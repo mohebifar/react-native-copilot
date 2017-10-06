@@ -1,0 +1,29 @@
+{
+  "name": "react-native-joyride",
+  "version": "1.0.0",
+  "description": "Make an interactive step by step tour guide for you react-native app",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/okgrow/react-native-joyride.git"
+  },
+  "keywords": [
+    "react-native",
+    "react",
+    "joyride",
+    "intro.js",
+    "intro"
+  ],
+  "files": [
+    "src"
+  ],
+  "author": "Mohamad Mohebifar <mohamad@okgrow.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/okgrow/react-native-joyride/issues"
+  },
+  "homepage": "https://github.com/okgrow/react-native-joyride#readme"
+}
