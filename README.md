@@ -1,4 +1,9 @@
 # React Native Joyride
+
+[![Build Status](https://semaphoreci.com/api/v1/mohebifar/react-native-joyride/branches/master/shields_badge.svg)](https://semaphoreci.com/mohebifar/react-native-joyride)
+[![npm version](https://img.shields.io/npm/v/react-native-joyride.svg?style=flat-square)](https://www.npmjs.com/package/react-native-joyride)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-joyride.svg?style=flat-square)](https://www.npmjs.com/package/react-native-joyride)
+
 > Step-by-step walkthrough for your react native app
 
 ![React Native Joyride](https://img11.hostingpics.net/pics/384088ezgif164977b0fa3.gif)
