@@ -1,11 +1,11 @@
-
+// @flow
 import { StyleSheet } from 'react-native';
 
 export const STEP_NUMBER_RADIUS: number = 14;
 export const STEP_NUMBER_DIAMETER: number = STEP_NUMBER_RADIUS * 2;
-export const ZINDEX = 100;
-export const MARGIN = 13;
-export const OFFSET_WIDTH = 4;
+export const ZINDEX: number = 100;
+export const MARGIN: number = 13;
+export const OFFSET_WIDTH: number = 4;
 
 export default StyleSheet.create({
   container: {
@@ -30,7 +30,7 @@ export default StyleSheet.create({
     overflow: 'hidden',
   },
   tooltipText: {
-    
+
   },
   stepNumber: {
     position: 'absolute',

@@ -1,39 +1,43 @@
+// @flow
 import React, { Component } from 'react';
 import { Animated, Easing, View, Text, TouchableOpacity } from 'react-native';
-
-import PropTypes from 'prop-types';
 
 import Button from './Button';
 import styles, { MARGIN, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
 
-type JoyrideModalState = {
+type Props = {
+  stop: () => void,
+  next: () => void,
+  prev: () => void,
+  nextButton?: React$Element,
+  prevButton?: React$Element,
+  skipButton?: React$Element,
+  finishButton?: React$Element,
+  currentStepNumber: number,
+  currentStep: ?Step,
+  visible: boolean,
+  isFirstStep: boolean,
+  isLastStep: boolean,
+};
+
+type State = {
   tooltip: Object,
   arrow: Object,
-  contentSize: Object,
   anim: Object,
   notAnimated: boolean,
 };
 
-class JoyrideModal extends Component {
-  props: {
-    stop: () => void,
-    next: () => void,
-    prev: () => void,
-    nextButton: React$Element,
-    prevButton: React$Element,
-    skipButton: React$Element,
-    finishButton: React$Element,
-    currentStepNumber: number,
-    currentStep?: Step,
-    visible: boolean,
-    isFirstStep: boolean,
-    isLastStep: boolean,
-  }
+class JoyrideModal extends Component<Props, State> {
+  static defaultProps = {
+    nextButton: <Button>Next</Button>,
+    prevButton: <Button>Previous</Button>,
+    skipButton: <Button>Stop</Button>,
+    finishButton: <Button>Finish</Button>,
+  };
 
-  state: JoyrideModalState = {
+  state = {
     tooltip: {},
     arrow: {},
-    contentSize: { width: 0, height: 0, left: 0, top: 0 },
     anim: {
       leftOverlayRightBoundary: new Animated.Value(0),
       rightOverlayLeftBoundary: new Animated.Value(0),
@@ -47,18 +51,13 @@ class JoyrideModal extends Component {
     animated: false,
   };
 
-  static defaultProps = {
-    nextButton: <Button>Next</Button>,
-    prevButton: <Button>Previous</Button>,
-    skipButton: <Button>Stop</Button>,
-    finishButton: <Button>Finish</Button>,
-  };
-
   measure(): Promise {
     return new Promise((resolve, reject) => {
       this.wrapper.measure(
-        (ox, oy, width, height, x, y) => resolve({ x, y, width, height }),
-        reject
+        (ox, oy, width, height, x, y) => resolve({
+          x, y, width, height,
+        }),
+        reject,
       );
     });
   }
@@ -70,15 +69,15 @@ class JoyrideModal extends Component {
     const layout = await this.measure();
 
     if (stepNumberLeft < 0) {
-      stepNumberLeft = obj.left + obj.width - STEP_NUMBER_RADIUS;
+      stepNumberLeft = (obj.left + obj.width) - STEP_NUMBER_RADIUS;
       if (stepNumberLeft > layout.width - STEP_NUMBER_DIAMETER) {
         stepNumberLeft = layout.width - STEP_NUMBER_DIAMETER;
       }
     }
 
     const center = {
-      x: obj.left + obj.width / 2,
-      y: obj.top + obj.height / 2,
+      x: obj.left + (obj.width / 2),
+      y: obj.top + (obj.height / 2),
     };
 
     const relativeToLeft = center.x;
@@ -95,11 +94,11 @@ class JoyrideModal extends Component {
     if (verticalPosition === 'bottom') {
       tooltip.top = obj.top + obj.height + MARGIN;
       arrow.borderBottomColor = '#fff';
-      arrow.top = tooltip.top - MARGIN + 3;
+      arrow.top = tooltip.top - (MARGIN + 3);
     } else {
-      tooltip.bottom = layout.height - obj.top + MARGIN;
+      tooltip.bottom = layout.height - (obj.top + MARGIN);
       arrow.borderTopColor = '#fff';
-      arrow.bottom = tooltip.bottom - MARGIN + 3;
+      arrow.bottom = tooltip.bottom - (MARGIN + 3);
     }
 
     if (horizontalPosition === 'left') {
@@ -126,17 +125,13 @@ class JoyrideModal extends Component {
     };
 
     if (this.state.animated) {
-      Animated.parallel(
-        Object.keys(animate).map(
-          key => Animated.timing(this.state.anim[key], {
-            duration,
-            toValue: animate[key],
-            easing: Easing.linear,
-          })
-        )
-      ).start();
+      Animated.parallel(Object.keys(animate).map(key => Animated.timing(this.state.anim[key], {
+        duration,
+        toValue: animate[key],
+        easing: Easing.linear,
+      }))).start();
     } else {
-      Object.keys(animate).forEach(key => {
+      Object.keys(animate).forEach((key) => {
         this.state.anim[key].setValue(animate[key]);
       });
     }
@@ -144,7 +139,6 @@ class JoyrideModal extends Component {
     this.setState({
       tooltip,
       arrow,
-      contentSize: obj,
       // FIXME: Animation is sluggish on Android
       // animated: true,
     });
@@ -154,7 +148,7 @@ class JoyrideModal extends Component {
     return this.props.visible ? (
       <View
         style={styles.container}
-        ref={element => { this.wrapper = element; }}
+        ref={(element) => { this.wrapper = element; }}
         onLayout={() => { }}
       >
         <Animated.View

@@ -1,26 +1,25 @@
+// @flow
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import type { JoyrideContext } from './types';
 
-class ConnectedJoyrideStep extends Component {
-  props: {
-    name: string,
-    text: string,
-    order: number,
-    _joyride: JoyrideContext,
-  }
+type Props = {
+  name: string,
+  text: string,
+  order: number,
+  _joyride: JoyrideContext,
+  children: React$Element
+};
 
+class ConnectedJoyrideStep extends Component<Props> {
   componentDidMount() {
-    this.props._joyride.registerStep(
-      {
-        name: this.props.name,
-        text: this.props.text,
-        order: this.props.order,
-        target: this,
-        wrapper: this.wrapper,
-      }
-    );
+    this.props._joyride.registerStep({
+      name: this.props.name,
+      text: this.props.text,
+      order: this.props.order,
+      target: this,
+      wrapper: this.wrapper,
+    });
   }
 
   componentWillUnmount() {
@@ -37,8 +36,10 @@ class ConnectedJoyrideStep extends Component {
         // Wait until the wrapper element appears
         if (this.wrapper.measure) {
           this.wrapper.measure(
-            (ox, oy, width, height, x, y) => resolve({ x, y, width, height }),
-            reject
+            (ox, oy, width, height, x, y) => resolve({
+              x, y, width, height,
+            }),
+            reject,
           );
         } else {
           requestAnimationFrame(measure);
@@ -51,7 +52,7 @@ class ConnectedJoyrideStep extends Component {
 
   render() {
     const joyride = {
-      ref: wrapper => { this.wrapper = wrapper; },
+      ref: (wrapper) => { this.wrapper = wrapper; },
       onLayout: () => { }, // Android hack
     };
 

@@ -4,6 +4,7 @@
   "description": "Make an interactive step by step tour guide for you react-native app",
   "main": "src/index.js",
   "scripts": {
+    "lint": "eslint --fix src/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,5 +26,15 @@
   "bugs": {
     "url": "https://github.com/okgrow/react-native-joyride/issues"
   },
-  "homepage": "https://github.com/okgrow/react-native-joyride#readme"
+  "homepage": "https://github.com/okgrow/react-native-joyride#readme",
+  "devDependencies": {
+    "babel-eslint": "^8.0.1",
+    "eslint": "^4.8.0",
+    "eslint-config-airbnb": "^16.0.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0"
+  },
+  "dependencies": {}
 }

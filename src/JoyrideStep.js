@@ -1,3 +1,4 @@
+// @flow
 import { Component, createElement } from 'react';
 import PropTypes from 'prop-types';
 
@@ -5,11 +6,15 @@ import ConnectedJoyrideStep from './ConnectedJoyrideStep';
 
 import type { JoyrideContext } from './types';
 
-class JoyrideStep extends Component {
-  props: {
-    name: string,
-    order: number,
-    text: string,
+type Props = {
+  name: string,
+  order: number, // eslint-disable-line react/no-unused-prop-types
+  text: string, // eslint-disable-line react/no-unused-prop-types
+};
+
+class JoyrideStep extends Component<Props> {
+  static contextTypes = {
+    _joyride: PropTypes.object,
   }
 
   context: {
@@ -25,13 +30,9 @@ class JoyrideStep extends Component {
         ...this.props,
         _joyride: this.context._joyride,
         visible: currentStep && currentStep.name === this.props.name,
-      }
+      },
     );
   }
 }
-
-JoyrideStep.contextTypes = {
-  _joyride: PropTypes.object,
-};
 
 export default JoyrideStep;
