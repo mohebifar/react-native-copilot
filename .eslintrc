@@ -18,8 +18,7 @@
   "globals": {
     "jest": true,
     "describe": true,
-    "beforeEach": true,
-    "it": true,
+    "test": true,
     "expect": true,
     "requestAnimationFrame": true
   }

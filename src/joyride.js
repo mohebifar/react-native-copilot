@@ -6,6 +6,7 @@ import { View } from 'react-native';
 
 import JoyrideModal from './JoyrideModal';
 
+import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep } from './utilities';
 import { OFFSET_WIDTH } from './style';
 
 import type { Step, JoyrideContext } from './types';
@@ -40,28 +41,18 @@ const joyride = ({
         };
       }
 
-      getFirstStep = (): boolean => Object
-        .values(this.state.steps)
-        .reduce((a, b) => (!a || a.order > b.order ? b : a), null);
+      getStepNumber = (step: ?Step = this.state.currentStep): number =>
+        getStepNumber(this.state.steps, step);
 
-      getLastStep = (): boolean => Object
-        .values(this.state.steps)
-        .reduce((a, b) => (!a || a.order < b.order ? b : a), null);
+      getFirstStep = (): ?Step => getFirstStep(this.state.steps);
 
-      getStepNumber = (step: ?Step = this.state.currentStep): number => step
-        && Object
-          .values(this.state.steps)
-          .filter(_step => _step.order <= step.order).length;
+      getLastStep = (): ?Step => getLastStep(this.state.steps);
 
-      getPrevStep = (step: ?Step = this.state.currentStep): number => Object
-        .values(this.state.steps)
-        .filter(_step => _step.order < step.order)
-        .reduce((a, b) => (!a || a.order < b.order ? b : a), null);
+      getPrevStep = (step: ?Step = this.state.currentStep): ?Step =>
+        getPrevStep(this.state.steps, step);
 
-      getNextStep = (step: ?Step = this.state.currentStep): number => Object
-        .values(this.state.steps)
-        .filter(_step => _step.order > step.order)
-        .reduce((a, b) => (!a || a.order > b.order ? b : a), null) || step;
+      getNextStep = (step: ?Step = this.state.currentStep): ?Step =>
+        getNextStep(this.state.steps, step);
 
       setCurrentStep = async (step: Step): void => {
         await this.setState({ currentStep: step });
