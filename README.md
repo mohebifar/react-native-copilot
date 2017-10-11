@@ -73,6 +73,9 @@ class HomeScreen {
 }
 ```
 
+## Name
+The name was inspired by "[React Joyride](https://github.com/gilbarbara/react-joyride)".
+
 ## Contributing
 Issues and Pull Requests are always welcome.
 
