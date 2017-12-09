@@ -1,4 +1,4 @@
-# React Native Joyride
+# React Native Copilot
 
 [![Build Status](https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg)](https://semaphoreci.com/okgrow/react-native-joyride)
 [![npm version](https://img.shields.io/npm/v/react-native-co-pilot.svg?style=flat-square)](https://www.npmjs.com/package/react-native-joyride)
@@ -72,9 +72,6 @@ class HomeScreen {
   }
 }
 ```
-
-## Name
-The name was inspired by "[React Joyride](https://github.com/gilbarbara/react-joyride)".
 
 ## Contributing
 Issues and Pull Requests are always welcome.
