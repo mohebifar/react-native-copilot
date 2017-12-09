@@ -1,19 +1,19 @@
 // @flow
 import React, { Component } from 'react';
 
-import type { JoyrideContext } from './types';
+import type { CopilotContext } from './types';
 
 type Props = {
   name: string,
   text: string,
   order: number,
-  _joyride: JoyrideContext,
+  _copilot: CopilotContext,
   children: React$Element
 };
 
-class ConnectedJoyrideStep extends Component<Props> {
+class ConnectedCopilotStep extends Component<Props> {
   componentDidMount() {
-    this.props._joyride.registerStep({
+    this.props._copilot.registerStep({
       name: this.props.name,
       text: this.props.text,
       order: this.props.order,
@@ -23,7 +23,7 @@ class ConnectedJoyrideStep extends Component<Props> {
   }
 
   componentWillUnmount() {
-    this.props._joyride.unregisterStep(this.props.name);
+    this.props._copilot.unregisterStep(this.props.name);
   }
 
   setNativeProps(obj) {
@@ -51,13 +51,13 @@ class ConnectedJoyrideStep extends Component<Props> {
   }
 
   render() {
-    const joyride = {
+    const copilot = {
       ref: (wrapper) => { this.wrapper = wrapper; },
       onLayout: () => { }, // Android hack
     };
 
-    return React.cloneElement(this.props.children, { joyride });
+    return React.cloneElement(this.props.children, { copilot });
   }
 }
 
-export default ConnectedJoyrideStep;
+export default ConnectedCopilotStep;

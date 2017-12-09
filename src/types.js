@@ -7,7 +7,7 @@ export type Step = {
   wrapper: React$Element,
 };
 
-export type JoyrideContext = {
+export type CopilotContext = {
   registerStep: (Step) => void,
   unregisterStep: (name: string) => void,
   getCurrentStep: () => Step,

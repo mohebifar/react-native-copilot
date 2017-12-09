@@ -1,7 +1,7 @@
-import joyride from './joyride';
-import joyridable from './joyridable';
-import JoyrideStep from './JoyrideStep';
+import copilot from './copilot';
+import walkthroughable from './walkthroughable';
+import CopilotStep from './CopilotStep';
 
-export { joyride };
-export { joyridable };
-export { JoyrideStep };
+export { copilot };
+export { walkthroughable };
+export { CopilotStep };

@@ -27,7 +27,7 @@ type State = {
   notAnimated: boolean,
 };
 
-class JoyrideModal extends Component<Props, State> {
+class CopilotModal extends Component<Props, State> {
   static defaultProps = {
     nextButton: <Button>Next</Button>,
     prevButton: <Button>Previous</Button>,
@@ -225,4 +225,4 @@ class JoyrideModal extends Component<Props, State> {
   }
 }
 
-export default JoyrideModal;
+export default CopilotModal;

@@ -2,9 +2,9 @@
 import { Component, createElement } from 'react';
 import PropTypes from 'prop-types';
 
-import ConnectedJoyrideStep from './ConnectedJoyrideStep';
+import ConnectedCopilotStep from './ConnectedCopilotStep';
 
-import type { JoyrideContext } from './types';
+import type { CopilotContext } from './types';
 
 type Props = {
   name: string,
@@ -12,27 +12,27 @@ type Props = {
   text: string, // eslint-disable-line react/no-unused-prop-types
 };
 
-class JoyrideStep extends Component<Props> {
+class CopilotStep extends Component<Props> {
   static contextTypes = {
-    _joyride: PropTypes.object,
+    _copilot: PropTypes.object,
   }
 
   context: {
-    _joyride: JoyrideContext,
+    _copilot: CopilotContext,
   }
 
   render() {
-    const currentStep = this.context._joyride.getCurrentStep();
+    const currentStep = this.context._copilot.getCurrentStep();
 
     return createElement(
-      ConnectedJoyrideStep,
+      ConnectedCopilotStep,
       {
         ...this.props,
-        _joyride: this.context._joyride,
+        _copilot: this.context._copilot,
         visible: currentStep && currentStep.name === this.props.name,
       },
     );
   }
 }
 
-export default JoyrideStep;
+export default CopilotStep;

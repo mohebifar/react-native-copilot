@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 
 import { View } from 'react-native';
 
-import JoyrideModal from './JoyrideModal';
+import CopilotModal from './CopilotModal';
 
 import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep } from './utilities';
 import { OFFSET_WIDTH } from './style';
 
-import type { Step, JoyrideContext } from './types';
+import type { Step, CopilotContext } from './types';
 
 type State = {
   steps: { [string]: Step },
@@ -17,23 +17,23 @@ type State = {
   visible: boolean,
 };
 
-const joyride = ({
+const copilot = ({
   nextButton,
   prevButton,
   stopButton,
   finishButton,
 } = {}) =>
   (WrappedComponent) => {
-    class Joyride extends Component<any, State> {
+    class Copilot extends Component<any, State> {
       state = {
         steps: {},
         currentStep: null,
         visible: false,
       };
 
-      getChildContext(): { _joyride: JoyrideContext } {
+      getChildContext(): { _copilot: CopilotContext } {
         return {
-          _joyride: {
+          _copilot: {
             registerStep: this.registerStep,
             unregisterStep: this.unregisterStep,
             getCurrentStep: () => this.state.currentStep,
@@ -124,7 +124,7 @@ const joyride = ({
               currentStep={this.state.currentStep}
               visible={this.state.visible}
             />
-            <JoyrideModal
+            <CopilotModal
               next={this.next}
               prev={this.prev}
               stop={this.stop}
@@ -144,11 +144,11 @@ const joyride = ({
       }
     }
 
-    Joyride.childContextTypes = {
-      _joyride: PropTypes.object.isRequired,
+    Copilot.childContextTypes = {
+      _copilot: PropTypes.object.isRequired,
     };
 
-    return Joyride;
+    return Copilot;
   };
 
-export default joyride;
+export default copilot;
