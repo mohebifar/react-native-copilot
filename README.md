@@ -1,4 +1,9 @@
-# React Native Copilot
+# React Native Joyride
+
+[![Build Status](https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg)](https://semaphoreci.com/okgrow/react-native-joyride)
+[![npm version](https://img.shields.io/npm/v/react-native-co-pilot.svg?style=flat-square)](https://www.npmjs.com/package/react-native-joyride)
+[![npm downloads](https://img.shields.io/npm/dm/react-native-joyride.svg?style=flat-square)](https://www.npmjs.com/package/react-native-joyride)
+
 > Step-by-step walkthrough for your react native app
 
 ![React Native Copilot](https://img11.hostingpics.net/pics/384088ezgif164977b0fa3.gif)
@@ -67,6 +72,9 @@ class HomeScreen {
   }
 }
 ```
+
+## Name
+The name was inspired by "[React Joyride](https://github.com/gilbarbara/react-joyride)".
 
 ## Contributing
 Issues and Pull Requests are always welcome.
