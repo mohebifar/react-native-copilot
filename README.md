@@ -1,8 +1,6 @@
 # React Native Copilot
 
-[![Build Status](https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg)](https://semaphoreci.com/okgrow/react-native-joyride)
-[![npm version](https://img.shields.io/npm/v/react-native-co-pilot.svg?style=flat-square)](https://www.npmjs.com/package/react-native-joyride)
-[![npm downloads](https://img.shields.io/npm/dm/react-native-joyride.svg?style=flat-square)](https://www.npmjs.com/package/react-native-joyride)
+[![Build Status](https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/badge.svg)](https://semaphoreci.com/okgrow/react-native-co-pilot)
 
 > Step-by-step walkthrough for your react native app
 
@@ -12,14 +10,14 @@
 
 ## Installation
 ```
-npm install --save react-native-copilot
+npm install --save @okgrow/react-native-copilot
 ```
 
 ## Usage
 Use the `copilot()` higher order component for the screen component that you want to use copilot with:
 
 ```js
-import { copilot } from 'react-native-copilot';
+import { copilot } from '@okgrow/react-native-copilot';
 
 class HomeScreen extends Component { /* ... */ }
 
@@ -29,7 +27,7 @@ export default copilot()(HomeScreen);
 Before defining walkthrough steps for your react elements, you must make them `copilotable`. The easiest way to do that for built-in react native components, is using the `copilotable` HOC. Then you must wrap the element with `CopilotStep`.
 
 ```js
-import { copilot, copilotable, CopilotStep } from 'react-native-copilot';
+import { copilot, copilotable, CopilotStep } from '@okgrow/react-native-copilot';
 
 const CopilotText = copilotable(Text);
 
@@ -56,7 +54,7 @@ Every `CopilotStep` must have these props:
 The components wrapped inside `CopilotStep`, will receive a `copilot` prop of type `Object` which the outermost rendered element of the component or the element that you want the tooltip be shown around, must extend.
 
 ```js
-import { copilot, CopilotStep } from 'react-native-copilot';
+import { copilot, CopilotStep } from '@okgrow/react-native-copilot';
 
 const CustomComponent = ({ copilot }) => <View {...copilot}><Text>Hello world!</Text></View>;
 
