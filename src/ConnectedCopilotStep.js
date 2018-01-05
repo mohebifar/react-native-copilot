@@ -37,7 +37,7 @@ class ConnectedCopilotStep extends Component<Props> {
         if (this.wrapper.measure) {
           this.wrapper.measure(
             (ox, oy, width, height, x, y) => resolve({
-              x, y, width, height,
+              x: ox, y: oy, width, height,
             }),
             reject,
           );
