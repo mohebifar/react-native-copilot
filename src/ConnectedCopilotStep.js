@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { Platform } from 'react-native';
 
 import type { CopilotContext } from './types';
 
@@ -10,6 +11,8 @@ type Props = {
   _copilot: CopilotContext,
   children: React$Element
 };
+
+const HEADER_HEIGHT = 56;
 
 class ConnectedCopilotStep extends Component<Props> {
   componentDidMount() {
@@ -37,7 +40,7 @@ class ConnectedCopilotStep extends Component<Props> {
         if (this.wrapper.measure) {
           this.wrapper.measure(
             (ox, oy, width, height, x, y) => resolve({
-              x: ox, y: oy, width, height,
+              x, y: Platform.OS === 'ios' ? oy : y - HEADER_HEIGHT, width, height,
             }),
             reject,
           );
