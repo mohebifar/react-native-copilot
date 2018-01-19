@@ -11,7 +11,7 @@ type Props = {
   prev: () => void,
   nextButton?: React$Element,
   prevButton?: React$Element,
-  skipButton?: React$Element,
+  stopButton?: React$Element,
   finishButton?: React$Element,
   currentStepNumber: number,
   currentStep: ?Step,
@@ -31,7 +31,7 @@ class CopilotModal extends Component<Props, State> {
   static defaultProps = {
     nextButton: <Button>Next</Button>,
     prevButton: <Button>Previous</Button>,
-    skipButton: <Button>Stop</Button>,
+    stopButton: <Button>Stop</Button>,
     finishButton: <Button>Finish</Button>,
   };
 
@@ -198,7 +198,7 @@ class CopilotModal extends Component<Props, State> {
             {
               !this.props.isLastStep ?
                 <TouchableOpacity onPress={this.props.stop}>
-                  {this.props.skipButton}
+                  {this.props.stopButton}
                 </TouchableOpacity>
                 : null
             }
