@@ -54,16 +54,35 @@ const copilot = ({
       getNextStep = (step: ?Step = this.state.currentStep): ?Step =>
         getNextStep(this.state.steps, step);
 
+      startScroll = async (targetMeasure): void => {
+        const whereToScroll = targetMeasure.y
+          - this.scrollViewMeasure.y
+          + (this.scrollViewMeasure.height
+          - targetMeasure.height)/2;
+
+        await this.setState({ whereToScroll });
+        return this.scrollViewMeasure.y
+          + (this.scrollViewMeasure.height
+          -  targetMeasure.height)/2
+      }
+      
       setCurrentStep = async (step: Step): void => {
+        const targetMeasure = await step.target.measure();     
+        const scrollViewBottomY = this.scrollViewMeasure.y + this.scrollViewMeasure.height;
+        const targetBottomY = targetMeasure.y + targetMeasure.height;
+        let newTargetY;
+
+        if (
+          (scrollViewBottomY < targetBottomY) || this.scrollViewMeasure.y > targetMeasure.y
+        ) newTargetY = await this.startScroll(targetMeasure);
+
         await this.setState({ currentStep: step });
 
-        const size = await this.state.currentStep.target.measure();
-
         this.modal.animateMove({
-          width: size.width + OFFSET_WIDTH,
-          height: size.height + OFFSET_WIDTH,
-          left: size.x - (OFFSET_WIDTH / 2),
-          top: size.y - (OFFSET_WIDTH / 2),
+          width: targetMeasure.width + OFFSET_WIDTH,
+          height: targetMeasure.height + OFFSET_WIDTH,
+          left: targetMeasure.x - (OFFSET_WIDTH / 2),
+          top: (isNumber(newTargetY) ? newTargetY : targetMeasure.y) - (OFFSET_WIDTH / 2),
         });
       }
 
@@ -122,7 +141,9 @@ const copilot = ({
               {...this.props}
               start={this.start}
               currentStep={this.state.currentStep}
+              whereToScroll={this.state.whereToScroll}
               visible={this.state.visible}
+              ref={(wrapped) => { this.wrapped = modal; }}
             />
             <CopilotModal
               next={this.next}
