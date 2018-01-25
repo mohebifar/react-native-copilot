@@ -22,7 +22,7 @@ type State = {
   currentStep: ?Step,
   visible: boolean,
   whereToScroll: number,
-  currentElementSize: number,
+  currentElementYPosition: number
 };
 
 const copilot = ({
@@ -38,7 +38,7 @@ const copilot = ({
       currentStep: null,
       visible: false,
       whereToScroll: 0,
-      currentElementSize: 0,
+      currentElementYPosition: 0
     };
 
     getChildContext(): { _copilot: CopilotContext } {
@@ -48,6 +48,7 @@ const copilot = ({
           unregisterStep: this.unregisterStep,
           getCurrentStep: () => this.state.currentStep
         }
+      };
     }
 
     getStepNumber = (step: ?Step = this.state.currentStep): number =>
@@ -79,7 +80,7 @@ const copilot = ({
 
     setCurrentStep = async (step: Step): void => {
       const targetMeasure = await step.target.measure();
-
+      this.setState({ currentElementYPosition: targetMeasure.y });
       const scrollViewHeight = this.scrollViewMeasure.height;
       const targetBottomY = targetMeasure.y + targetMeasure.height;
       let newTargetY;
@@ -172,7 +173,7 @@ const copilot = ({
             isLastStep={this.isLastStep()}
             currentStepNumber={this.getStepNumber()}
             currentStep={this.state.currentStep}
-            currentElementSize={this.state.currentElementSize}
+            currentElementYPosition={this.state.currentElementYPosition}
             nextButton={nextButton}
             prevButton={prevButton}
             stopButton={stopButton}

@@ -24,7 +24,7 @@ type Props = {
   prevButton?: React$Element,
   stopButton?: React$Element,
   finishButton?: React$Element,
-  currentElementSize: number,
+  currentElementYPosition: number,
   currentStepNumber: number,
   currentStep: ?Step,
   visible: boolean,
@@ -238,7 +238,7 @@ class CopilotModal extends Component<Props, State> {
         <Animated.View
           style={[
             styles.tooltip,
-            this.props.currentElementSize > this.state.wrapperSize / 2
+            this.props.currentElementYPosition > this.state.wrapperSize / 2
               ? styles.topToolTip
               : styles.bottomToolTip
           ]}

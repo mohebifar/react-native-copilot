@@ -36,7 +36,7 @@ export default StyleSheet.create({
     borderRadius: 3,
     overflow: "hidden",
     width: "100%",
-    height: 140
+    height: 120
   },
   tooltipText: {},
   stepNumber: {
