@@ -1,6 +1,13 @@
 // @flow
-import React, { Component } from 'react';
-import { Animated, Easing, View, Text, TouchableOpacity, Image } from 'react-native';
+import React, { Component } from "react";
+import {
+  Animated,
+  Easing,
+  View,
+  Text,
+  TouchableOpacity,
+  Image
+} from "react-native";
 
 import Button from "./Button";
 import styles, {
@@ -31,7 +38,7 @@ type State = {
   arrow: Object,
   anim: Object,
   notAnimated: boolean,
-  wrapperSize: number,
+  wrapperSize: number
 };
 
 class CopilotModal extends Component<Props, State> {
@@ -56,7 +63,7 @@ class CopilotModal extends Component<Props, State> {
       stepNumberLeft: new Animated.Value(0)
     },
     animated: false,
-    wrapperSize: 0,
+    wrapperSize: 0
   };
 
   measure(): Promise {
@@ -171,16 +178,15 @@ class CopilotModal extends Component<Props, State> {
     return this.props.visible ? (
       <View
         style={styles.container}
-        ref={(element) => { this.wrapper = element; }}
-        onLayout={() => { 
-          this.wrapper.measure(
-            (ox, oy, width, height, x, y) => {
-              const wrapperMeasure= {ox, oy, width, height, x, y};
-              this.setState({wrapperSize: wrapperMeasure.height})
-            }
-          );
-        }
-      }
+        ref={element => {
+          this.wrapper = element;
+        }}
+        onLayout={() => {
+          this.wrapper.measure((ox, oy, width, height, x, y) => {
+            const wrapperMeasure = { ox, oy, width, height, x, y };
+            this.setState({ wrapperSize: wrapperMeasure.height });
+          });
+        }}
       >
         <Animated.View
           style={[
@@ -229,42 +235,53 @@ class CopilotModal extends Component<Props, State> {
           </Text>
         </Animated.View>
         <Animated.View style={[styles.arrow, this.state.arrow]} />
-        <Animated.View style={[styles.tooltip, this.props.currentElementSize > this.state.wrapperSize/2 ? styles.topToolTip : styles.bottomToolTip]}>
-          <View style={{flex: 1, flexDirection: 'row'}}>
+        <Animated.View
+          style={[
+            styles.tooltip,
+            this.props.currentElementSize > this.state.wrapperSize / 2
+              ? styles.topToolTip
+              : styles.bottomToolTip
+          ]}
+        >
+          <View style={{ flex: 1, flexDirection: "row" }}>
             <Image source={this.props.image} style={styles.image} />
-            <View style={{flex: 1, flexDirection: 'column'}}>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "column",
+                justifyContent: "space-around",
+                paddingBottom: 15
+              }}
+            >
               <View>
-                <Text style={styles.tooltipText}>{this.props.currentStep.text}</Text>
+                <Text style={styles.tooltipText}>
+                  {this.props.currentStep.text}
+                </Text>
               </View>
-            
+
               <View style={[styles.bottomBar]}>
-                {
-                  !this.props.isLastStep ?
-                    <TouchableOpacity onPress={this.props.stop}>
-                      {this.props.stopButton}
-                    </TouchableOpacity>
-                    : null
-                }
-                {
-                  !this.props.isFirstStep ?
-                    <TouchableOpacity onPress={this.props.prev}>
-                      {this.props.prevButton}
-                    </TouchableOpacity>
-                    : null
-                }
-                {
-                  !this.props.isLastStep ?
-                    <TouchableOpacity onPress={this.props.next}>
-                      {this.props.nextButton}
-                    </TouchableOpacity> :
-                    <TouchableOpacity onPress={this.props.stop}>
-                      {this.props.finishButton}
-                    </TouchableOpacity>
-                }
+                {!this.props.isLastStep ? (
+                  <TouchableOpacity onPress={this.props.stop}>
+                    {this.props.stopButton}
+                  </TouchableOpacity>
+                ) : null}
+                {!this.props.isFirstStep ? (
+                  <TouchableOpacity onPress={this.props.prev}>
+                    {this.props.prevButton}
+                  </TouchableOpacity>
+                ) : null}
+                {!this.props.isLastStep ? (
+                  <TouchableOpacity onPress={this.props.next}>
+                    {this.props.nextButton}
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity onPress={this.props.stop}>
+                    {this.props.finishButton}
+                  </TouchableOpacity>
+                )}
               </View>
-              </View>
+            </View>
           </View>
-          
         </Animated.View>
       </View>
     ) : null;
