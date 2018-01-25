@@ -4,11 +4,11 @@ export type Step = {
   order: number,
   visible: boolean,
   target: React$Element,
-  wrapper: React$Element,
+  wrapper: React$Element
 };
 
 export type CopilotContext = {
-  registerStep: (Step) => void,
+  registerStep: Step => void,
   unregisterStep: (name: string) => void,
-  getCurrentStep: () => Step,
-}
+  getCurrentStep: () => Step
+};

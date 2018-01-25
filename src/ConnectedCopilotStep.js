@@ -1,8 +1,8 @@
 // @flow
-import React, { Component } from 'react';
-import { Platform } from 'react-native';
+import React, { Component } from "react";
+import { Platform } from "react-native";
 
-import type { CopilotContext } from './types';
+import type { CopilotContext } from "./types";
 
 type Props = {
   name: string,
@@ -12,7 +12,7 @@ type Props = {
   children: React$Element
 };
 
-const HEADER_HEIGHT = Platform.OS === 'ios' ? 64 : 56;
+const HEADER_HEIGHT = Platform.OS === "ios" ? 64 : 56;
 
 class ConnectedCopilotStep extends Component<Props> {
   componentDidMount() {
@@ -21,7 +21,7 @@ class ConnectedCopilotStep extends Component<Props> {
       text: this.props.text,
       order: this.props.order,
       target: this,
-      wrapper: this.wrapper,
+      wrapper: this.wrapper
     });
   }
 
@@ -39,10 +39,14 @@ class ConnectedCopilotStep extends Component<Props> {
         // Wait until the wrapper element appears
         if (this.wrapper.measure) {
           this.wrapper.measure(
-            (ox, oy, width, height, x, y) => resolve({
-              x, y: y - HEADER_HEIGHT, width, height,
-            }),
-            reject,
+            (ox, oy, width, height, x, y) =>
+              resolve({
+                x,
+                y: y - HEADER_HEIGHT,
+                width,
+                height
+              }),
+            reject
           );
         } else {
           requestAnimationFrame(measure);
@@ -55,8 +59,10 @@ class ConnectedCopilotStep extends Component<Props> {
 
   render() {
     const copilot = {
-      ref: (wrapper) => { this.wrapper = wrapper; },
-      onLayout: () => { }, // Android hack
+      ref: wrapper => {
+        this.wrapper = wrapper;
+      },
+      onLayout: () => {} // Android hack
     };
 
     return React.cloneElement(this.props.children, { copilot });
