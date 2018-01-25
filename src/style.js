@@ -21,13 +21,22 @@ export default StyleSheet.create({
     borderColor: "transparent",
     borderWidth: 5
   },
+  bottomToolTip: {
+    bottom: 0,
+  },
+  topToolTip: {
+    top: 0,
+  },
   tooltip: {
-    position: "absolute",
-    paddingTop: 15,
-    paddingHorizontal: 15,
-    backgroundColor: "#fff",
+    position: 'absolute',
+    padding: 15,
+    backgroundColor: '#fff',
     borderRadius: 3,
-    overflow: "hidden"
+    overflow: 'hidden',
+    width: '100%',
+  },
+  tooltipText: {
+
   },
   tooltipText: {},
   stepNumber: {
@@ -42,6 +51,10 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     zIndex: ZINDEX + 1
+  },
+  image: {
+    width: 50,
+    height: '100%',
   },
   stepNumberText: {
     fontSize: 10,

@@ -21,21 +21,24 @@ type State = {
   steps: { [string]: Step },
   currentStep: ?Step,
   visible: boolean,
-  whereToScroll: number
+  whereToScroll: number,
+  currentElementSize: number,
 };
 
 const copilot = ({
   nextButton,
   prevButton,
   stopButton,
-  finishButton
+  finishButton,
+  image
 } = {}) => WrappedComponent => {
   class Copilot extends Component<any, State> {
     state = {
       steps: {},
       currentStep: null,
       visible: false,
-      whereToScroll: 0
+      whereToScroll: 0,
+      currentElementSize: 0,
     };
 
     getChildContext(): { _copilot: CopilotContext } {
@@ -45,7 +48,6 @@ const copilot = ({
           unregisterStep: this.unregisterStep,
           getCurrentStep: () => this.state.currentStep
         }
-      };
     }
 
     getStepNumber = (step: ?Step = this.state.currentStep): number =>
@@ -170,10 +172,12 @@ const copilot = ({
             isLastStep={this.isLastStep()}
             currentStepNumber={this.getStepNumber()}
             currentStep={this.state.currentStep}
+            currentElementSize={this.state.currentElementSize}
             nextButton={nextButton}
             prevButton={prevButton}
             stopButton={stopButton}
             finishButton={finishButton}
+            image={image}
             ref={modal => {
               this.modal = modal;
             }}
