@@ -70,23 +70,17 @@ const copilot = ({
       
       setCurrentStep = async (step: Step): void => {
         const targetMeasure = await step.target.measure();   
-        console.log('TARGET', targetMeasure); 
-        console.log('ScrollView', this.scrollViewMeasure);
-        const scrollViewBottomY = this.scrollViewMeasure.height;
+
+        const scrollViewHeight = this.scrollViewMeasure.height;
         const targetBottomY = targetMeasure.y + targetMeasure.height;
         let newTargetY;
-        console.log('scrollViewBottomY', scrollViewBottomY);
-        console.log('targetBottomY', targetBottomY);
-
 
         if (
-          (scrollViewBottomY < targetBottomY) || this.scrollViewMeasure.oy > targetMeasure.y
-        ) 
-        {
+          (scrollViewHeight < targetBottomY) || this.scrollViewMeasure.oy > targetMeasure.y
+        ) {
           newTargetY = await this.startScroll(targetMeasure);
         }
         await this.setState({ currentStep: step });
-        console.log('New target Y', newTargetY);
 
         this.modal.animateMove({
           width: targetMeasure.width + OFFSET_WIDTH,
@@ -129,7 +123,7 @@ const copilot = ({
         this.setCurrentStep(this.getPrevStep());
       }
 
-      start = async (fromStep?: string, scrollViewMeasure?: string): void => {
+      start = async (fromStep?: string, scrollViewMeasure?: Object): void => {
         this.scrollViewMeasure = scrollViewMeasure;
         const { steps } = this.state;
 
@@ -154,7 +148,6 @@ const copilot = ({
               currentStep={this.state.currentStep}
               whereToScroll={this.state.whereToScroll}
               visible={this.state.visible}
-              ref={(wrapped) => { this.wrapped = wrapped; }}
             />
             <CopilotModal
               next={this.next}
