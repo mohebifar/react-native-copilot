@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Animated, Easing, View, Text, TouchableOpacity } from 'react-native';
 
 import Button from './Button';
-import styles, { MARGIN, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
+import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
 
 type Props = {
   stop: () => void,
@@ -94,11 +94,11 @@ class CopilotModal extends Component<Props, State> {
     if (verticalPosition === 'bottom') {
       tooltip.top = obj.top + obj.height + MARGIN;
       arrow.borderBottomColor = '#fff';
-      arrow.top = tooltip.top - (MARGIN + 3);
+      arrow.top = tooltip.top - (ARROW_SIZE * 2);
     } else {
-      tooltip.bottom = layout.height - (obj.top + MARGIN);
+      tooltip.bottom = layout.height - (obj.top - MARGIN);
       arrow.borderTopColor = '#fff';
-      arrow.bottom = tooltip.bottom - (MARGIN + 3);
+      arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
     }
 
     if (horizontalPosition === 'left') {
