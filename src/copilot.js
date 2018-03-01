@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 
 import { View } from 'react-native';
 
-import CopilotModal from './CopilotModal';
+import CopilotModal from './components/CopilotModal';
+import { OFFSET_WIDTH } from './components/style';
 
 import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep } from './utilities';
-import { OFFSET_WIDTH } from './style';
 
 import type { Step, CopilotContext } from './types';
 
@@ -18,10 +18,9 @@ type State = {
 };
 
 const copilot = ({
-  nextButton,
-  prevButton,
-  stopButton,
-  finishButton,
+  overlay,
+  tooltipComponent,
+  animated,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -133,10 +132,9 @@ const copilot = ({
               isLastStep={this.isLastStep()}
               currentStepNumber={this.getStepNumber()}
               currentStep={this.state.currentStep}
-              nextButton={nextButton}
-              prevButton={prevButton}
-              stopButton={stopButton}
-              finishButton={finishButton}
+              tooltipComponent={tooltipComponent}
+              overlay={overlay}
+              animated={animated}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
