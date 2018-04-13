@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, Image, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { copilot, walkthroughable, CopilotStep } from './src';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableImage = walkthroughable(Image);
@@ -85,4 +85,7 @@ App.propTypes = {
   start: PropTypes.func.isRequired,
 };
 
-export default copilot()(App);
+export default copilot({
+  animated: true, // Can be true or false
+  overlay: 'svg', // Can be either view or svg
+})(App);

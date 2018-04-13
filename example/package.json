@@ -3,9 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "react-native-scripts": "1.5.0",
-    "jest-expo": "^21.0.2",
-    "react-test-renderer": "16.0.0-alpha.12"
+    "fs-extra": "^5.0.0",
+    "jest-expo": "^26.0.0",
+    "minimatch": "^3.0.4",
+    "node-watch": "^0.5.8",
+    "react-native-scripts": "1.13.1",
+    "react-test-renderer": "16.0.0-alpha.12",
+    "rimraf": "^2.6.2"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -13,14 +17,17 @@
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js --watch"
+    "test": "node node_modules/jest/bin/jest.js --watch",
+    "watch": "node scripts/watch-and-copy-src.js"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
-    "expo": "^21.0.0",
-    "react": "16.0.0-alpha.12",
-    "react-native": "^0.48.4"
+    "expo": "^26.0.0",
+    "react": "16.3.0-alpha.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-26.0.0.tar.gz",
+    "@okgrow/react-native-copilot": "../",
+    "react-native-svg": "^6.3.1"
   }
 }
