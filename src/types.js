@@ -13,7 +13,7 @@ export type CopilotContext = {
   getCurrentStep: () => Step,
 }
 
-type valueXY = {
+export type valueXY = {
   x: number,
   y: number,
 };

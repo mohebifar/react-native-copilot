@@ -13,7 +13,8 @@
     "import/no-unresolved": [2, { "ignore": ["^react"] }],
     "import/no-extraneous-dependencies": 0,
     "import/extensions": 0,
-    "react/jsx-filename-extension": 0
+    "react/jsx-filename-extension": 0,
+    "function-paren-newline": 0
   },
   "globals": {
     "jest": true,
@@ -21,5 +22,8 @@
     "test": true,
     "expect": true,
     "requestAnimationFrame": true
+  },
+  "env": {
+    "jest": true
   }
 }

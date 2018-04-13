@@ -65,10 +65,12 @@ class ViewMask extends Component<Props, State> {
 
     const leftOverlayRight = Animated.add(width, Animated.multiply(position.x, -1));
     const rightOverlayLeft = Animated.add(size.x, position.x);
-    const verticalOverlayLeftBoundary = position.x;
-    const verticalOverlayRightBoundary = Animated.add(width, Animated.multiply(-1, rightOverlayLeft));
     const bottomOverlayTopBoundary = Animated.add(size.y, position.y);
     const topOverlayBottomBoundary = Animated.add(height, Animated.multiply(-1, position.y));
+    const verticalOverlayLeftBoundary = position.x;
+    const verticalOverlayRightBoundary = Animated.add(
+      width, Animated.multiply(-1, rightOverlayLeft),
+    );
 
     return (
       <View style={this.props.style}>
