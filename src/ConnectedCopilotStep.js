@@ -31,6 +31,12 @@ class ConnectedCopilotStep extends Component<Props> {
   }
 
   measure() {
+    if (__TEST__) { // eslint-disable-line no-undef
+      return new Promise(resolve => resolve({
+        x: 0, y: 0, width: 0, height: 0,
+      }));
+    }
+
     return new Promise((resolve, reject) => {
       const measure = () => {
         // Wait until the wrapper element appears

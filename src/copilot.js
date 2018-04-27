@@ -91,12 +91,12 @@ const copilot = ({
         }));
       }
 
-      next = (): void => {
-        this.setCurrentStep(this.getNextStep());
+      next = async (): void => {
+        await this.setCurrentStep(this.getNextStep());
       }
 
-      prev = (): void => {
-        this.setCurrentStep(this.getPrevStep());
+      prev = async (): void => {
+        await this.setCurrentStep(this.getPrevStep());
       }
 
       start = (fromStep?: string): void => {

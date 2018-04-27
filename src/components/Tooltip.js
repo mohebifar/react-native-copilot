@@ -27,7 +27,7 @@ const Tooltip = ({
 }: Props) => (
   <View>
     <View style={styles.tooltipContainer}>
-      <Text style={styles.tooltipText}>{currentStep.text}</Text>
+      <Text testID="stepDescription" style={styles.tooltipText}>{currentStep.text}</Text>
     </View>
     <View style={[styles.bottomBar]}>
       {
