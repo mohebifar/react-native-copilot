@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, Text, ScrollView, TextInput } from 'react-native';
+import { View } from 'react-native';
 import renderer from 'react-test-renderer';
-import { copilot, walkthroughable, CopilotStep } from './index';
-import CopilotModal from './components/CopilotModal';
-import ViewMask from './components/ViewMask';
-import SvgMask from './components/SvgMask';
+import { copilot, walkthroughable, CopilotStep } from '../index';
+import CopilotModal from '../components/CopilotModal';
+import ViewMask from '../components/ViewMask';
+import SvgMask from '../components/SvgMask';
 
 const WalkthroughableView = walkthroughable(View);
 

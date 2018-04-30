@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 
-import type { CopilotContext } from './types';
+import type { CopilotContext } from '../types';
 
 type Props = {
   name: string,

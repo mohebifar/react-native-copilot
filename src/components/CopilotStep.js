@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import ConnectedCopilotStep from './ConnectedCopilotStep';
 
-import type { CopilotContext } from './types';
+import type { CopilotContext } from '../types';
 
 type Props = {
   name: string,

@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 
 import { View } from 'react-native';
 
-import CopilotModal from './components/CopilotModal';
-import { OFFSET_WIDTH } from './components/style';
+import CopilotModal from '../components/CopilotModal';
+import { OFFSET_WIDTH } from '../components/style';
 
-import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep } from './utilities';
+import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep } from '../utilities';
 
-import type { Step, CopilotContext } from './types';
+import type { Step, CopilotContext } from '../types';
 
 type State = {
   steps: { [string]: Step },
