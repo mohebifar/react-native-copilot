@@ -109,3 +109,28 @@ it('hides the tutorial tooltip once the tutorial is finished', async () => {
 
   expect(modal.children.length).toBe(0);
 });
+
+it('shows the custom tooltip component if specified', async () => {
+  const TooltipComponent = () => (
+    <View />
+  );
+
+  const CopilotComponent = copilot({
+    tooltipComponent: TooltipComponent,
+  })(SampleComponent);
+
+  const tree = renderer.create(<CopilotComponent />);
+  tree.root.findByType(SampleComponent).props.start();
+  const tooltip = tree.root.findByType(TooltipComponent);
+
+  expect(tooltip).toBeDefined();
+  expect(tooltip.props).toHaveProperty('currentStep');
+  expect(tooltip.props).toHaveProperty('handlePrev');
+  expect(tooltip.props).toHaveProperty('handleNext');
+  expect(tooltip.props).toHaveProperty('handleStop');
+  expect(tooltip.props).toHaveProperty('isFirstStep');
+  expect(tooltip.props).toHaveProperty('isLastStep');
+  expect(tooltip.props.currentStep).toHaveProperty('name');
+  expect(tooltip.props.currentStep).toHaveProperty('order');
+  expect(tooltip.props.currentStep).toHaveProperty('text');
+});
