@@ -1,50 +1,52 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, Text, TouchableOpacity } from 'react-native';
+import { Animated, Easing, View, Text, NativeModules } from 'react-native';
 
-import Button from './Button';
+import Tooltip from './Tooltip';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
 
 type Props = {
   stop: () => void,
   next: () => void,
   prev: () => void,
-  nextButton?: React$Element,
-  prevButton?: React$Element,
-  skipButton?: React$Element,
-  finishButton?: React$Element,
   currentStepNumber: number,
   currentStep: ?Step,
   visible: boolean,
   isFirstStep: boolean,
   isLastStep: boolean,
+  easing: ?func,
+  animationDuration: ?number,
+  tooltipComponent: ?React$Component,
+  overlay: 'svg' | 'view',
+  animated: boolean,
 };
 
 type State = {
   tooltip: Object,
   arrow: Object,
-  anim: Object,
+  animatedValues: Object,
   notAnimated: boolean,
+  layout: ?{
+    width: number,
+    height: number,
+  },
 };
 
 class CopilotModal extends Component<Props, State> {
   static defaultProps = {
-    nextButton: <Button>Next</Button>,
-    prevButton: <Button>Previous</Button>,
-    skipButton: <Button>Stop</Button>,
-    finishButton: <Button>Finish</Button>,
+    easing: Easing.elastic(0.7),
+    animationDuration: 400,
+    tooltipComponent: Tooltip,
+    // If react-native-svg native module was avaialble, use svg as the default overlay component
+    overlay: typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
+    // If animated was not specified, rely on the default overlay type
+    animated: typeof NativeModules.RNSVGSvgViewManager !== 'undefined',
   };
 
   state = {
     tooltip: {},
     arrow: {},
-    anim: {
-      leftOverlayRightBoundary: new Animated.Value(0),
-      rightOverlayLeftBoundary: new Animated.Value(0),
-      verticalOverlayLeftBoundary: new Animated.Value(0),
-      verticalOverlayRightBoundary: new Animated.Value(0),
-      topOverlayBottomBoundary: new Animated.Value(0),
-      bottomOverlayTopBoundary: new Animated.Value(0),
+    animatedValues: {
       top: new Animated.Value(0),
       stepNumberLeft: new Animated.Value(0),
     },
@@ -63,7 +65,6 @@ class CopilotModal extends Component<Props, State> {
   }
 
   async animateMove(obj = {}): void {
-    const duration = 300;
     let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
 
     const layout = await this.measure();
@@ -114,76 +115,83 @@ class CopilotModal extends Component<Props, State> {
     }
 
     const animate = {
-      leftOverlayRightBoundary: layout.width - obj.left,
-      rightOverlayLeftBoundary: obj.left + obj.width,
-      verticalOverlayLeftBoundary: obj.left,
-      verticalOverlayRightBoundary: layout.width - obj.left - obj.width,
-      topOverlayBottomBoundary: layout.height - obj.top,
-      bottomOverlayTopBoundary: obj.top + obj.height,
       top: obj.top,
       stepNumberLeft,
     };
 
     if (this.state.animated) {
-      Animated.parallel(Object.keys(animate).map(key => Animated.timing(this.state.anim[key], {
-        duration,
-        toValue: animate[key],
-        easing: Easing.linear,
-      }))).start();
+      Animated
+        .parallel(Object.keys(animate).map(key => Animated.timing(this.state.animatedValues[key], {
+          toValue: animate[key],
+          duration: this.props.animationDuration,
+          easing: this.props.easing,
+        })))
+        .start();
     } else {
       Object.keys(animate).forEach((key) => {
-        this.state.anim[key].setValue(animate[key]);
+        this.state.animatedValues[key].setValue(animate[key]);
       });
     }
 
     this.setState({
       tooltip,
       arrow,
-      // FIXME: Animation is sluggish on Android
-      // animated: true,
+      layout,
+      animated: this.props.animated,
+      size: {
+        x: obj.width,
+        y: obj.height,
+      },
+      position: {
+        x: Math.floor(Math.max(obj.left, 0)),
+        y: Math.floor(Math.max(obj.top, 0)),
+      },
     });
   }
 
+  handleNext = () => {
+    this.props.next();
+  }
+
+  handlePrev = () => {
+    this.props.prev();
+  }
+
+  handleStop = () => {
+    this.setState({ animated: false });
+    this.props.stop();
+  }
+
   render() {
+    const { tooltipComponent: TooltipComponent } = this.props;
+
+    /* eslint-disable global-require */
+    const MaskComponent = this.props.overlay === 'svg'
+      ? require('./SvgMask').default
+      : require('./ViewMask').default;
+    /* eslint-enable */
+
     return this.props.visible ? (
       <View
         style={styles.container}
         ref={(element) => { this.wrapper = element; }}
         onLayout={() => { }}
       >
-        <Animated.View
-          style={[styles.overlayRectangle, { right: this.state.anim.leftOverlayRightBoundary }]}
+        <MaskComponent
+          animated={this.props.animated}
+          layout={this.state.layout}
+          style={styles.overlayContainer}
+          size={this.state.size}
+          position={this.state.position}
+          easing={this.props.easing}
+          animationDuration={this.props.animationDuration}
         />
-        <Animated.View
-          style={[styles.overlayRectangle, { left: this.state.anim.rightOverlayLeftBoundary }]}
-        />
-        <Animated.View
-          style={[
-            styles.overlayRectangle,
-            {
-              top: this.state.anim.bottomOverlayTopBoundary,
-              left: this.state.anim.verticalOverlayLeftBoundary,
-              right: this.state.anim.verticalOverlayRightBoundary,
-            },
-          ]}
-        />
-        <Animated.View
-          style={[
-            styles.overlayRectangle,
-            {
-              bottom: this.state.anim.topOverlayBottomBoundary,
-              left: this.state.anim.verticalOverlayLeftBoundary,
-              right: this.state.anim.verticalOverlayRightBoundary,
-            },
-          ]}
-        />
-
         <Animated.View
           style={[
             styles.stepNumber,
             {
-              left: this.state.anim.stepNumberLeft,
-              top: Animated.add(this.state.anim.top, -STEP_NUMBER_RADIUS),
+              left: this.state.animatedValues.stepNumberLeft,
+              top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
             },
           ]}
         >
@@ -191,34 +199,14 @@ class CopilotModal extends Component<Props, State> {
         </Animated.View>
         <Animated.View style={[styles.arrow, this.state.arrow]} />
         <Animated.View style={[styles.tooltip, this.state.tooltip]}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.tooltipText}>{this.props.currentStep.text}</Text>
-          </View>
-          <View style={[styles.bottomBar]}>
-            {
-              !this.props.isLastStep ?
-                <TouchableOpacity onPress={this.props.stop}>
-                  {this.props.skipButton}
-                </TouchableOpacity>
-                : null
-            }
-            {
-              !this.props.isFirstStep ?
-                <TouchableOpacity onPress={this.props.prev}>
-                  {this.props.prevButton}
-                </TouchableOpacity>
-                : null
-            }
-            {
-              !this.props.isLastStep ?
-                <TouchableOpacity onPress={this.props.next}>
-                  {this.props.nextButton}
-                </TouchableOpacity> :
-                <TouchableOpacity onPress={this.props.stop}>
-                  {this.props.finishButton}
-                </TouchableOpacity>
-            }
-          </View>
+          <TooltipComponent
+            isFirstStep={this.props.isFirstStep}
+            isLastStep={this.props.isLastStep}
+            currentStep={this.props.currentStep}
+            handleNext={this.handleNext}
+            handlePrev={this.handlePrev}
+            handleStop={this.handleStop}
+          />
         </Animated.View>
       </View>
     ) : null;

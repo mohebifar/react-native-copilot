@@ -12,3 +12,8 @@ export type CopilotContext = {
   unregisterStep: (name: string) => void,
   getCurrentStep: () => Step,
 }
+
+export type valueXY = {
+  x: number,
+  y: number,
+};
