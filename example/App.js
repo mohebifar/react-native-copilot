@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, Image, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
+import { copilot, walkthroughable, CopilotStep } from '@okgrow/react-native-copilot';
 
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableImage = walkthroughable(Image);
@@ -52,7 +52,7 @@ const App = props => (
   <View style={styles.container}>
     <CopilotStep text="Hey! This is the first step of the tour!" order={1} name="openApp">
       <WalkthroughableText style={styles.title}>
-        {'Welcome to the demo of\n"React Native Joyride"'}
+        {'Welcome to the demo of\n"React Native Copilot"'}
       </WalkthroughableText>
     </CopilotStep>
     <View style={styles.middleView}>
