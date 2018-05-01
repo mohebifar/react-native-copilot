@@ -13,8 +13,8 @@ function matchesFile(filename, fileGlob) {
 
 function copyAndWatch(source, destination, fileGlob) {
   console.log(`Cleaning "${destination}"`);
-  rimraf(destination + '/../node_modules', () => {
-    rimraf(destination + '/../example', () => {
+  rimraf(`${destination}/../node_modules`, () => {
+    rimraf(`${destination}/../example`, () => {
       rimraf(destination, () => {
         console.log(`Copying "${source}" to "${destination}"`);
         fs.copy(source, destination, (err) => {
@@ -35,7 +35,6 @@ function copyAndWatch(source, destination, fileGlob) {
       });
     });
   });
-
 }
 
 copyAndWatch(
