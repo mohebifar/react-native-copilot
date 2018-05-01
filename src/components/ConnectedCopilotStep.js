@@ -31,7 +31,7 @@ class ConnectedCopilotStep extends Component<Props> {
   }
 
   measure() {
-    if (__TEST__) { // eslint-disable-line no-undef
+    if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
       return new Promise(resolve => resolve({
         x: 0, y: 0, width: 0, height: 0,
       }));
