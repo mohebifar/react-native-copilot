@@ -15,6 +15,13 @@
 npm install --save @okgrow/react-native-copilot
 ```
 
+**Optional**: If you want to have the smooth SVG animation, you should install and link `react-native-svg`. If you are using Expo, **you can skip** this as Expo comes with `react-native-svg`.
+
+```
+npm install --save react-native-svg
+react-native link react-native-svg
+```
+
 ## Usage
 Use the `copilot()` higher order component for the screen component that you want to use copilot with:
 
