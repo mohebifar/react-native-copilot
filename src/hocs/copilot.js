@@ -11,6 +11,12 @@ import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep } fr
 
 import type { Step, CopilotContext } from '../types';
 
+/*
+This is the maximum wait time for the steps to be registered before starting the tutorial
+At 60fps means 2 seconds
+*/
+const MAX_START_TRIES = 120;
+
 type State = {
   steps: { [string]: Step },
   currentStep: ?Step,
@@ -53,22 +59,19 @@ const copilot = ({
       getNextStep = (step: ?Step = this.state.currentStep): ?Step =>
         getNextStep(this.state.steps, step);
 
-      setCurrentStep = async (step: Step): void => {
+      setCurrentStep = async (step: Step, move?: boolean = true): void => {
         await this.setState({ currentStep: step });
 
-        const size = await this.state.currentStep.target.measure();
-
-        this.modal.animateMove({
-          width: size.width + OFFSET_WIDTH,
-          height: size.height + OFFSET_WIDTH,
-          left: size.x - (OFFSET_WIDTH / 2),
-          top: size.y - (OFFSET_WIDTH / 2),
-        });
+        if (move) {
+          this.moveToCurrentStep();
+        }
       }
 
-      setVisibility = (visible: boolean): void => {
-        this.setState({ visible });
-      }
+      setVisibility = (visible: boolean): void => new Promise((resolve) => {
+        this.setState({ visible }, () => resolve());
+      });
+
+      startTries = 0;
 
       isFirstStep = (): boolean => this.state.currentStep === this.getFirstStep();
 
@@ -99,19 +102,42 @@ const copilot = ({
         await this.setCurrentStep(this.getPrevStep());
       }
 
-      start = (fromStep?: string): void => {
+      start = async (fromStep?: string): void => {
         const { steps } = this.state;
 
         const currentStep = fromStep
           ? steps.find(step => step.name === fromStep)
           : this.getFirstStep();
 
-        this.setCurrentStep(currentStep);
-        this.setVisibility(true);
+        if (this.startTries > MAX_START_TRIES) {
+          this.startTries = 0;
+          return;
+        }
+
+        if (currentStep === null) {
+          this.startTries += 1;
+          requestAnimationFrame(() => this.start(fromStep));
+        } else {
+          await this.setCurrentStep(currentStep, false);
+          await this.moveToCurrentStep();
+          await this.setVisibility(true);
+          this.startTries = 0;
+        }
       }
 
-      stop = (): void => {
-        this.setVisibility(false);
+      stop = async (): void => {
+        await this.setVisibility(false);
+      }
+
+      async moveToCurrentStep(): void {
+        const size = await this.state.currentStep.target.measure();
+
+        await this.modal.animateMove({
+          width: size.width + OFFSET_WIDTH,
+          height: size.height + OFFSET_WIDTH,
+          left: size.x - (OFFSET_WIDTH / 2),
+          top: size.y - (OFFSET_WIDTH / 2),
+        });
       }
 
       render() {

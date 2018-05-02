@@ -39,9 +39,8 @@ class SvgMask extends Component<Props, State> {
 
     this.state = {
       canvasSize: { x: 0, y: 0 },
-      size: new Animated.ValueXY({ x: 0, y: 0 }),
-      position: new Animated.ValueXY({ x: 0, y: 0 }),
-      animated: false,
+      size: new Animated.ValueXY(props.size),
+      position: new Animated.ValueXY(props.position),
     };
 
     this.state.position.addListener(this.animationListener);
@@ -61,7 +60,7 @@ class SvgMask extends Component<Props, State> {
   };
 
   animate = (size: valueXY = this.props.size, position: valueXY = this.props.position): void => {
-    if (this.state.animated) {
+    if (this.props.animated) {
       Animated.parallel([
         Animated.timing(this.state.size, {
           toValue: size,
@@ -77,7 +76,6 @@ class SvgMask extends Component<Props, State> {
     } else {
       this.state.size.setValue(size);
       this.state.position.setValue(position);
-      this.setState({ animated: this.props.animated });
     }
   }
 
