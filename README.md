@@ -1,6 +1,8 @@
 # React Native Copilot
 
-[![Build Status](https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/badge.svg)](https://semaphoreci.com/okgrow/react-native-co-pilot)
+[![Build Status](https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg)](https://semaphoreci.com/okgrow/react-native-co-pilot)
+[![npm version](https://img.shields.io/npm/v/@okgrow/react-native-copilot.svg)](https://www.npmjs.com/package/merge-graphql-schemas)
+[![npm downloads](https://img.shields.io/npm/dm/@okgrow/react-native-copilot.svg)](https://www.npmjs.com/package/merge-graphql-schemas)
 
 > Step-by-step walkthrough for your react native app
 
