@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, Image, View, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -48,42 +48,50 @@ const styles = StyleSheet.create({
   },
 });
 
-const App = props => (
-  <View style={styles.container}>
-    <CopilotStep text="Hey! This is the first step of the tour!" order={1} name="openApp">
-      <WalkthroughableText style={styles.title}>
-        {'Welcome to the demo of\n"React Native Copilot"'}
-      </WalkthroughableText>
-    </CopilotStep>
-    <View style={styles.middleView}>
-      <CopilotStep text="Here goes your profile picture!" order={2} name="secondText">
-        <WalkthroughableImage
-          source={{ uri: 'https://pbs.twimg.com/profile_images/527584017189982208/l3wwN-l-_400x400.jpeg' }}
-          style={styles.profilePhoto}
-        />
-      </CopilotStep>
-      <TouchableOpacity style={styles.button} onPress={() => props.start()}>
-        <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
-      </TouchableOpacity>
-    </View>
-    <View style={styles.row}>
-      <CopilotStep text="Here is an item in the corner of the screen." order={3} name="thirdText">
-        <WalkthroughableText style={styles.tabItem}>
-          <Ionicons name="ios-contact" size={40} color="#888" />
-        </WalkthroughableText>
-      </CopilotStep>
+class App extends Component {
+  static propTypes = {
+    start: PropTypes.func.isRequired,
+  };
 
-      <Ionicons style={styles.tabItem} name="ios-game-controller-b" size={40} color="#888" />
-      <Ionicons style={styles.tabItem} name="ios-globe" size={40} color="#888" />
-      <Ionicons style={styles.tabItem} name="ios-navigate-outline" size={40} color="#888" />
-      <Ionicons style={styles.tabItem} name="ios-rainy" size={40} color="#888" />
-    </View>
-  </View>
-);
+  componentDidMount() {
+    this.props.start();
+  }
 
-App.propTypes = {
-  start: PropTypes.func.isRequired,
-};
+  render() {
+    return (
+      <View style={styles.container}>
+        <CopilotStep text="Hey! This is the first step of the tour!" order={1} name="openApp">
+          <WalkthroughableText style={styles.title}>
+            {'Welcome to the demo of\n"React Native Copilot"'}
+          </WalkthroughableText>
+        </CopilotStep>
+        <View style={styles.middleView}>
+          <CopilotStep text="Here goes your profile picture!" order={2} name="secondText">
+            <WalkthroughableImage
+              source={{ uri: 'https://pbs.twimg.com/profile_images/527584017189982208/l3wwN-l-_400x400.jpeg' }}
+              style={styles.profilePhoto}
+            />
+          </CopilotStep>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.start()}>
+            <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.row}>
+          <CopilotStep text="Here is an item in the corner of the screen." order={3} name="thirdText">
+            <WalkthroughableText style={styles.tabItem}>
+              <Ionicons name="ios-contact" size={40} color="#888" />
+            </WalkthroughableText>
+          </CopilotStep>
+
+          <Ionicons style={styles.tabItem} name="ios-game-controller-b" size={40} color="#888" />
+          <Ionicons style={styles.tabItem} name="ios-globe" size={40} color="#888" />
+          <Ionicons style={styles.tabItem} name="ios-navigate-outline" size={40} color="#888" />
+          <Ionicons style={styles.tabItem} name="ios-rainy" size={40} color="#888" />
+        </View>
+      </View>
+    );
+  }
+}
 
 export default copilot({
   animated: true, // Can be true or false
