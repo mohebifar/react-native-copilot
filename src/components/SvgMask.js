@@ -25,7 +25,7 @@ type Props = {
 type State = {
   size: Animated.ValueXY,
   position: Animated.ValueXY,
-  canvasSize: valueXY,
+  canvasSize: ?valueXY,
 };
 
 class SvgMask extends Component<Props, State> {
@@ -38,10 +38,9 @@ class SvgMask extends Component<Props, State> {
     super(props);
 
     this.state = {
-      canvasSize: { x: 0, y: 0 },
-      size: new Animated.ValueXY({ x: 0, y: 0 }),
-      position: new Animated.ValueXY({ x: 0, y: 0 }),
-      animated: false,
+      canvasSize: null,
+      size: new Animated.ValueXY(props.size),
+      position: new Animated.ValueXY(props.position),
     };
 
     this.state.position.addListener(this.animationListener);
@@ -61,7 +60,7 @@ class SvgMask extends Component<Props, State> {
   };
 
   animate = (size: valueXY = this.props.size, position: valueXY = this.props.position): void => {
-    if (this.state.animated) {
+    if (this.props.animated) {
       Animated.parallel([
         Animated.timing(this.state.size, {
           toValue: size,
@@ -77,7 +76,6 @@ class SvgMask extends Component<Props, State> {
     } else {
       this.state.size.setValue(size);
       this.state.position.setValue(position);
-      this.setState({ animated: this.props.animated });
     }
   }
 
@@ -93,15 +91,21 @@ class SvgMask extends Component<Props, State> {
   render() {
     return (
       <View pointerEvents="box-none" style={this.props.style} onLayout={this.handleLayout}>
-        <Svg pointerEvents="none" width={this.state.canvasSize.x} height={this.state.canvasSize.y}>
-          <AnimatedSvgPath
-            ref={(ref) => { this.mask = ref; }}
-            fill="rgba(0, 0, 0, 0.4)"
-            fillRule="evenodd"
-            strokeWidth={1}
-            d={path(this.state.size, this.state.position, this.state.canvasSize)}
-          />
-        </Svg>
+        {
+          this.state.canvasSize
+            ? (
+              <Svg pointerEvents="none" width={this.state.canvasSize.x} height={this.state.canvasSize.y}>
+                <AnimatedSvgPath
+                  ref={(ref) => { this.mask = ref; }}
+                  fill="rgba(0, 0, 0, 0.4)"
+                  fillRule="evenodd"
+                  strokeWidth={1}
+                  d={path(this.state.size, this.state.position, this.state.canvasSize)}
+                />
+              </Svg>
+            )
+            : null
+        }
       </View>
     );
   }

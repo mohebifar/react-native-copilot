@@ -51,9 +51,22 @@ class CopilotModal extends Component<Props, State> {
       stepNumberLeft: new Animated.Value(0),
     },
     animated: false,
+    containerVisible: false,
   };
 
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.visible === false) {
+      this.reset();
+    }
+  }
+
   measure(): Promise {
+    if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
+      return new Promise(resolve => resolve({
+        x: 0, y: 0, width: 0, height: 0,
+      }));
+    }
+
     return new Promise((resolve, reject) => {
       this.wrapper.measure(
         (ox, oy, width, height, x, y) => resolve({
@@ -64,10 +77,10 @@ class CopilotModal extends Component<Props, State> {
     });
   }
 
-  async animateMove(obj = {}): void {
-    let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
-
+  async _animateMove(obj = {}): void {
     const layout = await this.measure();
+
+    let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
 
     if (stepNumberLeft < 0) {
       stepNumberLeft = (obj.left + obj.width) - STEP_NUMBER_RADIUS;
@@ -121,11 +134,12 @@ class CopilotModal extends Component<Props, State> {
 
     if (this.state.animated) {
       Animated
-        .parallel(Object.keys(animate).map(key => Animated.timing(this.state.animatedValues[key], {
-          toValue: animate[key],
-          duration: this.props.animationDuration,
-          easing: this.props.easing,
-        })))
+        .parallel(Object.keys(animate)
+          .map(key => Animated.timing(this.state.animatedValues[key], {
+            toValue: animate[key],
+            duration: this.props.animationDuration,
+            easing: this.props.easing,
+          })))
         .start();
     } else {
       Object.keys(animate).forEach((key) => {
@@ -149,6 +163,26 @@ class CopilotModal extends Component<Props, State> {
     });
   }
 
+  animateMove(obj = {}): void {
+    return new Promise((resolve) => {
+      this.setState(
+        { containerVisible: true },
+        () => requestAnimationFrame(async () => {
+          await this._animateMove(obj);
+          resolve();
+        }),
+      );
+    });
+  }
+
+  reset(): void {
+    this.setState({
+      animated: false,
+      containerVisible: false,
+      layout: undefined,
+    });
+  }
+
   handleNext = () => {
     this.props.next();
   }
@@ -158,56 +192,72 @@ class CopilotModal extends Component<Props, State> {
   }
 
   handleStop = () => {
-    this.setState({ animated: false });
+    this.reset();
     this.props.stop();
   }
 
-  render() {
-    const { tooltipComponent: TooltipComponent } = this.props;
-
+  renderMask() {
     /* eslint-disable global-require */
     const MaskComponent = this.props.overlay === 'svg'
       ? require('./SvgMask').default
       : require('./ViewMask').default;
     /* eslint-enable */
 
-    return this.props.visible ? (
+    return (
+      <MaskComponent
+        animated={this.props.animated}
+        layout={this.state.layout}
+        style={styles.overlayContainer}
+        size={this.state.size}
+        position={this.state.position}
+        easing={this.props.easing}
+        animationDuration={this.props.animationDuration}
+      />
+    );
+  }
+
+  renderTooltip() {
+    const { tooltipComponent: TooltipComponent } = this.props;
+
+    return [
+      <Animated.View
+        key="stepNumber"
+        style={[
+          styles.stepNumber,
+          {
+            left: this.state.animatedValues.stepNumberLeft,
+            top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
+          },
+        ]}
+      >
+        <Text style={[styles.stepNumberText]}>{this.props.currentStepNumber}</Text>
+      </Animated.View>,
+      <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
+      <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip]}>
+        <TooltipComponent
+          isFirstStep={this.props.isFirstStep}
+          isLastStep={this.props.isLastStep}
+          currentStep={this.props.currentStep}
+          handleNext={this.handleNext}
+          handlePrev={this.handlePrev}
+          handleStop={this.handleStop}
+        />
+      </Animated.View>,
+    ];
+  }
+
+  render() {
+    const containerVisible = this.state.containerVisible || this.props.visible;
+    const contentVisible = this.state.layout && this.state.containerVisible && this.props.visible;
+
+    return containerVisible ? (
       <View
         style={styles.container}
         ref={(element) => { this.wrapper = element; }}
         onLayout={() => { }}
       >
-        <MaskComponent
-          animated={this.props.animated}
-          layout={this.state.layout}
-          style={styles.overlayContainer}
-          size={this.state.size}
-          position={this.state.position}
-          easing={this.props.easing}
-          animationDuration={this.props.animationDuration}
-        />
-        <Animated.View
-          style={[
-            styles.stepNumber,
-            {
-              left: this.state.animatedValues.stepNumberLeft,
-              top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
-            },
-          ]}
-        >
-          <Text style={[styles.stepNumberText]}>{this.props.currentStepNumber}</Text>
-        </Animated.View>
-        <Animated.View style={[styles.arrow, this.state.arrow]} />
-        <Animated.View style={[styles.tooltip, this.state.tooltip]}>
-          <TooltipComponent
-            isFirstStep={this.props.isFirstStep}
-            isLastStep={this.props.isLastStep}
-            currentStep={this.props.currentStep}
-            handleNext={this.handleNext}
-            handlePrev={this.handlePrev}
-            handleStop={this.handleStop}
-          />
-        </Animated.View>
+        {contentVisible && this.renderMask()}
+        {contentVisible && this.renderTooltip()}
       </View>
     ) : null;
   }
