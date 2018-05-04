@@ -60,5 +60,7 @@
       "__TEST__": true
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "mitt": "^1.1.3"
+  }
 }
