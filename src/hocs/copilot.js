@@ -111,7 +111,7 @@ const copilot = ({
         const { steps } = this.state;
 
         const currentStep = fromStep
-          ? steps.find(step => step.name === fromStep)
+          ? steps[fromStep]
           : this.getFirstStep();
 
         if (this.startTries > MAX_START_TRIES) {
@@ -119,7 +119,7 @@ const copilot = ({
           return;
         }
 
-        if (currentStep === null) {
+        if (!currentStep) {
           this.startTries += 1;
           requestAnimationFrame(() => this.start(fromStep));
         } else {
