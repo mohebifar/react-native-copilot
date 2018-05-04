@@ -51,10 +51,18 @@ const styles = StyleSheet.create({
 class App extends Component {
   static propTypes = {
     start: PropTypes.func.isRequired,
+    copilotEvents: PropTypes.shape({
+      on: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   componentDidMount() {
+    this.props.copilotEvents.on('stepChange', this.handleStepChange);
     this.props.start();
+  }
+
+  handleStepChange = (step) => {
+    console.log(`Current step is: ${step.name}`);
   }
 
   render() {

@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import { View } from 'react-native';
 
+import mitt from 'mitt';
+
 import CopilotModal from '../components/CopilotModal';
 import { OFFSET_WIDTH } from '../components/style';
 
@@ -61,6 +63,7 @@ const copilot = ({
 
       setCurrentStep = async (step: Step, move?: boolean = true): void => {
         await this.setState({ currentStep: step });
+        this.eventEmitter.emit('stepChange', step);
 
         if (move) {
           this.moveToCurrentStep();
@@ -72,6 +75,8 @@ const copilot = ({
       });
 
       startTries = 0;
+
+      eventEmitter = mitt();
 
       isFirstStep = (): boolean => this.state.currentStep === this.getFirstStep();
 
@@ -118,6 +123,7 @@ const copilot = ({
           this.startTries += 1;
           requestAnimationFrame(() => this.start(fromStep));
         } else {
+          this.eventEmitter.emit('start');
           await this.setCurrentStep(currentStep, false);
           await this.moveToCurrentStep();
           await this.setVisibility(true);
@@ -127,6 +133,7 @@ const copilot = ({
 
       stop = async (): void => {
         await this.setVisibility(false);
+        this.eventEmitter.emit('stop');
       }
 
       async moveToCurrentStep(): void {
@@ -148,6 +155,7 @@ const copilot = ({
               start={this.start}
               currentStep={this.state.currentStep}
               visible={this.state.visible}
+              copilotEvents={this.eventEmitter}
             />
             <CopilotModal
               next={this.next}
