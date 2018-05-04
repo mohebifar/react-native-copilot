@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Modal } from 'react-native';
 import renderer from 'react-test-renderer';
 import { copilot, walkthroughable, CopilotStep } from '../index';
 import CopilotModal from '../components/CopilotModal';
@@ -26,9 +26,9 @@ it('only renders the component within a wrapper as long as tutorial has not been
   const CopilotComponent = copilot()(SampleComponent);
 
   const tree = renderer.create(<CopilotComponent />);
-  const numberOfChildren = tree.root.findByType(CopilotModal).children.length;
+  const modal = tree.root.findByType(CopilotModal).findByType(Modal);
 
-  expect(numberOfChildren).toEqual(0);
+  expect(modal.props.visible).toBeFalsy();
 });
 
 it('renders the modal once the tutorial is started', async () => {
@@ -37,9 +37,9 @@ it('renders the modal once the tutorial is started', async () => {
   const tree = renderer.create(<CopilotComponent />);
   await tree.root.findByType(SampleComponent).props.start();
 
-  const numberOfChildren = tree.root.findByType(CopilotModal).children.length;
+  const modal = tree.root.findByType(CopilotModal).findByType(Modal);
 
-  expect(numberOfChildren).toBeGreaterThan(0);
+  expect(modal.props.visible).toBeTruthy();
 });
 
 it('renders <ViewMask /> when the overlay is `view`', async () => {
@@ -97,17 +97,17 @@ it('hides the tutorial tooltip once the tutorial is finished', async () => {
   const CopilotComponent = copilot()(SampleComponent);
 
   const tree = renderer.create(<CopilotComponent />);
-  const modal = tree.root.findByType(CopilotModal);
+  const modal = tree.root.findByType(CopilotModal).findByType(Modal);
 
-  expect(modal.children.length).toBe(0);
+  expect(modal.props.visible).toBeFalsy();
 
   await tree.root.findByType(SampleComponent).props.start();
 
-  expect(modal.children.length).toBeGreaterThan(0);
+  expect(modal.props.visible).toBeTruthy();
 
   await tree.root.instance.stop();
 
-  expect(modal.children.length).toBe(0);
+  expect(modal.props.visible).toBeFalsy();
 });
 
 it('shows the custom tooltip component if specified', async () => {
