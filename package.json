@@ -1,6 +1,6 @@
 {
   "name": "@okgrow/react-native-copilot",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Make an interactive step by step tour guide for you react-native app",
   "main": "src/index.js",
   "private": false,
