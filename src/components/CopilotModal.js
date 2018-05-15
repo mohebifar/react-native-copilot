@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, Text, NativeModules, Modal } from 'react-native';
+import { Animated, Easing, View, Text, NativeModules } from 'react-native';
 
 import Tooltip from './Tooltip';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -250,23 +250,16 @@ class CopilotModal extends Component<Props, State> {
     const containerVisible = this.state.containerVisible || this.props.visible;
     const contentVisible = this.state.layout && this.state.containerVisible && this.props.visible;
 
-    return (
-      <Modal
-        animationType="none"
-        visible={containerVisible}
-        onRequestClose={() => { }}
-        transparent
+    return containerVisible ? (
+      <View
+        style={styles.container}
+        ref={(element) => { this.wrapper = element; }}
+        onLayout={() => { }}
       >
-        <View
-          style={styles.container}
-          ref={(element) => { this.wrapper = element; }}
-          onLayout={() => { }}
-        >
-          {contentVisible && this.renderMask()}
-          {contentVisible && this.renderTooltip()}
-        </View>
-      </Modal>
-    );
+        {contentVisible && this.renderMask()}
+        {contentVisible && this.renderTooltip()}
+      </View>
+    ) : null;
   }
 }
 
