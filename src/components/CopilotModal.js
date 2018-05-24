@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, Text, NativeModules, Modal, StatusBar } from 'react-native';
+import { Animated, Easing, View, Text, NativeModules, Modal, StatusBar, Platform } from 'react-native';
 
 import Tooltip from './Tooltip';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -81,7 +81,7 @@ class CopilotModal extends Component<Props, State> {
 
   async _animateMove(obj = {}): void {
     const layout = await this.measure();
-    if (this.props.androidStatusBarVisible) {
+    if (this.props.androidStatusBarVisible && Platform.OS === 'android') {
       obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
     }
 
