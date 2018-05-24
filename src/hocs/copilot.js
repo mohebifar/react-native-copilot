@@ -23,12 +23,14 @@ type State = {
   steps: { [string]: Step },
   currentStep: ?Step,
   visible: boolean,
+  androidStatusBarVisible: boolean,
 };
 
 const copilot = ({
   overlay,
   tooltipComponent,
   animated,
+  androidStatusBarVisible,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -169,6 +171,7 @@ const copilot = ({
               tooltipComponent={tooltipComponent}
               overlay={overlay}
               animated={animated}
+              androidStatusBarVisible={androidStatusBarVisible}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
