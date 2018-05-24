@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, Text, NativeModules, Modal } from 'react-native';
+import { Animated, Easing, View, Text, NativeModules, Modal, StatusBar } from 'react-native';
 
 import Tooltip from './Tooltip';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -19,6 +19,7 @@ type Props = {
   tooltipComponent: ?React$Component,
   overlay: 'svg' | 'view',
   animated: boolean,
+  androidStatusBarVisible: boolean,
 };
 
 type State = {
@@ -41,6 +42,7 @@ class CopilotModal extends Component<Props, State> {
     overlay: typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
     // If animated was not specified, rely on the default overlay type
     animated: typeof NativeModules.RNSVGSvgViewManager !== 'undefined',
+    androidStatusBarVisible: true,
   };
 
   state = {
@@ -79,6 +81,9 @@ class CopilotModal extends Component<Props, State> {
 
   async _animateMove(obj = {}): void {
     const layout = await this.measure();
+    if (this.props.androidStatusBarVisible) {
+      obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
+    }
 
     let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
 
