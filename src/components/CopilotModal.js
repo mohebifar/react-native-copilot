@@ -65,10 +65,10 @@ class CopilotModal extends Component<Props, State> {
 
   layout = {
     width: 0,
-    height: 0
+    height: 0,
   }
 
-  handleLayoutChange = ({nativeEvent: { layout }}) => {
+  handleLayoutChange = ({ nativeEvent: { layout } }) => {
     this.layout = layout;
   }
 
@@ -82,7 +82,7 @@ class CopilotModal extends Component<Props, State> {
 
     return new Promise((resolve) => {
       const setLayout = () => {
-        if(this.layout.width !== 0) {
+        if (this.layout.width !== 0) {
           resolve(this.layout);
         } else {
           requestAnimationFrame(setLayout);
