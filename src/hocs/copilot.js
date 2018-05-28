@@ -159,7 +159,6 @@ const copilot = ({
       }
 
       componentWillUnmount() {
-        console.log('componentWillUnmount method')
         this.mounted = false;
       };
 
