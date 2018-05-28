@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react';
 import { Animated, Easing, View, Text, NativeModules, Modal, StatusBar, Platform } from 'react-native';
-
 import Tooltip from './Tooltip';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
 
@@ -33,6 +32,8 @@ type State = {
   },
 };
 
+const noop = () => {};
+
 class CopilotModal extends Component<Props, State> {
   static defaultProps = {
     easing: Easing.elastic(0.7),
@@ -62,6 +63,15 @@ class CopilotModal extends Component<Props, State> {
     }
   }
 
+  layout = {
+    width: 0,
+    height: 0,
+  }
+
+  handleLayoutChange = ({ nativeEvent: { layout } }) => {
+    this.layout = layout;
+  }
+
   measure(): Promise {
     if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
       return new Promise(resolve => resolve({
@@ -69,13 +79,16 @@ class CopilotModal extends Component<Props, State> {
       }));
     }
 
-    return new Promise((resolve, reject) => {
-      this.wrapper.measure(
-        (ox, oy, width, height, x, y) => resolve({
-          x, y, width, height,
-        }),
-        reject,
-      );
+
+    return new Promise((resolve) => {
+      const setLayout = () => {
+        if (this.layout.width !== 0) {
+          resolve(this.layout);
+        } else {
+          requestAnimationFrame(setLayout);
+        }
+      };
+      setLayout();
     });
   }
 
@@ -253,19 +266,18 @@ class CopilotModal extends Component<Props, State> {
 
   render() {
     const containerVisible = this.state.containerVisible || this.props.visible;
-    const contentVisible = this.state.layout && this.state.containerVisible && this.props.visible;
+    const contentVisible = this.state.layout && containerVisible;
 
     return (
       <Modal
         animationType="none"
         visible={containerVisible}
-        onRequestClose={() => { }}
+        onRequestClose={noop}
         transparent
       >
         <View
           style={styles.container}
-          ref={(element) => { this.wrapper = element; }}
-          onLayout={() => { }}
+          onLayout={this.handleLayoutChange}
         >
           {contentVisible && this.renderMask()}
           {contentVisible && this.renderTooltip()}
