@@ -4,6 +4,7 @@ import {
   View,
   Animated,
   Easing,
+  Dimensions,
 } from 'react-native';
 // import { Svg } from 'expo';
 import Svg from 'react-native-svg';
@@ -11,6 +12,7 @@ import AnimatedSvgPath from './AnimatedPath';
 
 import type { valueXY } from '../types';
 
+const windowDimensions = Dimensions.get('window');
 const path = (size, position, canvasSize): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
 
 type Props = {
@@ -38,7 +40,10 @@ class SvgMask extends Component<Props, State> {
     super(props);
 
     this.state = {
-      canvasSize: null,
+      canvasSize: {
+        x: windowDimensions.width,
+        y: windowDimensions.height,
+      },
       size: new Animated.ValueXY(props.size),
       position: new Animated.ValueXY(props.position),
     };
@@ -104,7 +109,7 @@ class SvgMask extends Component<Props, State> {
                 />
               </Svg>
             )
-            : null
+            : null 
         }
       </View>
     );
