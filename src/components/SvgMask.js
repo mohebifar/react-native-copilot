@@ -109,7 +109,7 @@ class SvgMask extends Component<Props, State> {
                 />
               </Svg>
             )
-            : null 
+            : null
         }
       </View>
     );
