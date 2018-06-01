@@ -1,14 +1,32 @@
-# React Native Copilot
+<h1 align="center">React Native Copilot</h1>
 
-[![Build Status](https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg)](https://semaphoreci.com/okgrow/react-native-co-pilot)
-[![npm version](https://img.shields.io/npm/v/@okgrow/react-native-copilot.svg)](https://www.npmjs.com/package/merge-graphql-schemas)
-[![npm downloads](https://img.shields.io/npm/dm/@okgrow/react-native-copilot.svg)](https://www.npmjs.com/package/merge-graphql-schemas)
+<div align="center">
+  <p align="center">
+    <a href="https://semaphoreci.com/okgrow/react-native-co-pilot">
+      <img src="https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg" alt="Build Status" />
+    </a>
+    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
+      <img src="https://img.shields.io/npm/v/@okgrow/react-native-copilot.svg" alt="NPM Version" />
+    </a>
+    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
+      <img src="https://img.shields.io/npm/dm/@okgrow/react-native-copilot.svg" alt="NPM Downloads" />
+    </a>
+  </p>
+</div>
 
-> Step-by-step walkthrough for your react native app
+<p align="center">
+  Step-by-step walkthrough for your react native app!
+</p>
 
-![React Native Copilot](https://media.giphy.com/media/65VKIzGWZmHiEgEBi7/giphy.gif)
+<p align="center">
+  <img src="https://media.giphy.com/media/65VKIzGWZmHiEgEBi7/giphy.gif" alt="React Native Copilot" />
+</p>
 
-[Demo](https://expo.io/@mohebifar/copilot-example)
+<p align="center">
+  <a href="https://expo.io/@mohebifar/copilot-example" >
+    Demo
+  </a>
+</p>
 
 ## Installation
 ```
