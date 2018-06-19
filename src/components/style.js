@@ -33,6 +33,11 @@ export default StyleSheet.create({
   tooltipText: {
 
   },
+  extraComponentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   imageContainer: {
     flex: 1,
     justifyContent: 'center',

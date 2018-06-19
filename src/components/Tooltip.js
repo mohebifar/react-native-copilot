@@ -27,6 +27,9 @@ const Tooltip = ({
 }: Props) => {
   return (
     <View>
+      <View style={styles.extraComponentContainer}>
+        {currentStep.extraComponent}
+      </View>
       <View style={styles.imageContainer}>
         <Image style={{ flex: 1 }} source={currentStep.imageSource} />
       </View>
