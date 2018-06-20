@@ -29,6 +29,7 @@ type State = {
 const copilot = ({
   overlay,
   tooltipComponent,
+  stepNumberComponent,
   animated,
   androidStatusBarVisible,
 } = {}) =>
@@ -160,7 +161,7 @@ const copilot = ({
 
       componentWillUnmount() {
         this.mounted = false;
-      };
+      }
 
       render() {
         return (
@@ -181,6 +182,7 @@ const copilot = ({
               isLastStep={this.isLastStep()}
               currentStepNumber={this.getStepNumber()}
               currentStep={this.state.currentStep}
+              stepNumberComponent={stepNumberComponent}
               tooltipComponent={tooltipComponent}
               overlay={overlay}
               animated={animated}
