@@ -76,6 +76,8 @@ Every `CopilotStep` must have these props:
 1. **name**: A unique name for the walkthrough step.
 2. **order**: A positive number indicating the order of the step in the entire walkthrough.
 3. **text**: The text shown as the description for the step.
+4. **imageSource(optional)**: Image to be shown on the tooltip of walkthrough step.
+5. **extraComponent(optional)**: Any other custom React component or React element to be shown in the tooltip of walkthrough step.
 
 In order to start the tutorial, you can call the `start` prop function in the root component that is injected by `copilot`:
 
