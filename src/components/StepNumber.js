@@ -4,19 +4,11 @@ import { View, Text } from 'react-native';
 
 import styles from './style';
 
-import type { Step } from '../types';
-
 type Props = {
-  isFirstStep: boolean,
-  isLastStep: boolean,
-  currentStep: Step,
   currentStepNumber: number,
 };
 
 const StepNumber = ({
-  isFirstStep,
-  isLastStep,
-  currentStep,
   currentStepNumber,
 }: Props) => (
   <View style={styles.stepNumber}>

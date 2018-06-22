@@ -51,6 +51,14 @@ const copilot = ({
         };
       }
 
+      componentDidMount() {
+        this.mounted = true;
+      }
+
+      componentWillUnmount() {
+        this.mounted = false;
+      }
+
       getStepNumber = (step: ?Step = this.state.currentStep): number =>
         getStepNumber(this.state.steps, step);
 
@@ -153,14 +161,6 @@ const copilot = ({
           left: size.x - (OFFSET_WIDTH / 2),
           top: size.y - (OFFSET_WIDTH / 2),
         });
-      }
-
-      componentDidMount() {
-        this.mounted = true;
-      }
-
-      componentWillUnmount() {
-        this.mounted = false;
       }
 
       render() {

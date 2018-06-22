@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, Text, NativeModules, Modal, StatusBar, Platform } from 'react-native';
+import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -238,7 +238,10 @@ class CopilotModal extends Component<Props, State> {
   }
 
   renderTooltip() {
-    const { tooltipComponent: TooltipComponent, stepNumberComponent: StepNumberComponent } = this.props;
+    const {
+      tooltipComponent: TooltipComponent,
+      stepNumberComponent: StepNumberComponent,
+    } = this.props;
 
     return [
       <Animated.View
