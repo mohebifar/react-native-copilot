@@ -112,7 +112,7 @@ You can specify the overlay when applying the `copilot` HOC:
 ```js
 copilot({
   overlay: 'svg', // or 'view'
-  animated true, // or false
+  animated: true, // or false
 })(RootComponent);
 ```
 
