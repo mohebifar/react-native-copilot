@@ -178,6 +178,40 @@ class HomeScreen {
 ### Triggering the tutorial
 Use `this.props.start()` in the root component in order to trigger the tutorial. You can either invoke it with a touch event or in `componentDidMount`. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
 
+### Listening to the events
+Along with `this.props.start()`, `copilot` HOC passes `copilotEvents` function to the component to help you with tracking of tutorial progress. It utilizes [mitt](https://github.com/developit/mitt) under the hood, you can see how full API there.
+
+List of available events is:
+
+- `start` — Copilot tutorial has started.
+- `stop` — Copilot tutorial has ended or skipped.
+- `stepChange` — Next step is triggered. Passes [`Step`](https://github.com/okgrow/react-native-copilot/blob/master/src/types.js#L2) instance as event handler argument.
+
+
+**Example:**
+```js
+import { copilot, CopilotStep } from '@okgrow/react-native-copilot';
+
+const CustomComponent = ({ copilot }) => <View {...copilot}><Text>Hello world!</Text></View>;
+
+class HomeScreen {
+  componentDidMount() {
+    this.props.copilotEvents.on('stop', () => {
+      // Copilot tutorial finished!
+    });
+  }
+  
+  componentWillUnmount() {
+    // Don't forget to disable event handlers to prevent errors
+    this.props.copilotEvents.off('stop');
+  }
+
+  render() {
+    // ...
+  }
+}
+```
+
 ## Contributing
 Issues and Pull Requests are always welcome.
 
