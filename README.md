@@ -200,6 +200,11 @@ class HomeScreen {
       // Copilot tutorial finished!
     });
   }
+  
+  componentWillUnmount() {
+    // Don't forget to disable event handlers to prevent errors
+    this.props.copilotEvents.off('stop');
+  }
 
   render() {
     // ...
