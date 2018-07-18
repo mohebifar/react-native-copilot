@@ -46,18 +46,21 @@ export default StyleSheet.create({
   tooltipContainer: {
     flex: 1,
   },
-  stepNumber: {
+  stepNumberContainer: {
     position: 'absolute',
     width: STEP_NUMBER_DIAMETER,
     height: STEP_NUMBER_DIAMETER,
+    overflow: 'hidden',
+    zIndex: ZINDEX + 1,
+  },
+  stepNumber: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 2,
     borderRadius: STEP_NUMBER_RADIUS,
     borderColor: '#FFFFFF',
     backgroundColor: '#27ae60',
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: ZINDEX + 1,
   },
   stepNumberText: {
     fontSize: 10,
