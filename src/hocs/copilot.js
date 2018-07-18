@@ -170,6 +170,7 @@ const copilot = ({
               {...this.props}
               start={this.start}
               currentStep={this.state.currentStep}
+              unregisterStep={this.unregisterStep}
               visible={this.state.visible}
               copilotEvents={this.eventEmitter}
             />
