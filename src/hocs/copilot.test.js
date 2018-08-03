@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { View, Modal } from 'react-native';
 import renderer from 'react-test-renderer';
@@ -8,12 +9,16 @@ import SvgMask from '../components/SvgMask';
 
 const WalkthroughableView = walkthroughable(View);
 
-const SampleComponent = () => (
+type SampleComponentProps = {
+  secondStepActive?: boolean
+};
+
+const SampleComponent = ({ secondStepActive }: SampleComponentProps) => (
   <View>
     <CopilotStep order={0} name="step-1" text="This is the description for the first step">
       <WalkthroughableView />
     </CopilotStep>
-    <CopilotStep order={1} name="step-2" text="This is the description for the second step">
+    <CopilotStep order={1} name="step-2" active={secondStepActive} text="This is the description for the second step">
       <WalkthroughableView />
     </CopilotStep>
     <CopilotStep order={3} name="step-3" text="This is the description for the third step">
@@ -21,6 +26,10 @@ const SampleComponent = () => (
     </CopilotStep>
   </View>
 );
+
+SampleComponent.defaultProps = {
+  secondStepActive: true,
+};
 
 it('only renders the component within a wrapper as long as tutorial has not been started', () => {
   const CopilotComponent = copilot()(SampleComponent);
@@ -133,4 +142,26 @@ it('shows the custom tooltip component if specified', async () => {
   expect(tooltip.props.currentStep).toHaveProperty('name');
   expect(tooltip.props.currentStep).toHaveProperty('order');
   expect(tooltip.props.currentStep).toHaveProperty('text');
+});
+
+it('skips a step if disabled', async () => {
+  const CopilotComponent = copilot()(SampleComponent);
+
+  const tree = renderer.create(<CopilotComponent secondStepActive={false} />);
+  await tree.root.findByType(SampleComponent).props.start();
+
+  const textComponent = tree.root.findByProps({
+    testID: 'stepDescription',
+  });
+
+  expect(textComponent.props.children).toBe('This is the description for the first step');
+
+  await tree.root.instance.next();
+
+  expect(textComponent.props.children).not.toBe('This is the description for the second step');
+  expect(textComponent.props.children).toBe('This is the description for the third step');
+
+  await tree.root.instance.prev();
+
+  expect(textComponent.props.children).toBe('This is the description for the first step');
 });
