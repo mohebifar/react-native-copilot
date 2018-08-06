@@ -2,8 +2,7 @@
 import React, { Component } from 'react';
 import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
 import Tooltip from './Tooltip';
-import StepNumber from './StepNumber';
-import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
+import styles, { MARGIN, ARROW_SIZE } from './style';
 
 type Props = {
   stop: () => void,
@@ -17,7 +16,6 @@ type Props = {
   easing: ?func,
   animationDuration: ?number,
   tooltipComponent: ?React$Component,
-  stepNumberComponent: ?React$Component,
   overlay: 'svg' | 'view',
   animated: boolean,
   androidStatusBarVisible: boolean,
@@ -41,7 +39,6 @@ class CopilotModal extends Component<Props, State> {
     easing: Easing.elastic(0.7),
     animationDuration: 400,
     tooltipComponent: Tooltip,
-    stepNumberComponent: StepNumber,
     // If react-native-svg native module was avaialble, use svg as the default overlay component
     overlay: typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
     // If animated was not specified, rely on the default overlay type
@@ -53,8 +50,7 @@ class CopilotModal extends Component<Props, State> {
     tooltip: {},
     arrow: {},
     animatedValues: {
-      top: new Animated.Value(0),
-      stepNumberLeft: new Animated.Value(0),
+      top: new Animated.Value(0)
     },
     animated: false,
     containerVisible: false,
@@ -101,15 +97,6 @@ class CopilotModal extends Component<Props, State> {
       obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
     }
 
-    let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
-
-    if (stepNumberLeft < 0) {
-      stepNumberLeft = (obj.left + obj.width) - STEP_NUMBER_RADIUS;
-      if (stepNumberLeft > layout.width - STEP_NUMBER_DIAMETER) {
-        stepNumberLeft = layout.width - STEP_NUMBER_DIAMETER;
-      }
-    }
-
     const center = {
       x: obj.left + (obj.width / 2),
       y: obj.top + (obj.height / 2),
@@ -149,8 +136,7 @@ class CopilotModal extends Component<Props, State> {
     }
 
     const animate = {
-      top: obj.top,
-      stepNumberLeft,
+      top: obj.top
     };
 
     if (this.state.animated) {
@@ -239,28 +225,10 @@ class CopilotModal extends Component<Props, State> {
 
   renderTooltip() {
     const {
-      tooltipComponent: TooltipComponent,
-      stepNumberComponent: StepNumberComponent,
+      tooltipComponent: TooltipComponent
     } = this.props;
 
     return [
-      <Animated.View
-        key="stepNumber"
-        style={[
-          styles.stepNumberContainer,
-          {
-            left: this.state.animatedValues.stepNumberLeft,
-            top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
-          },
-        ]}
-      >
-        <StepNumberComponent
-          isFirstStep={this.props.isFirstStep}
-          isLastStep={this.props.isLastStep}
-          currentStep={this.props.currentStep}
-          currentStepNumber={this.props.currentStepNumber}
-        />
-      </Animated.View>,
       <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
       <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip]}>
         <TooltipComponent
