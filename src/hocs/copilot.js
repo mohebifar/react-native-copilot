@@ -24,12 +24,12 @@ type State = {
   currentStep: ?Step,
   visible: boolean,
   androidStatusBarVisible: boolean,
+  whereToScroll: number
 };
 
 const copilot = ({
   overlay,
   tooltipComponent,
-  stepNumberComponent,
   animated,
   androidStatusBarVisible,
 } = {}) =>
@@ -123,7 +123,8 @@ const copilot = ({
         await this.setCurrentStep(this.getPrevStep());
       }
 
-      start = async (fromStep?: string): void => {
+      start = async (fromStep?: string, scrollViewMeasure?: Object): void => {
+        this.scrollViewMeasure = scrollViewMeasure;
         const { steps } = this.state;
 
         const currentStep = fromStep
@@ -152,14 +153,40 @@ const copilot = ({
         this.eventEmitter.emit('stop');
       }
 
+      startScroll = async (targetMeasure): void => {
+        const whereToScroll =
+          targetMeasure.y -
+          (this.scrollViewMeasure.height - targetMeasure.height) / 2;
+  
+        await this.setState({
+          whereToScroll: whereToScroll < 0 ? 0 : whereToScroll
+        });
+        return this.scrollViewMeasure.oy > targetMeasure.y
+          ? -targetMeasure.height / 2 - whereToScroll
+          : this.scrollViewMeasure.y +
+              ((this.scrollViewMeasure.height) / 2 - targetMeasure.height);
+      };
+  
+
       async moveToCurrentStep(): void {
         const size = await this.state.currentStep.target.measure();
+        const scrollViewHeight = this.scrollViewMeasure ? this.scrollViewMeasure.height : null;
+        const targetBottomY = size.y + size.height;
+        let newTargetY;
+
+        if (scrollViewHeight && (
+          scrollViewHeight < targetBottomY ||
+          this.scrollViewMeasure.oy > size.y)) {
+          newTargetY = await this.startScroll(size);
+        }
+
+        const top = !Number.isNaN(parseFloat(newTargetY)) ? newTargetY : size.y;
 
         await this.modal.animateMove({
           width: size.width + OFFSET_WIDTH,
           height: size.height + OFFSET_WIDTH,
           left: size.x - (OFFSET_WIDTH / 2),
-          top: size.y - (OFFSET_WIDTH / 2),
+          top: top - (OFFSET_WIDTH / 2)
         });
       }
 
@@ -172,6 +199,7 @@ const copilot = ({
               currentStep={this.state.currentStep}
               visible={this.state.visible}
               copilotEvents={this.eventEmitter}
+              whereToScroll={this.state.whereToScroll}
             />
             <CopilotModal
               next={this.next}
@@ -182,7 +210,6 @@ const copilot = ({
               isLastStep={this.isLastStep()}
               currentStepNumber={this.getStepNumber()}
               currentStep={this.state.currentStep}
-              stepNumberComponent={stepNumberComponent}
               tooltipComponent={tooltipComponent}
               overlay={overlay}
               animated={animated}
