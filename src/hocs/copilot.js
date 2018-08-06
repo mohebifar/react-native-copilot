@@ -158,7 +158,7 @@ const copilot = ({
           targetMeasure.y -
           (this.scrollViewMeasure.height - targetMeasure.height) / 2;
   
-        await this.setState({
+        this.setState({
           whereToScroll: whereToScroll < 0 ? 0 : whereToScroll
         });
         return this.scrollViewMeasure.oy > targetMeasure.y
