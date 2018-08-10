@@ -7,12 +7,41 @@ type Props = {
   name: string,
   text: string,
   order: number,
+  active?: boolean,
   _copilot: CopilotContext,
   children: React$Element
 };
 
 class ConnectedCopilotStep extends Component<Props> {
+  static defaultProps = {
+    active: true,
+  };
+
   componentDidMount() {
+    if (this.props.active) {
+      this.register();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.active !== this.props.active) {
+      if (nextProps.active) {
+        this.register();
+      } else {
+        this.unregister();
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.unregister();
+  }
+
+  setNativeProps(obj) {
+    this.wrapper.setNativeProps(obj);
+  }
+
+  register() {
     this.props._copilot.registerStep({
       name: this.props.name,
       text: this.props.text,
@@ -22,12 +51,8 @@ class ConnectedCopilotStep extends Component<Props> {
     });
   }
 
-  componentWillUnmount() {
+  unregister() {
     this.props._copilot.unregisterStep(this.props.name);
-  }
-
-  setNativeProps(obj) {
-    this.wrapper.setNativeProps(obj);
   }
 
   measure() {
