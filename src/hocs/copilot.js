@@ -87,7 +87,6 @@ const copilot = ({
       });
 
       startTries = 0;
-      onStop = null;
 
       mounted = false;
 
@@ -125,7 +124,7 @@ const copilot = ({
         await this.setCurrentStep(this.getPrevStep());
       }
 
-      start = async (fromStep?: string, onStop?: () => void): void => {
+      start = async (fromStep?: string): void => {
         const { steps } = this.state;
 
         const currentStep = fromStep
@@ -147,17 +146,11 @@ const copilot = ({
           await this.setVisibility(true);
           this.startTries = 0;
         }
-
-        this.onStop = onStop;
       }
 
       stop = async (): void => {
         await this.setVisibility(false);
         this.eventEmitter.emit('stop');
-
-        if (this.onStop != null) {
-          this.onStop();
-        }
       }
 
       async moveToCurrentStep(): void {

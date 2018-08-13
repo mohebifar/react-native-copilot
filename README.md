@@ -176,9 +176,7 @@ class HomeScreen {
 ```
 
 ### Triggering the tutorial
-Use `this.props.start(fromStep, onStop)` in the root component in order to trigger the tutorial. You can either invoke it with a touch event or in `componentDidMount`. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
-
-The `onStop` method will be called after a user selects 'Skip' or 'Finish' buttion in the tooltip.
+Use `this.props.start()` in the root component in order to trigger the tutorial. You can either invoke it with a touch event or in `componentDidMount`. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
 
 ### Listening to the events
 Along with `this.props.start()`, `copilot` HOC passes `copilotEvents` function to the component to help you with tracking of tutorial progress. It utilizes [mitt](https://github.com/developit/mitt) under the hood, you can see how full API there.
