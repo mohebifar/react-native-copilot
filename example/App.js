@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, Image, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, View, TouchableOpacity, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { copilot, walkthroughable, CopilotStep } from '@okgrow/react-native-copilot';
@@ -46,6 +46,13 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
   },
+  activeSwitchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    alignItems: 'center',
+    paddingHorizontal: 40,
+  },
 });
 
 class App extends Component {
@@ -54,6 +61,10 @@ class App extends Component {
     copilotEvents: PropTypes.shape({
       on: PropTypes.func.isRequired,
     }).isRequired,
+  };
+
+  state = {
+    secondStepActive: true,
   };
 
   componentDidMount() {
@@ -74,12 +85,21 @@ class App extends Component {
           </WalkthroughableText>
         </CopilotStep>
         <View style={styles.middleView}>
-          <CopilotStep text="Here goes your profile picture!" order={2} name="secondText">
+          <CopilotStep active={this.state.secondStepActive} text="Here goes your profile picture!" order={2} name="secondText">
             <WalkthroughableImage
               source={{ uri: 'https://pbs.twimg.com/profile_images/527584017189982208/l3wwN-l-_400x400.jpeg' }}
               style={styles.profilePhoto}
             />
           </CopilotStep>
+          <View style={styles.activeSwitchContainer}>
+            <Text>Profile photo step activated?</Text>
+            <View style={{ flexGrow: 1 }} />
+            <Switch
+              onValueChange={secondStepActive => this.setState({ secondStepActive })}
+              value={this.state.secondStepActive}
+            />
+          </View>
+
           <TouchableOpacity style={styles.button} onPress={() => this.props.start()}>
             <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
           </TouchableOpacity>

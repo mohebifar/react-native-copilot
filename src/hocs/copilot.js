@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 
 import mitt from 'mitt';
+import hoistStatics from 'hoist-non-react-statics'
 
 import CopilotModal from '../components/CopilotModal';
 import { OFFSET_WIDTH } from '../components/style';
@@ -141,7 +142,7 @@ const copilot = ({
           requestAnimationFrame(() => this.start(fromStep));
         } else {
           this.eventEmitter.emit('start');
-          await this.setCurrentStep(currentStep, false);
+          await this.setCurrentStep(currentStep);
           await this.moveToCurrentStep();
           await this.setVisibility(true);
           this.startTries = 0;
@@ -205,7 +206,7 @@ const copilot = ({
       _copilot: PropTypes.object.isRequired,
     };
 
-    return Copilot;
+    return hoistStatics(Copilot, WrappedComponent);
   };
 
 export default copilot;
