@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 
 import mitt from 'mitt';
+import hoistStatics from 'hoist-non-react-statics'
 
 import CopilotModal from '../components/CopilotModal';
 import { OFFSET_WIDTH } from '../components/style';
@@ -198,7 +199,7 @@ const copilot = ({
       _copilot: PropTypes.object.isRequired,
     };
 
-    return Copilot;
+    return hoistStatics(Copilot, WrappedComponent);
   };
 
 export default copilot;
