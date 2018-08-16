@@ -61,7 +61,7 @@ class CopilotModal extends Component<Props, State> {
   };
 
   componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.visible === false) {
+    if (this.props.visible === true && nextProps.visible === false) {
       this.reset();
     }
   }
