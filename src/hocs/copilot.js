@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 
 import mitt from 'mitt';
-import hoistStatics from 'hoist-non-react-statics'
+import hoistStatics from 'hoist-non-react-statics';
 
 import CopilotModal from '../components/CopilotModal';
 import { OFFSET_WIDTH } from '../components/style';
