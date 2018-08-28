@@ -102,7 +102,7 @@ class SvgMask extends Component<Props, State> {
               <Svg pointerEvents="none" width={this.state.canvasSize.x} height={this.state.canvasSize.y}>
                 <AnimatedSvgPath
                   ref={(ref) => { this.mask = ref; }}
-                  fill="rgba(0, 0, 0, 0.6)"
+                  fill={this.props.maskColor}
                   fillRule="evenodd"
                   strokeWidth={1}
                   d={path(this.state.size, this.state.position, this.state.canvasSize)}

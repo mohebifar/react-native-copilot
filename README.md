@@ -154,6 +154,16 @@ copilot({
 })(RootComponent)
 ```
 
+### Custom mask color 
+You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a color string to the `copilot` HOC maker. 
+
+```js
+
+copilot({
+  maskColor:"rgba(50, 50, 100, 0.9)",
+})(RootComponent)
+```
+
 ### Custom components as steps
 The components wrapped inside `CopilotStep`, will receive a `copilot` prop of type `Object` which the outermost rendered element of the component or the element that you want the tooltip be shown around, must extend.
 

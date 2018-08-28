@@ -25,6 +25,7 @@ type State = {
   currentStep: ?Step,
   visible: boolean,
   androidStatusBarVisible: boolean,
+  maskColor: string
 };
 
 const copilot = ({
@@ -33,6 +34,7 @@ const copilot = ({
   stepNumberComponent,
   animated,
   androidStatusBarVisible,
+  maskColor
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -165,6 +167,9 @@ const copilot = ({
       }
 
       render() {
+        console.warn("androidStatusBarVisible",androidStatusBarVisible);
+        console.warn("maskColor", maskColor);
+       
         return (
           <View style={{ flex: 1 }}>
             <WrappedComponent
@@ -188,6 +193,7 @@ const copilot = ({
               overlay={overlay}
               animated={animated}
               androidStatusBarVisible={androidStatusBarVisible}
+              maskColor={maskColor}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
