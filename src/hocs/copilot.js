@@ -166,10 +166,7 @@ const copilot = ({
         });
       }
 
-      render() {
-        console.warn("androidStatusBarVisible",androidStatusBarVisible);
-        console.warn("maskColor", maskColor);
-       
+      render() {       
         return (
           <View style={{ flex: 1 }}>
             <WrappedComponent
