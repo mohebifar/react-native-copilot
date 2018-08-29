@@ -79,6 +79,7 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               right: leftOverlayRight,
+              backgroundColor : this.props.backdropColor
             }]}
         />
         <Animated.View
@@ -86,6 +87,7 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               left: rightOverlayLeft,
+              backgroundColor : this.props.backdropColor
             }]}
         />
         <Animated.View
@@ -95,6 +97,7 @@ class ViewMask extends Component<Props, State> {
               top: bottomOverlayTopBoundary,
               left: verticalOverlayLeftBoundary,
               right: verticalOverlayRightBoundary,
+              backgroundColor : this.props.backdropColor
             },
           ]}
         />
@@ -105,6 +108,7 @@ class ViewMask extends Component<Props, State> {
               bottom: topOverlayBottomBoundary,
               left: verticalOverlayLeftBoundary,
               right: verticalOverlayRightBoundary,
+              backgroundColor : this.props.backdropColor
             },
           ]}
         />
