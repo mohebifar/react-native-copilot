@@ -160,7 +160,7 @@ You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a
 ```js
 
 copilot({
-  maskColor:"rgba(50, 50, 100, 0.9)",
+  backdropColor:"rgba(50, 50, 100, 0.9)",
 })(RootComponent)
 ```
 
