@@ -1,6 +1,15 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
+import {
+  Animated,
+  Easing,
+  View,
+  NativeModules,
+  Modal,
+  StatusBar,
+  Platform,
+  I18nManager,
+} from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -35,6 +44,10 @@ type State = {
 };
 
 const noop = () => {};
+
+const rtl = I18nManager.isRTL;
+const start = rtl ? 'right' : 'left';
+const end = rtl ? 'left' : 'right';
 
 class CopilotModal extends Component<Props, State> {
   static defaultProps = {
@@ -101,14 +114,30 @@ class CopilotModal extends Component<Props, State> {
       obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
     }
 
-    let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
+    let stepNumberLeft;
 
-    if (stepNumberLeft < 0) {
+    const edgeCase = (stepLeft) => {
+      if (stepLeft > layout.width - STEP_NUMBER_DIAMETER) {
+        return layout.width - STEP_NUMBER_DIAMETER;
+      }
+      return stepLeft;
+    };
+
+    if (!rtl) {
+      stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
+
+      if (stepNumberLeft < 0) {
+        stepNumberLeft = (obj.left + obj.width) - STEP_NUMBER_RADIUS;
+        stepNumberLeft = edgeCase(stepNumberLeft);
+      }
+    } else {
       stepNumberLeft = (obj.left + obj.width) - STEP_NUMBER_RADIUS;
-      if (stepNumberLeft > layout.width - STEP_NUMBER_DIAMETER) {
-        stepNumberLeft = layout.width - STEP_NUMBER_DIAMETER;
+      if (stepNumberLeft > layout.width) {
+        stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
+        stepNumberLeft = edgeCase(stepNumberLeft);
       }
     }
+
 
     const center = {
       x: obj.left + (obj.width / 2),
@@ -137,15 +166,15 @@ class CopilotModal extends Component<Props, State> {
     }
 
     if (horizontalPosition === 'left') {
-      tooltip.right = Math.max(layout.width - (obj.left + obj.width), 0);
+      tooltip[end] = Math.max(layout.width - (obj.left + obj.width), 0);
       tooltip.right = tooltip.right === 0 ? tooltip.right + MARGIN : tooltip.right;
       tooltip.maxWidth = layout.width - tooltip.right - MARGIN;
-      arrow.right = tooltip.right + MARGIN;
+      arrow[end] = tooltip[end] + MARGIN;
     } else {
-      tooltip.left = Math.max(obj.left, 0);
+      tooltip[start] = Math.max(obj.left, 0);
       tooltip.left = tooltip.left === 0 ? tooltip.left + MARGIN : tooltip.left;
       tooltip.maxWidth = layout.width - tooltip.left - MARGIN;
-      arrow.left = tooltip.left + MARGIN;
+      arrow[start] = tooltip[start] + MARGIN;
     }
 
     const animate = {
@@ -249,7 +278,7 @@ class CopilotModal extends Component<Props, State> {
         style={[
           styles.stepNumberContainer,
           {
-            left: this.state.animatedValues.stepNumberLeft,
+            [start]: this.state.animatedValues.stepNumberLeft,
             top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
           },
         ]}

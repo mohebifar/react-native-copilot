@@ -1,10 +1,15 @@
 // @flow
 import React, { Component } from 'react';
-
-import { View, Animated } from 'react-native';
+import PropTypes from 'prop-types';
+import { View, Animated, I18nManager, TouchableOpacity } from 'react-native';
 import styles from './style';
 
-import type { valueXY } from '../types';
+import type { CopilotContext, valueXY } from '../types';
+
+
+const rtl = I18nManager.isRTL;
+const start = rtl ? 'right' : 'left';
+const end = rtl ? 'left' : 'right';
 
 type Props = {
   size: valueXY,
@@ -26,6 +31,10 @@ type State = {
 };
 
 class ViewMask extends Component<Props, State> {
+  static contextTypes = {
+    _copilot: PropTypes.object,
+  }
+
   state = {
     size: new Animated.ValueXY({ x: 0, y: 0 }),
     position: new Animated.ValueXY({ x: 0, y: 0 }),
@@ -35,6 +44,10 @@ class ViewMask extends Component<Props, State> {
     if (this.props.position !== nextProps.position || this.props.size !== nextProps.size) {
       this.animate(nextProps.size, nextProps.position);
     }
+  }
+
+  context: {
+    _copilot: CopilotContext,
   }
 
   animate = (size: valueXY = this.props.size, position: valueXY = this.props.position): void => {
@@ -78,14 +91,14 @@ class ViewMask extends Component<Props, State> {
           style={[
             styles.overlayRectangle,
             {
-              right: leftOverlayRight,
+              [end]: leftOverlayRight,
             }]}
         />
         <Animated.View
           style={[
             styles.overlayRectangle,
             {
-              left: rightOverlayLeft,
+              [start]: rightOverlayLeft,
             }]}
         />
         <Animated.View
@@ -93,8 +106,8 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               top: bottomOverlayTopBoundary,
-              left: verticalOverlayLeftBoundary,
-              right: verticalOverlayRightBoundary,
+              [start]: verticalOverlayLeftBoundary,
+              [end]: verticalOverlayRightBoundary,
             },
           ]}
         />
@@ -103,10 +116,21 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               bottom: topOverlayBottomBoundary,
-              left: verticalOverlayLeftBoundary,
-              right: verticalOverlayRightBoundary,
+              [start]: verticalOverlayLeftBoundary,
+              [end]: verticalOverlayRightBoundary,
             },
           ]}
+        />
+        <TouchableOpacity
+          style={{
+            backgroundColor: 'transparent',
+            [start]: this.props.position.x,
+            [end]: (this.props.layout.width - (this.props.size.x + this.props.position.x)),
+            top: this.props.position.y,
+            width: this.props.size.x,
+            height: this.props.size.y,
+          }}
+          onPress={this.context._copilot.getCurrentStep().target.props.children.props.onPress || null}
         />
       </View>
     );
