@@ -285,6 +285,7 @@ class CopilotModal extends Component<Props, State> {
         visible={containerVisible}
         onRequestClose={noop}
         transparent
+        supportedOrientations={['portrait', 'landscape']}
       >
         <View
           style={styles.container}
