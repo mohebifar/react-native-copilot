@@ -32,6 +32,7 @@ const copilot = ({
   tooltipComponent,
   stepNumberComponent,
   animated,
+  overlayColor,
   androidStatusBarVisible,
 } = {}) =>
   (WrappedComponent) => {
@@ -187,6 +188,7 @@ const copilot = ({
               tooltipComponent={tooltipComponent}
               overlay={overlay}
               animated={animated}
+              overlayColor={overlayColor}
               androidStatusBarVisible={androidStatusBarVisible}
               ref={(modal) => { this.modal = modal; }}
             />

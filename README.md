@@ -113,6 +113,7 @@ You can specify the overlay when applying the `copilot` HOC:
 copilot({
   overlay: 'svg', // or 'view'
   animated: true, // or false
+  overlayColor: 'rgba(0,0,0,0.7)', // String - default is 'rgba(0,0,0,0.4)'
 })(RootComponent);
 ```
 

@@ -22,6 +22,7 @@ type Props = {
   easing: func,
   animationDuration: number,
   animated: boolean,
+  overlayColor: string,
 };
 
 type State = {
@@ -94,15 +95,16 @@ class SvgMask extends Component<Props, State> {
   }
 
   render() {
+    const { overlayColor, style } = this.props;
     return (
-      <View pointerEvents="box-none" style={this.props.style} onLayout={this.handleLayout}>
+      <View pointerEvents="box-none" style={style} onLayout={this.handleLayout}>
         {
           this.state.canvasSize
             ? (
               <Svg pointerEvents="none" width={this.state.canvasSize.x} height={this.state.canvasSize.y}>
                 <AnimatedSvgPath
                   ref={(ref) => { this.mask = ref; }}
-                  fill="rgba(0, 0, 0, 0.4)"
+                  fill={overlayColor}
                   fillRule="evenodd"
                   strokeWidth={1}
                   d={path(this.state.size, this.state.position, this.state.canvasSize)}

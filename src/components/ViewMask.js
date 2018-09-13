@@ -17,6 +17,7 @@ type Props = {
   easing: func,
   animationDuration: number,
   animated: boolean,
+  overlayColor: string,
 };
 
 type State = {
@@ -60,6 +61,7 @@ class ViewMask extends Component<Props, State> {
 
   render() {
     const { size, position } = this.state;
+    const { overlayColor, style } = this.props;
     const width = this.props.layout ? this.props.layout.width : 500;
     const height = this.props.layout ? this.props.layout.height : 500;
 
@@ -73,12 +75,13 @@ class ViewMask extends Component<Props, State> {
     );
 
     return (
-      <View style={this.props.style}>
+      <View style={style}>
         <Animated.View
           style={[
             styles.overlayRectangle,
             {
               right: leftOverlayRight,
+              backgroundColor: overlayColor,
             }]}
         />
         <Animated.View
@@ -86,6 +89,7 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               left: rightOverlayLeft,
+              backgroundColor: overlayColor,
             }]}
         />
         <Animated.View
@@ -95,6 +99,7 @@ class ViewMask extends Component<Props, State> {
               top: bottomOverlayTopBoundary,
               left: verticalOverlayLeftBoundary,
               right: verticalOverlayRightBoundary,
+              backgroundColor: overlayColor,
             },
           ]}
         />
@@ -105,6 +110,7 @@ class ViewMask extends Component<Props, State> {
               bottom: topOverlayBottomBoundary,
               left: verticalOverlayLeftBoundary,
               right: verticalOverlayRightBoundary,
+              backgroundColor: overlayColor,
             },
           ]}
         />
