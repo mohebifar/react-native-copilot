@@ -34,7 +34,7 @@ const copilot = ({
   stepNumberComponent,
   animated,
   androidStatusBarVisible,
-  backdropColor
+  backdropColor,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -166,7 +166,7 @@ const copilot = ({
         });
       }
 
-      render() {       
+      render() {
         return (
           <View style={{ flex: 1 }}>
             <WrappedComponent

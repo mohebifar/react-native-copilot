@@ -22,6 +22,7 @@ type Props = {
   easing: func,
   animationDuration: number,
   animated: boolean,
+  backdropColor: string,
 };
 
 type State = {
