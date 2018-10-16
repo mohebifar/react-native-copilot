@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import ReactNative from "react-native";
 import PropTypes from 'prop-types';
 
-
 import { View } from 'react-native';
 
 import mitt from 'mitt';
