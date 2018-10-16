@@ -1,6 +1,8 @@
 // @flow
 import React, { Component } from 'react';
+import ReactNative from "react-native";
 import PropTypes from 'prop-types';
+
 
 import { View } from 'react-native';
 
@@ -25,7 +27,7 @@ type State = {
   currentStep: ?Step,
   visible: boolean,
   androidStatusBarVisible: boolean,
-  backdropColor: string
+  scrollView?: React.RefObject
 };
 
 const copilot = ({
@@ -34,7 +36,6 @@ const copilot = ({
   stepNumberComponent,
   animated,
   androidStatusBarVisible,
-  backdropColor,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -42,6 +43,7 @@ const copilot = ({
         steps: {},
         currentStep: null,
         visible: false,
+        scrollView: null
       };
 
       getChildContext(): { _copilot: CopilotContext } {
@@ -78,6 +80,14 @@ const copilot = ({
       setCurrentStep = async (step: Step, move?: boolean = true): void => {
         await this.setState({ currentStep: step });
         this.eventEmitter.emit('stepChange', step);
+        const scrollView = this.state.scrollView.current;
+
+        if (this.state.scrollView) {
+          const relativeSize = await this.state.currentStep.wrapper.measureLayout(ReactNative.findNodeHandle(scrollView), (x, y, w, h) => {
+            const yOffsett = y > 0 ? y - (h / 2) : 0;
+            scrollView.scrollTo({ y: yOffsett, animated: false });
+          });
+        }
 
         if (move) {
           this.moveToCurrentStep();
@@ -126,8 +136,11 @@ const copilot = ({
         await this.setCurrentStep(this.getPrevStep());
       }
 
-      start = async (fromStep?: string): void => {
+      start = async (fromStep?: string, scrollView?: React.RefObject): void => {
+
         const { steps } = this.state;
+
+        this.state.scrollView ? null : this.setState({ scrollView })
 
         const currentStep = fromStep
           ? steps[fromStep]
@@ -143,7 +156,7 @@ const copilot = ({
           requestAnimationFrame(() => this.start(fromStep));
         } else {
           this.eventEmitter.emit('start');
-          await this.setCurrentStep(currentStep);
+          await this.setCurrentStep(currentStep, true);
           await this.moveToCurrentStep();
           await this.setVisibility(true);
           this.startTries = 0;
@@ -155,7 +168,7 @@ const copilot = ({
         this.eventEmitter.emit('stop');
       }
 
-      async moveToCurrentStep(): void {
+      async  moveToCurrentStep(): void {
         const size = await this.state.currentStep.target.measure();
 
         await this.modal.animateMove({
@@ -190,7 +203,6 @@ const copilot = ({
               overlay={overlay}
               animated={animated}
               androidStatusBarVisible={androidStatusBarVisible}
-              backdropColor={backdropColor}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
