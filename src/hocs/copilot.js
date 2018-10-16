@@ -27,6 +27,7 @@ type State = {
   currentStep: ?Step,
   visible: boolean,
   androidStatusBarVisible: boolean,
+  backdropColor: string,
   scrollView?: React.RefObject
 };
 
@@ -36,6 +37,7 @@ const copilot = ({
   stepNumberComponent,
   animated,
   androidStatusBarVisible,
+  backdropColor,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -88,12 +90,12 @@ const copilot = ({
             scrollView.scrollTo({ y: yOffsett, animated: false });
           });
         }
-        
         setTimeout(() => {
           if (move) {
             this.moveToCurrentStep();
           }
-        }, this.state.scrollView ? 100 : 0);
+        }, this.state.scrollView ? 100 : 0)
+
       }
 
       setVisibility = (visible: boolean): void => new Promise((resolve) => {
@@ -158,7 +160,7 @@ const copilot = ({
           requestAnimationFrame(() => this.start(fromStep));
         } else {
           this.eventEmitter.emit('start');
-          await this.setCurrentStep(currentStep, true);
+          await this.setCurrentStep(currentStep);
           await this.moveToCurrentStep();
           await this.setVisibility(true);
           this.startTries = 0;
@@ -170,7 +172,7 @@ const copilot = ({
         this.eventEmitter.emit('stop');
       }
 
-      async  moveToCurrentStep(): void {
+      async moveToCurrentStep(): void {
         const size = await this.state.currentStep.target.measure();
 
         await this.modal.animateMove({
@@ -205,6 +207,7 @@ const copilot = ({
               overlay={overlay}
               animated={animated}
               androidStatusBarVisible={androidStatusBarVisible}
+              backdropColor={backdropColor}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
