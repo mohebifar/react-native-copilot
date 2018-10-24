@@ -155,6 +155,10 @@ const copilot = ({
         this.eventEmitter.emit('stop');
       }
 
+      stopCopilot = async (): void => {
+        this.modal.handleStop();
+      }
+
       async moveToCurrentStep(): void {
         const size = await this.state.currentStep.target.measure();
 
