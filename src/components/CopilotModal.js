@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
+import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -294,6 +294,9 @@ class CopilotModal extends Component<Props, State> {
           onLayout={this.handleLayoutChange}
         >
           {contentVisible && this.renderMask()}
+          {contentVisible&&!!this.props.anywhereNext&&<TouchableWithoutFeedback onPress={this.props.isLastStep ? this.handleStop : this.handleNext}>
+            <View style={StyleSheet.absoluteFill} />
+          </TouchableWithoutFeedback>}
           {contentVisible && this.renderTooltip()}
         </View>
       </Modal>
