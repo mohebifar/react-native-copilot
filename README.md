@@ -77,6 +77,8 @@ Every `CopilotStep` must have these props:
 2. **order**: A positive number indicating the order of the step in the entire walkthrough.
 3. **text**: The text shown as the description for the step.
 
+You can round rectangle of copilot by specifying radius props for `CopilotStep`
+
 In order to start the tutorial, you can call the `start` prop function in the root component that is injected by `copilot`:
 
 ```js
@@ -113,6 +115,7 @@ You can specify the overlay when applying the `copilot` HOC:
 copilot({
   overlay: 'svg', // or 'view'
   animated: true, // or false
+  anywhereNext: 'true' // touch anywhere to next or finish
 })(RootComponent);
 ```
 
