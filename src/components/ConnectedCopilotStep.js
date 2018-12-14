@@ -7,6 +7,7 @@ type Props = {
   name: string,
   text: string,
   order: number,
+  radius?: number,
   active?: boolean,
   _copilot: CopilotContext,
   children: React$Element
@@ -15,6 +16,7 @@ type Props = {
 class ConnectedCopilotStep extends Component<Props> {
   static defaultProps = {
     active: true,
+    radius: 0.1,
   };
 
   componentDidMount() {
@@ -46,6 +48,7 @@ class ConnectedCopilotStep extends Component<Props> {
       name: this.props.name,
       text: this.props.text,
       order: this.props.order,
+      radius: this.props.radius,
       target: this,
       wrapper: this.wrapper,
     });

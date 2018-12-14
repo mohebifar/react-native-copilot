@@ -183,6 +183,7 @@ class CopilotModal extends Component<Props, State> {
         x: Math.floor(Math.max(obj.left, 0)),
         y: Math.floor(Math.max(obj.top, 0)),
       },
+      radius: obj.radius,
     });
   }
 
@@ -232,6 +233,7 @@ class CopilotModal extends Component<Props, State> {
         style={styles.overlayContainer}
         size={this.state.size}
         position={this.state.position}
+        radius={this.state.radius}
         easing={this.props.easing}
         animationDuration={this.props.animationDuration}
         backdropColor={this.props.backdropColor}

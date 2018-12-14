@@ -10,6 +10,7 @@ type Props = {
   name: string,
   order: number, // eslint-disable-line react/no-unused-prop-types
   text: string, // eslint-disable-line react/no-unused-prop-types
+  radius: number,
 };
 
 class CopilotStep extends Component<Props> {

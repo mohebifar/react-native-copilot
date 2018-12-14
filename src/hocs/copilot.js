@@ -165,6 +165,7 @@ const copilot = ({
           height: size.height + OFFSET_WIDTH,
           left: size.x - (OFFSET_WIDTH / 2),
           top: size.y - (OFFSET_WIDTH / 2) + verticalOffset,
+          radius: this.state.currentStep.radius,
         });
       }
 
