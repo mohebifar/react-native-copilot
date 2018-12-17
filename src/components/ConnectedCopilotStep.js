@@ -16,7 +16,7 @@ type Props = {
 class ConnectedCopilotStep extends Component<Props> {
   static defaultProps = {
     active: true,
-    radius: 0.1,
+    radius: 0,
   };
 
   componentDidMount() {

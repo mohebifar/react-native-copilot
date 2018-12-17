@@ -17,29 +17,14 @@ const windowDimensions = Dimensions.get('window');
 
 const path = (size, position, canvasSize, r): string => {
   const minSize = Math.min(size.x._value, size.y._value)
-  const radius = Math.max(Math.min(minSize/2, r._value)*0.94, 0.1)
-  const hr = radius / 2
-  const px = position.x._value
-  const py = position.y._value
-  const pxs = px + size.x._value
-  const pys = py + size.y._value
-  const xl = px + radius
-  const xr = pxs - radius
-  const yt = py + radius
-  const yb = pys - radius
+  const radius = Math.max(Math.min(minSize / 2, r._value), 0)
+  const lx = size.x._value - radius * 2
+  const ly = size.y._value - radius * 2
   return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0Z\
-M${xr},${py}C ${pxs - hr} ${py}, ${pxs} ${py + hr}, ${pxs} ${yt}\
-V${yb}C ${pxs} ${pys - hr}, ${pxs - hr} ${pys}, ${xr} ${pys}\
-H${xl}C ${px + hr} ${pys}, ${px} ${pys - hr}, ${px} ${yb}\
-V${yt}C ${px} ${py + hr}, ${px + hr} ${py}, ${xl} ${py}Z`
-    /*
-    const cx = size.x._value / 2 + position.x._value
-    const cy = size.y._value / 2 + position.y._value
-    return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0Z\
-M ${cx - radius}, ${cy}
-a ${radius},${radius} 0 1,0 (${radius} * 2),0
-a ${radius},${radius} 0 1,0 -(${radius} * 2),0`
-*/
+M${position.x._value + size.x._value - lx - radius},${position.y._value} h${lx} a${radius},${radius} 0 0 1 ${radius},${radius}\
+v${ly} a${radius},${radius} 0 0 1 -${radius},${radius}\
+h-${lx} a${radius},${radius} 0 0 1 -${radius},-${radius}\
+v-${ly} a${radius},${radius} 0 0 1 ${radius},-${radius} z`
 }
 
 type Props = {
