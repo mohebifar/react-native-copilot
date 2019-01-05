@@ -15,18 +15,20 @@ export default StyleSheet.create({
     top: 0,
     right: 0,
     bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.0)',
     zIndex: ZINDEX,
   },
   arrow: {
     position: 'absolute',
     borderColor: 'transparent',
     borderWidth: ARROW_SIZE,
+    color: 'transparent'
   },
   tooltip: {
     position: 'absolute',
     paddingTop: 15,
     paddingHorizontal: 15,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -70,7 +72,7 @@ export default StyleSheet.create({
   },
   overlayRectangle: {
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'rgba(0,0,0,0.8)',
     left: 0,
     top: 0,
     bottom: 0,

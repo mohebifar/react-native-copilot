@@ -39,6 +39,7 @@ const copilot = ({
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
+      static navigationOptions = { header: null };
       state = {
         steps: {},
         currentStep: null,
