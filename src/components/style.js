@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 export const STEP_NUMBER_RADIUS: number = 14;
 export const STEP_NUMBER_DIAMETER: number = STEP_NUMBER_RADIUS * 2;
 export const ZINDEX: number = 100;
-export const MARGIN: number = 13;
+export const MARGIN: number = 15;
 export const OFFSET_WIDTH: number = 4;
 export const ARROW_SIZE: number = 6;
 
@@ -24,14 +24,15 @@ export default StyleSheet.create({
   },
   tooltip: {
     position: 'absolute',
-    paddingTop: 15,
-    paddingHorizontal: 15,
+    paddingTop: 30,
+    paddingBottom: 20,
+    paddingHorizontal: 30,
     backgroundColor: '#fff',
-    borderRadius: 3,
+    borderRadius: 10,
     overflow: 'hidden',
   },
   tooltipText: {
-
+    color: '#596284',
   },
   tooltipContainer: {
     flex: 1,
@@ -45,28 +46,41 @@ export default StyleSheet.create({
   },
   stepNumber: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
-    borderRadius: STEP_NUMBER_RADIUS,
-    borderColor: '#FFFFFF',
-    backgroundColor: '#27ae60',
+    flexDirection: 'row',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // borderWidth: 2,
+    // borderRadius: STEP_NUMBER_RADIUS,
+    // borderColor: '#FFFFFF',
+    // backgroundColor: '#27ae60',
   },
   stepNumberText: {
-    fontSize: 10,
-    backgroundColor: 'transparent',
-    color: '#FFFFFF',
+    // fontSize: 14,
+    fontWeight: 'bold',
+    color: '#000'
   },
   button: {
     padding: 10,
   },
   buttonText: {
-    color: '#27ae60',
+    color: '#2B6DEF',
+    fontWeight: 'bold',
+  },
+  buttonSkipText: {
+    color: '#8089A3',
   },
   bottomBar: {
-    marginTop: 10,
+    marginTop: 20,
+    marginBottom: 0,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  bottomBarButtons: {
+    flexDirection: 'row',
+    marginTop: -10,
+    marginRight: -10,
+    marginBottom: -10,
+    marginLeft: -10,
   },
   overlayRectangle: {
     position: 'absolute',

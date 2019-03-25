@@ -14,6 +14,7 @@ type Props = {
   visible: boolean,
   isFirstStep: boolean,
   isLastStep: boolean,
+  lastStep: Object,
   easing: ?func,
   animationDuration: ?number,
   tooltipComponent: ?React$Component,
@@ -84,7 +85,6 @@ class CopilotModal extends Component<Props, State> {
       }));
     }
 
-
     return new Promise((resolve) => {
       const setLayout = () => {
         if (this.layout.width !== 0) {
@@ -149,6 +149,11 @@ class CopilotModal extends Component<Props, State> {
       tooltip.maxWidth = layout.width - tooltip.left - MARGIN;
       arrow.left = tooltip.left + MARGIN;
     }
+
+    // Fix the width of tooltip
+    tooltip.left = MARGIN
+    tooltip.right = MARGIN
+    tooltip.maxWidth = null
 
     const animate = {
       top: obj.top,
@@ -246,29 +251,13 @@ class CopilotModal extends Component<Props, State> {
     } = this.props;
 
     return [
-      <Animated.View
-        key="stepNumber"
-        style={[
-          styles.stepNumberContainer,
-          {
-            left: this.state.animatedValues.stepNumberLeft,
-            top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
-          },
-        ]}
-      >
-        <StepNumberComponent
-          isFirstStep={this.props.isFirstStep}
-          isLastStep={this.props.isLastStep}
-          currentStep={this.props.currentStep}
-          currentStepNumber={this.props.currentStepNumber}
-        />
-      </Animated.View>,
       <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
       <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
           currentStep={this.props.currentStep}
+          lastStep={this.props.lastStep}
           handleNext={this.handleNext}
           handlePrev={this.handlePrev}
           handleStop={this.handleStop}

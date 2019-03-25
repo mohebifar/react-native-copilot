@@ -186,6 +186,7 @@ const copilot = ({
               isLastStep={this.isLastStep()}
               currentStepNumber={this.getStepNumber()}
               currentStep={this.state.currentStep}
+              lastStep={this.getLastStep()}
               stepNumberComponent={stepNumberComponent}
               tooltipComponent={tooltipComponent}
               overlay={overlay}
