@@ -1,6 +1,7 @@
 // @flow
 export type Step = {
   name: string,
+  tool: string,
   order: number,
   visible: boolean,
   target: React$Element,
