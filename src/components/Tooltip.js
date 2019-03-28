@@ -7,7 +7,7 @@ import StepNumber from './StepNumber';
 
 import styles from './style';
 
-import type { Step } from '../types';
+import type, { Step } from '../types';
 
 type Props = {
   isFirstStep: boolean,
@@ -30,7 +30,10 @@ const Tooltip = ({
 }: Props) => (
   <View>
     <View style={styles.tooltipContainer}>
-      <Text testID="stepDescription" style={styles.tooltipText}>{currentStep.text}</Text>
+      {currentStep.tooltip ?
+        <View style={styles.tooltipText}>{currentStep.tooltip}</View> :
+        <Text testID="stepDescription" style={styles.tooltipText}>{currentStep.text}</Text>
+      }
     </View>
     <View style={[styles.bottomBar]}>
       <StepNumber
