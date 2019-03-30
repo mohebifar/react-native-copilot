@@ -188,6 +188,34 @@ class HomeScreen {
 ### Triggering the tutorial
 Use `this.props.start()` in the root component in order to trigger the tutorial. You can either invoke it with a touch event or in `componentDidMount`. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
 
+### Usage inside a ScrollView
+Pass the ScrollView reference as the second argument to the `this.props.start()` function.
+eg `this.props.start(false, ScrollViewRef)`
+
+```js
+import { ScrollView } from 'react-native';
+import { copilot } from '@okgrow/react-native-copilot';
+
+class HomeScreen {
+  componentDidMount() {
+    // Starting the tutorial and passing the scrollview reference.
+    this.props.start(false, this.scrollView);
+  }
+  
+  componentWillUnmount() {
+    // Don't forget to disable event handlers to prevent errors
+    this.props.copilotEvents.off('stop');
+  }
+
+  render() {
+    <ScrollView ref={ref => this.scrollView = ref}>
+        // ...
+    </ScrollView>
+  }
+}
+export default copilot()(HomeScreen);
+```
+
 ### Listening to the events
 Along with `this.props.start()`, `copilot` HOC passes `copilotEvents` function to the component to help you with tracking of tutorial progress. It utilizes [mitt](https://github.com/developit/mitt) under the hood, you can see how full API there.
 
@@ -200,12 +228,15 @@ List of available events is:
 
 **Example:**
 ```js
+import { ScrollView } from 'react-native';
 import { copilot, CopilotStep } from '@okgrow/react-native-copilot';
 
 const CustomComponent = ({ copilot }) => <View {...copilot}><Text>Hello world!</Text></View>;
 
 class HomeScreen {
   componentDidMount() {
+    // Starting the tutorial.
+    this.props.start(false, this.scrollView);
     this.props.copilotEvents.on('stop', () => {
       // Copilot tutorial finished!
     });
@@ -217,7 +248,9 @@ class HomeScreen {
   }
 
   render() {
-    // ...
+    <ScrollView ref={ref => this.scrollView = ref}>
+        // ...
+    </ScrollView>
   }
 }
 ```
