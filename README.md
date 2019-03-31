@@ -1,19 +1,5 @@
 <h1 align="center">React Native Copilot</h1>
 
-<div align="center">
-  <p align="center">
-    <a href="https://semaphoreci.com/okgrow/react-native-co-pilot">
-      <img src="https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg" alt="Build Status" />
-    </a>
-    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
-      <img src="https://img.shields.io/npm/v/@okgrow/react-native-copilot.svg" alt="NPM Version" />
-    </a>
-    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
-      <img src="https://img.shields.io/npm/dm/@okgrow/react-native-copilot.svg" alt="NPM Downloads" />
-    </a>
-  </p>
-</div>
-
 <p align="center">
   Step-by-step walkthrough for your react native app!
 </p>
