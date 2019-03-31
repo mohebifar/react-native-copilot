@@ -148,7 +148,7 @@ class Example extends Component {
     </CopilotStep>
   }
 }
-
+```
 ### Custom tooltip component
 You can customize the tooltip by passing a component to the `copilot` HOC maker. If you are looking for an example tooltip component, take a look at [the default tooltip implementation](https://github.com/okgrow/react-native-copilot/blob/master/src/components/Tooltip.js).
 
