@@ -7,13 +7,17 @@ import {
   Dimensions,
 } from 'react-native';
 // import { Svg } from 'expo';
-import Svg from 'react-native-svg';
+import Svg, { Path, RadialGradient, Defs, Stop } from 'react-native-svg';
 import AnimatedSvgPath from './AnimatedPath';
+import AnimatedRect from './AnimatedRect';
 
 import type { valueXY } from '../types';
 
 const windowDimensions = Dimensions.get('window');
-const path = (size, position, canvasSize): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+// const path = (size, position, canvasSize): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+const extraSpacing = 20
+const extraSize = 40
+const path = (size, position, canvasSize): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value - extraSpacing},${position.y._value - extraSpacing}H${position.x._value - extraSpacing + size.x._value + extraSize}V${position.y._value - extraSpacing + size.y._value + extraSize}H${position.x._value - extraSpacing}V${position.y._value - extraSpacing}Z`;
 
 type Props = {
   size: valueXY,
@@ -101,12 +105,50 @@ class SvgMask extends Component<Props, State> {
           this.state.canvasSize
             ? (
               <Svg pointerEvents="none" width={this.state.canvasSize.x} height={this.state.canvasSize.y}>
-                <AnimatedSvgPath
+                <Defs>
+                  <RadialGradient
+                    id="grad"
+                  >
+                    <Stop
+                      offset="0"
+                      stopColor="white"
+                      stopOpacity="0"
+                    />
+                    <Stop
+                      offset="0.4"
+                      stopColor="white"
+                      stopOpacity="0"
+                    />
+                    {/* <Stop
+                      offset="0.8"
+                      stopColor={this.props.backdropColor}
+                      stopOpacity="0.4"
+                    /> */}
+                    <Stop
+                      offset="0.9"
+                      stopColor={this.props.backdropColor}
+                      stopOpacity="0.5"
+                    />
+                    <Stop
+                      offset="1"
+                      stopColor={this.props.backdropColor}
+                      stopOpacity="0.5"
+                    />
+                  </RadialGradient>
+                </Defs>
+                <Path
                   ref={(ref) => { this.mask = ref; }}
                   fill={this.props.backdropColor}
                   fillRule="evenodd"
-                  strokeWidth={1}
+                  strokeWidth={0}
                   d={path(this.state.size, this.state.position, this.state.canvasSize)}
+                />
+                <AnimatedRect
+                  x={this.state.position.x._value - extraSpacing}
+                  y={this.state.position.y._value - extraSpacing}
+                  width={this.state.size.x._value + extraSize}
+                  height={this.state.size.y._value + extraSize}
+                  fill="url(#grad)"
                 />
               </Svg>
             )
