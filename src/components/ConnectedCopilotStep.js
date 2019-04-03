@@ -1,12 +1,13 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import type { CopilotContext } from '../types';
+import type { CopilotContext, OverLayElement } from "../types";
 
 type Props = {
   name: string,
   text: string,
   order: number,
+  overlayElement?: OverLayElement,
   active?: boolean,
   _copilot: CopilotContext,
   children: React$Element
@@ -14,7 +15,7 @@ type Props = {
 
 class ConnectedCopilotStep extends Component<Props> {
   static defaultProps = {
-    active: true,
+    active: true
   };
 
   componentDidMount() {
@@ -48,6 +49,9 @@ class ConnectedCopilotStep extends Component<Props> {
       order: this.props.order,
       target: this,
       wrapper: this.wrapper,
+      ...(this.props.overlayElement && {
+        overlayElement: this.props.overlayElement
+      })
     });
   }
 
@@ -56,10 +60,16 @@ class ConnectedCopilotStep extends Component<Props> {
   }
 
   measure() {
-    if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
-      return new Promise(resolve => resolve({
-        x: 0, y: 0, width: 0, height: 0,
-      }));
+    if (typeof __TEST__ !== "undefined" && __TEST__) {
+      // eslint-disable-line no-undef
+      return new Promise(resolve =>
+        resolve({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0
+        })
+      );
     }
 
     return new Promise((resolve, reject) => {
@@ -67,10 +77,14 @@ class ConnectedCopilotStep extends Component<Props> {
         // Wait until the wrapper element appears
         if (this.wrapper && this.wrapper.measure) {
           this.wrapper.measure(
-            (ox, oy, width, height, x, y) => resolve({
-              x, y, width, height,
-            }),
-            reject,
+            (ox, oy, width, height, x, y) =>
+              resolve({
+                x,
+                y,
+                width,
+                height
+              }),
+            reject
           );
         } else {
           requestAnimationFrame(measure);
@@ -83,8 +97,10 @@ class ConnectedCopilotStep extends Component<Props> {
 
   render() {
     const copilot = {
-      ref: (wrapper) => { this.wrapper = wrapper; },
-      onLayout: () => { }, // Android hack
+      ref: wrapper => {
+        this.wrapper = wrapper;
+      },
+      onLayout: () => {} // Android hack
     };
 
     return React.cloneElement(this.props.children, { copilot });
