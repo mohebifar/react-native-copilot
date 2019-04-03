@@ -33,6 +33,7 @@ const copilot = ({
   tooltipComponent,
   stepNumberComponent,
   animated,
+  labels,
   androidStatusBarVisible,
   backdropColor,
   verticalOffset = 0,
@@ -187,6 +188,7 @@ const copilot = ({
               isLastStep={this.isLastStep()}
               currentStepNumber={this.getStepNumber()}
               currentStep={this.state.currentStep}
+              labels={labels}
               stepNumberComponent={stepNumberComponent}
               tooltipComponent={tooltipComponent}
               overlay={overlay}

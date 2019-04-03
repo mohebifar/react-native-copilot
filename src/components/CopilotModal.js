@@ -21,7 +21,8 @@ type Props = {
   overlay: 'svg' | 'view',
   animated: boolean,
   androidStatusBarVisible: boolean,
-  backdropColor: string
+  backdropColor: string,
+  labels: Object
 };
 
 type State = {
@@ -49,6 +50,7 @@ class CopilotModal extends Component<Props, State> {
     animated: typeof NativeModules.RNSVGSvgViewManager !== 'undefined',
     androidStatusBarVisible: false,
     backdropColor: 'rgba(0, 0, 0, 0.4)',
+    labels: {}
   };
 
   state = {
@@ -272,6 +274,7 @@ class CopilotModal extends Component<Props, State> {
           handleNext={this.handleNext}
           handlePrev={this.handlePrev}
           handleStop={this.handleStop}
+          labels={this.props.labels}
         />
       </Animated.View>,
     ];

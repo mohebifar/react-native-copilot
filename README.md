@@ -187,6 +187,20 @@ class HomeScreen {
 }
 ```
 
+### Custom labels (for i18n)
+You can localize labels:
+
+```js
+copilot({
+  labels: {
+    previous: 'Vorheriger',
+    next: 'Nächster',
+    skip: 'Überspringen',
+    finish: 'Beenden',
+  }
+})(RootComponent);
+```
+
 ### Adjust vertical position
 In order to adjust vertical position pass `verticalOffset` to the `copilot` HOC.
 
