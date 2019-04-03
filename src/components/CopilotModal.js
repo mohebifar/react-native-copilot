@@ -50,7 +50,7 @@ class CopilotModal extends Component<Props, State> {
     animated: typeof NativeModules.RNSVGSvgViewManager !== 'undefined',
     androidStatusBarVisible: false,
     backdropColor: 'rgba(0, 0, 0, 0.4)',
-    labels: {}
+    labels: {},
   };
 
   state = {
