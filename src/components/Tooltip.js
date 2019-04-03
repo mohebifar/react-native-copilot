@@ -34,7 +34,7 @@ const Tooltip = ({
     <View style={[styles.bottomBar]}>
       {!isLastStep ? (
         <TouchableOpacity onPress={handleStop}>
-          <Button>Skip</Button>
+          <Button>Skip tutorial</Button>
         </TouchableOpacity>
       ) : null}
       {!isFirstStep ? (
