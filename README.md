@@ -1,25 +1,11 @@
 <h1 align="center">React Native Copilot</h1>
 
-<div align="center">
-  <p align="center">
-    <a href="https://semaphoreci.com/okgrow/react-native-co-pilot">
-      <img src="https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg" alt="Build Status" />
-    </a>
-    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
-      <img src="https://img.shields.io/npm/v/@okgrow/react-native-copilot.svg" alt="NPM Version" />
-    </a>
-    <a href="https://www.npmjs.com/package/@okgrow/react-native-copilot">
-      <img src="https://img.shields.io/npm/dm/@okgrow/react-native-copilot.svg" alt="NPM Downloads" />
-    </a>
-  </p>
-</div>
-
 <p align="center">
   Step-by-step walkthrough for your react native app!
 </p>
 
 <p align="center">
-  <img src="https://media.giphy.com/media/65VKIzGWZmHiEgEBi7/giphy.gif" alt="React Native Copilot" />
+  <img src="https://media.giphy.com/media/4ZvoxeFdW7jeSETYsX/giphy.gif" alt="React Native Copilot" />
 </p>
 
 <p align="center">
@@ -115,7 +101,40 @@ copilot({
   animated: true, // or false
 })(RootComponent);
 ```
+### Custom component over the overlay
+This comes in handy when you want to show some kind of icon (like swipe gesture) on top of the overlay. The CopilotStep component accepts a prop called "overlayElement" that must return a react component wrapped inside a function. The position, size, nextHandle and previousHandle are automatically injected into this function.
 
+```js
+import { React, { Component } } from "react";
+import { View } from "react-native";
+
+class Example extends Component {
+  renderOverlayElement = (position, size, handleNext, handlePrevious) => {
+    //Displays this in the center of the overlay
+    return (
+      <View style={{
+        position: "absolute",
+        top: position.y + size.y/3
+        left: position.x + size.x/3
+      }}>
+        //...
+      </View>
+    );
+  }
+  render(){
+    <CopilotStep
+            name={}
+            text={}
+            order={}
+            {...overlayElement && {
+              overlayElement: this.renderOverlayElement
+            }}
+          >
+          //...
+    </CopilotStep>
+  }
+}
+```
 ### Custom tooltip component
 You can customize the tooltip by passing a component to the `copilot` HOC maker. If you are looking for an example tooltip component, take a look at [the default tooltip implementation](https://github.com/okgrow/react-native-copilot/blob/master/src/components/Tooltip.js).
 
