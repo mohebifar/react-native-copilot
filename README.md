@@ -28,6 +28,8 @@
   </a>
 </p>
 
+Creation of this project was sponsored by [OKG](http://www.okg.io)
+
 ## Installation
 ```
 npm install --save @okgrow/react-native-copilot
