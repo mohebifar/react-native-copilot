@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Text, Image, View, TouchableOpacity, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { copilot, walkthroughable, CopilotStep } from '@okgrow/react-native-copilot';
+import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot';
 
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableImage = walkthroughable(Image);
