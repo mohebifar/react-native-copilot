@@ -28,7 +28,7 @@
   </a>
 </p>
 
-Creation of this project was sponsored by [OKG](http://www.okg.io)
+Creation of this project was sponsored by **[OK GROW!](https://www.okgrow.com/)**
 
 ## Installation
 ```
