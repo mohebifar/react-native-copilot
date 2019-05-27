@@ -17,3 +17,12 @@ export type valueXY = {
   x: number,
   y: number,
 };
+
+export type SvgMaskPathFn = (args: {
+  size: Animated.valueXY,
+  position: Animated.valueXY,
+  canvasSize: {
+    x: number,
+    y: number
+  }
+}) => string;
