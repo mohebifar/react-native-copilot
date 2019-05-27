@@ -160,9 +160,35 @@ copilot({
 You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a color string to the `copilot` HOC maker. 
 
 ```js
-
 copilot({
   backdropColor:"rgba(50, 50, 100, 0.9)",
+})(RootComponent)
+```
+
+### Custom svg mask Path 
+You can customize the mask svg path by passing a function to the `copilot` HOC maker. 
+
+function signature: 
+```js
+SvgMaskPathFn = (args: {
+  size: Animated.valueXY,
+  position: Animated.valueXY,
+  canvasSize: {
+    x: number,
+    y: number
+  }
+}) => string
+```
+
+Example with circle:
+```js
+const circleSvgPath = ({ position, canvasSize }): string =>
+  `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${
+    position.y._value
+  }Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
+
+copilot({
+  svgMaskPath: circleSvgPath,
 })(RootComponent)
 ```
 
