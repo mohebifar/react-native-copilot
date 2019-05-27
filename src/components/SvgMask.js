@@ -6,14 +6,13 @@ import {
   Easing,
   Dimensions,
 } from 'react-native';
-// import { Svg } from 'expo';
 import Svg from 'react-native-svg';
 import AnimatedSvgPath from './AnimatedPath';
 
-import type { valueXY } from '../types';
+import type { valueXY, svgMaskPath } from '../types';
 
 const windowDimensions = Dimensions.get('window');
-const path = (size, position, canvasSize): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+const defaultSvgPath = (size, position, canvasSize): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
 
 type Props = {
   size: valueXY,
@@ -23,6 +22,7 @@ type Props = {
   animationDuration: number,
   animated: boolean,
   backdropColor: string,
+  svgMaskPath?: svgMaskPath
 };
 
 type State = {
@@ -35,6 +35,7 @@ class SvgMask extends Component<Props, State> {
   static defaultProps = {
     animationDuration: 300,
     easing: Easing.linear,
+    svgMaskPath: defaultSvgPath,
   };
 
   constructor(props) {
@@ -59,7 +60,11 @@ class SvgMask extends Component<Props, State> {
   }
 
   animationListener = (): void => {
-    const d: string = path(this.state.size, this.state.position, this.state.canvasSize);
+    const d: string = this.props.svgMaskPath({
+      size: this.state.size,
+      position: this.state.position,
+      canvasSize: this.state.canvasSize,
+    });
     if (this.mask) {
       this.mask.setNativeProps({ d });
     }
@@ -106,7 +111,11 @@ class SvgMask extends Component<Props, State> {
                   fill={this.props.backdropColor}
                   fillRule="evenodd"
                   strokeWidth={1}
-                  d={path(this.state.size, this.state.position, this.state.canvasSize)}
+                  d={this.props.svgMaskPath({
+                    size: this.state.size,
+                    position: this.state.position,
+                    canvasSize: this.state.canvasSize,
+                  })}
                 />
               </Svg>
             )

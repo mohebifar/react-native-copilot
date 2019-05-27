@@ -4,6 +4,7 @@ import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } fro
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
+import type { SvgMaskPathFn } from '../types';
 
 type Props = {
   stop: () => void,
@@ -21,7 +22,8 @@ type Props = {
   overlay: 'svg' | 'view',
   animated: boolean,
   androidStatusBarVisible: boolean,
-  backdropColor: string
+  backdropColor: string,
+  svgMaskPath?: SvgMaskPathFn
 };
 
 type State = {
@@ -235,6 +237,7 @@ class CopilotModal extends Component<Props, State> {
         easing={this.props.easing}
         animationDuration={this.props.animationDuration}
         backdropColor={this.props.backdropColor}
+        svgMaskPath={this.props.svgMaskPath}
       />
     );
   }

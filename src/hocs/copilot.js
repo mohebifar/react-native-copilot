@@ -35,6 +35,7 @@ const copilot = ({
   animated,
   androidStatusBarVisible,
   backdropColor,
+  svgMaskPath,
   verticalOffset = 0,
 } = {}) =>
   (WrappedComponent) => {
@@ -192,6 +193,7 @@ const copilot = ({
               animated={animated}
               androidStatusBarVisible={androidStatusBarVisible}
               backdropColor={backdropColor}
+              svgMaskPath={svgMaskPath}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
