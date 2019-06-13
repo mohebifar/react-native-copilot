@@ -1,10 +1,15 @@
 // @flow
 import React, { Component } from 'react';
 
-import { View, Animated } from 'react-native';
+import { View, Animated, I18nManager } from 'react-native';
 import styles from './style';
 
 import type { valueXY } from '../types';
+
+
+const rtl = I18nManager.isRTL;
+const start = rtl ? 'right' : 'left';
+const end = rtl ? 'left' : 'right';
 
 type Props = {
   size: valueXY,
@@ -17,7 +22,6 @@ type Props = {
   easing: func,
   animationDuration: number,
   animated: boolean,
-  backdropColor: string,
 };
 
 type State = {
@@ -79,16 +83,14 @@ class ViewMask extends Component<Props, State> {
           style={[
             styles.overlayRectangle,
             {
-              right: leftOverlayRight,
-              backgroundColor: this.props.backdropColor,
+              [end]: leftOverlayRight,
             }]}
         />
         <Animated.View
           style={[
             styles.overlayRectangle,
             {
-              left: rightOverlayLeft,
-              backgroundColor: this.props.backdropColor,
+              [start]: rightOverlayLeft,
             }]}
         />
         <Animated.View
@@ -96,9 +98,8 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               top: bottomOverlayTopBoundary,
-              left: verticalOverlayLeftBoundary,
-              right: verticalOverlayRightBoundary,
-              backgroundColor: this.props.backdropColor,
+              [start]: verticalOverlayLeftBoundary,
+              [end]: verticalOverlayRightBoundary,
             },
           ]}
         />
@@ -107,9 +108,8 @@ class ViewMask extends Component<Props, State> {
             styles.overlayRectangle,
             {
               bottom: topOverlayBottomBoundary,
-              left: verticalOverlayLeftBoundary,
-              right: verticalOverlayRightBoundary,
-              backgroundColor: this.props.backdropColor,
+              [start]: verticalOverlayLeftBoundary,
+              [end]: verticalOverlayRightBoundary,
             },
           ]}
         />
