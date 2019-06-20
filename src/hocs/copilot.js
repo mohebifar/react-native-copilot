@@ -163,7 +163,7 @@ const copilot = ({
           width: size.width + OFFSET_WIDTH,
           height: size.height + OFFSET_WIDTH,
           left: size.x - (OFFSET_WIDTH / 2),
-          top: size.y - (OFFSET_WIDTH / 2) + verticalOffset,
+          top: (size.y - (OFFSET_WIDTH / 2)) + verticalOffset,
         });
       }
 

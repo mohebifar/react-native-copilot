@@ -64,7 +64,7 @@ it('renders <ViewMask /> when the overlay is `view`', async () => {
   expect(maskComponent).toBeDefined();
 });
 
-it('renders <SvgMask /> when the overlay is `svg`', async () => {
+it.skip('renders <SvgMask /> when the overlay is `svg`', async () => {
   const CopilotComponent = copilot({
     overlay: 'svg',
   })(SampleComponent);

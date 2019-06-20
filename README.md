@@ -2,8 +2,8 @@
 
 <div align="center">
   <p align="center">
-    <a href="https://semaphoreci.com/okgrow/react-native-co-pilot">
-      <img src="https://semaphoreci.com/api/v1/okgrow/react-native-co-pilot/branches/master/shields_badge.svg" alt="Build Status" />
+    <a href="https://travis-ci.org/mohebifar/react-native-copilot">
+      <img src="https://img.shields.io/travis/mohebifar/react-native-copilot.svg" alt="Travis (.org)">
     </a>
     <a href="https://www.npmjs.com/package/react-native-copilot">
       <img src="https://img.shields.io/npm/v/react-native-copilot.svg" alt="NPM Version" />
