@@ -45,8 +45,8 @@
     "jest-react-native": "^18.0.0",
     "react": ">=16.8.0",
     "react-native": ">=0.59.0",
-    "react-native-svg": "^6.3.1",
-    "react-test-renderer": "^16.3.1"
+    "react-native-svg": "^9.5.1",
+    "react-test-renderer": ">=16.8.0"
   },
   "jest": {
     "preset": "react-native",
