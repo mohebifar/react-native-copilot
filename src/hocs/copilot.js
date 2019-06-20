@@ -37,6 +37,7 @@ const copilot = ({
   backdropColor,
   svgMaskPath,
   verticalOffset = 0,
+  wrapperStyle,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -164,13 +165,13 @@ const copilot = ({
           width: size.width + OFFSET_WIDTH,
           height: size.height + OFFSET_WIDTH,
           left: size.x - (OFFSET_WIDTH / 2),
-          top: size.y - (OFFSET_WIDTH / 2) + verticalOffset,
+          top: (size.y - (OFFSET_WIDTH / 2)) + verticalOffset,
         });
       }
 
       render() {
         return (
-          <View style={{ flex: 1 }}>
+          <View style={wrapperStyle || { flex: 1 }}>
             <WrappedComponent
               {...this.props}
               start={this.start}
