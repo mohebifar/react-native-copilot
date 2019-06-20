@@ -23,7 +23,7 @@
   "files": [
     "src"
   ],
-  "author": "OK GROW! <hello@okgrow.com> (https://www.okgrow.com)",
+  "author": "Mohamad Mohebifar <mohamad@mohebifar.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mohebifar/react-native-copilot/issues"
@@ -41,15 +41,18 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.4.0",
-    "jest": "^21.2.1",
+    "jest": "^24.8.0",
     "jest-react-native": "^18.0.0",
-    "react": ">=16.0.0-alpha.3",
-    "react-native": ">=0.46.0",
-    "react-native-svg": "^6.3.1",
-    "react-test-renderer": "^16.3.1"
+    "react": ">=16.8.0",
+    "react-native": ">=0.59.0",
+    "react-native-svg": "^9.5.1",
+    "react-test-renderer": ">=16.8.0"
   },
   "jest": {
     "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    },
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|react-clone-referenced-element)"
     ],
