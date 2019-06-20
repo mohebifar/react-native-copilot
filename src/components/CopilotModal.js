@@ -21,7 +21,8 @@ type Props = {
   overlay: 'svg' | 'view',
   animated: boolean,
   androidStatusBarVisible: boolean,
-  backdropColor: string
+  backdropColor: string,
+  customNavigator?: React$Component,
 };
 
 type State = {
@@ -263,9 +264,14 @@ class CopilotModal extends Component<Props, State> {
           currentStepNumber={this.props.currentStepNumber}
         />
       </Animated.View>,
-      <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip]}>
+      TooltipComponent ? null : (
+        <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />
+      ),
+      TooltipComponent ? (
         <TooltipComponent
+          key="tooltip"
+          arrowPosition={[this.state.arrow, { position: 'absolute' }]}
+          tooltipPosition={[this.state.tooltip, { position: 'absolute' }]}
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
           currentStep={this.props.currentStep}
@@ -273,13 +279,25 @@ class CopilotModal extends Component<Props, State> {
           handlePrev={this.handlePrev}
           handleStop={this.handleStop}
         />
-      </Animated.View>,
+      ) : (
+        <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip]}>
+          <Tooltip
+            isFirstStep={this.props.isFirstStep}
+            isLastStep={this.props.isLastStep}
+            currentStep={this.props.currentStep}
+            handleNext={this.handleNext}
+            handlePrev={this.handlePrev}
+            handleStop={this.handleStop}
+          />
+        </Animated.View>
+      ),
     ];
   }
 
   render() {
     const containerVisible = this.state.containerVisible || this.props.visible;
     const contentVisible = this.state.layout && containerVisible;
+    const CustomNavigator = this.props.customNavigator;
 
     return (
       <Modal
@@ -295,6 +313,16 @@ class CopilotModal extends Component<Props, State> {
         >
           {contentVisible && this.renderMask()}
           {contentVisible && this.renderTooltip()}
+          {!!CustomNavigator && (
+            <CustomNavigator
+              isFirstStep={this.props.isFirstStep}
+              isLastStep={this.props.isLastStep}
+              currentStep={this.props.currentStep}
+              handleNext={this.handleNext}
+              handlePrev={this.handlePrev}
+              handleStop={this.handleStop}
+            />
+          )}
         </View>
       </Modal>
     );

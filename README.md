@@ -123,6 +123,8 @@ You can customize the tooltip by passing a component to the `copilot` HOC maker.
 
 ```js
 const TooltipComponent = ({
+  tooltipPosition,
+  arrowPosition,
   isFirstStep,
   isLastStep,
   handleNext,
@@ -163,6 +165,28 @@ You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a
 
 copilot({
   backdropColor:"rgba(50, 50, 100, 0.9)",
+})(RootComponent)
+```
+
+### Custom navigator 
+You can add a custom navigator, by passing a React Component to the `copilot` HOC maker. 
+
+This is the same prop as [tooltip](#custom-tooltip-component).
+
+```js
+const customNavigator = ({
+  isFirstStep,
+  isLastStep,
+  handleNext,
+  handlePrev,
+  handleStop,
+  currentStep,
+}) => (
+  // ...
+);
+
+copilot({
+  customNavigator: customNavigator
 })(RootComponent)
 ```
 
