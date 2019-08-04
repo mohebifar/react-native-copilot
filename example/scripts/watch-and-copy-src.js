@@ -30,5 +30,5 @@ function copyAndWatch(source, destination) {
 
 copyAndWatch(
   '../src',
-  'node_modules/@okgrow/react-native-copilot/src',
+  'node_modules/react-native-copilot/src',
 );
