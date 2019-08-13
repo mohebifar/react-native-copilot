@@ -138,6 +138,21 @@ copilot({
 })(RootComponent)
 ```
 
+### Custom tooltip styling
+You can customize tooltip's style:
+
+```js
+const style = {
+  backgroundColor: '#9FA8DA',
+  borderRadius: 10,
+  paddingTop: 5,
+};
+
+copilot({
+  tooltipStyle: style
+})(RootComponent)
+```
+
 ### Custom step number component
 You can customize the step number by passing a component to the `copilot` HOC maker. If you are looking for an example step number component, take a look at [the default step number implementation](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/StepNumber.js).
 
