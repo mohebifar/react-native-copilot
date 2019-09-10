@@ -40,6 +40,8 @@ const copilot = ({
   svgMaskPath,
   verticalOffset = 0,
   wrapperStyle,
+  fullWidthTooltips,
+  fullWidthTooltipsHorizontalPadding,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -200,6 +202,8 @@ const copilot = ({
               backdropColor={backdropColor}
               svgMaskPath={svgMaskPath}
               ref={(modal) => { this.modal = modal; }}
+              fullWidthTooltips={fullWidthTooltips}
+              fullWidthTooltipsHorizontalPadding={fullWidthTooltipsHorizontalPadding}
             />
           </View>
         );

@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
+import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform, Dimensions } from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -26,6 +26,8 @@ type Props = {
   backdropColor: string,
   labels: Object,
   svgMaskPath?: SvgMaskPathFn,
+  fullWidthTooltips?: boolean,
+  fullWidthTooltipsHorizontalPadding?: number,
 };
 
 type State = {
@@ -38,6 +40,8 @@ type State = {
     height: number,
   },
 };
+
+const WINDOW_WIDTH: number = Dimensions.get('window').width;
 
 const noop = () => {};
 
@@ -55,6 +59,7 @@ class CopilotModal extends Component<Props, State> {
     androidStatusBarVisible: false,
     backdropColor: 'rgba(0, 0, 0, 0.4)',
     labels: {},
+    fullWidthTooltips: false,
   };
 
   state = {
@@ -154,6 +159,15 @@ class CopilotModal extends Component<Props, State> {
       tooltip.left = tooltip.left === 0 ? tooltip.left + MARGIN : tooltip.left;
       tooltip.maxWidth = layout.width - tooltip.left - MARGIN;
       arrow.left = tooltip.left + MARGIN;
+    }
+
+    if (this.props.fullWidthTooltips) {
+      const margin = this.props.fullWidthTooltipsHorizontalPadding !== undefined
+        ? this.props.fullWidthTooltipsHorizontalPadding
+        : MARGIN;
+      tooltip.maxWidth = WINDOW_WIDTH - (2 * margin);
+      tooltip.left = margin;
+      tooltip.right = margin;
     }
 
     const animate = {

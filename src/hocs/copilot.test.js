@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { View, Modal } from 'react-native';
+import { Dimensions, View, Modal } from 'react-native';
 import renderer from 'react-test-renderer';
 import { copilot, walkthroughable, CopilotStep } from '../index';
 import CopilotModal from '../components/CopilotModal';
@@ -164,4 +164,26 @@ it('skips a step if disabled', async () => {
   await tree.root.instance.prev();
 
   expect(textComponent.props.children).toBe('This is the description for the first step');
+});
+
+it('sets tool tips as full width', async () => {
+  const WINDOW_WIDTH = Dimensions.get('window').width;
+  const tooltipBubbleMargin = 12;
+  const TooltipComponent = () => (
+    <View />
+  );
+
+  const CopilotComponent = copilot({
+    tooltipComponent: TooltipComponent,
+    fullWidthTooltips: true,
+    fullWidthTooltipsHorizontalPadding: tooltipBubbleMargin,
+  })(SampleComponent);
+
+  const tree = renderer.create(<CopilotComponent />);
+  await tree.root.findByType(SampleComponent).props.start();
+
+  const tooltipWrapper = tree.root.findByType(TooltipComponent).parent;
+  expect(tooltipWrapper.props.style).toMatchObject({
+    maxWidth: WINDOW_WIDTH - (2 * tooltipBubbleMargin),
+  });
 });
