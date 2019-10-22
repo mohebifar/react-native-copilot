@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import ReactNative from "react-native";
+import { findNodeHandle } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { View } from 'react-native';
@@ -89,7 +89,7 @@ const copilot = ({
 
         if (this.state.scrollView) {
           const scrollView = this.state.scrollView.current;
-          const relativeSize = await this.state.currentStep.wrapper.measureLayout(ReactNative.findNodeHandle(scrollView), (x, y, w, h) => {
+          const relativeSize = await this.state.currentStep.wrapper.measureLayout(findNodeHandle(scrollView), (x, y, w, h) => {
             const yOffsett = y > 0 ? y - (h / 2) : 0;
             scrollView.scrollTo({ y: yOffsett, animated: false });
           });
