@@ -87,8 +87,9 @@ const copilot = ({
         this.eventEmitter.emit('stepChange', step);
 
         if (this.state.scrollView) {
-          const scrollView = this.state.scrollView;
-          const relativeSize = await this.state.currentStep.wrapper.measureLayout(findNodeHandle(scrollView), (x, y, w, h) => {
+          const { scrollView } = this.state;
+          await this.state.currentStep.wrapper.measureLayout(
+            findNodeHandle(scrollView), (x, y, w, h) => {
             const yOffsett = y > 0 ? y - (h / 2) : 0;
             scrollView.scrollTo({ y: yOffsett, animated: false });
           });
@@ -97,7 +98,7 @@ const copilot = ({
           if (move) {
             this.moveToCurrentStep();
           }
-        }, this.state.scrollView ? 100 : 0)
+        }, this.state.scrollView ? 100 : 0);
       }
 
       setVisibility = (visible: boolean): void => new Promise((resolve) => {
@@ -142,31 +143,33 @@ const copilot = ({
         await this.setCurrentStep(this.getPrevStep());
       }
 
-  	  start = async (fromStep?: string, scrollView?: React.RefObject): void => {
-        const { steps } = this.state;
+      start = async (fromStep?: string, scrollView?: React.RefObject): void => {
+       const { steps } = this.state;
 
-        this.state.scrollView ? null : this.setState({ scrollView });
+       if (this.state.scrollView) {
+         this.setState({ scrollView });
+       }
 
-        const currentStep = fromStep
-          ? steps[fromStep]
-          : this.getFirstStep();
+       const currentStep = fromStep
+         ? steps[fromStep]
+         : this.getFirstStep();
 
-        if (this.startTries > MAX_START_TRIES) {
-          this.startTries = 0;
-          return;
-        }
+       if (this.startTries > MAX_START_TRIES) {
+         this.startTries = 0;
+         return;
+       }
 
-        if (!currentStep) {
-          this.startTries += 1;
-          requestAnimationFrame(() => this.start(fromStep));
-        } else {
-          this.eventEmitter.emit('start');
-          await this.setCurrentStep(currentStep);
-          await this.moveToCurrentStep();
-          await this.setVisibility(true);
-          this.startTries = 0;
-        }
-      }
+       if (!currentStep) {
+         this.startTries += 1;
+         requestAnimationFrame(() => this.start(fromStep));
+       } else {
+         this.eventEmitter.emit('start');
+         await this.setCurrentStep(currentStep);
+         await this.moveToCurrentStep();
+         await this.setVisibility(true);
+         this.startTries = 0;
+       }
+     }
 
       stop = async (): void => {
         await this.setVisibility(false);
