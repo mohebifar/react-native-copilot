@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import ReactNative from "react-native";
 import PropTypes from 'prop-types';
 
 import { View } from 'react-native';
@@ -25,7 +26,8 @@ type State = {
   currentStep: ?Step,
   visible: boolean,
   androidStatusBarVisible: boolean,
-  backdropColor: string
+  backdropColor: string,
+  scrollView?: React.RefObject,
 };
 
 const copilot = ({
@@ -47,6 +49,7 @@ const copilot = ({
         steps: {},
         currentStep: null,
         visible: false,
+        scrollView: null,
       };
 
       getChildContext(): { _copilot: CopilotContext } {
@@ -84,9 +87,18 @@ const copilot = ({
         await this.setState({ currentStep: step });
         this.eventEmitter.emit('stepChange', step);
 
-        if (move) {
-          this.moveToCurrentStep();
+        if (this.state.scrollView) {
+          const scrollView = this.state.scrollView.current;
+          const relativeSize = await this.state.currentStep.wrapper.measureLayout(ReactNative.findNodeHandle(scrollView), (x, y, w, h) => {
+            const yOffsett = y > 0 ? y - (h / 2) : 0;
+            scrollView.scrollTo({ y: yOffsett, animated: false });
+          });
         }
+        setTimeout(() => {
+          if (move) {
+            this.moveToCurrentStep();
+          }
+        }, this.state.scrollView ? 100 : 0)
       }
 
       setVisibility = (visible: boolean): void => new Promise((resolve) => {
@@ -131,8 +143,10 @@ const copilot = ({
         await this.setCurrentStep(this.getPrevStep());
       }
 
-      start = async (fromStep?: string): void => {
+  	  start = async (fromStep?: string, scrollView?: React.RefObject): void => {
         const { steps } = this.state;
+
+        this.state.scrollView ? null : this.setState({ scrollView });
 
         const currentStep = fromStep
           ? steps[fromStep]
