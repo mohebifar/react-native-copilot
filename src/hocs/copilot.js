@@ -87,7 +87,7 @@ const copilot = ({
         this.eventEmitter.emit('stepChange', step);
 
         if (this.state.scrollView) {
-          const { scrollView } = this.state;        	
+          const { scrollView } = this.state;
           await this.state.currentStep.wrapper.measureLayout(
             findNodeHandle(scrollView), (x, y, w, h) => {
               const yOffsett = y > 0 ? y - (h / 2) : 0;
