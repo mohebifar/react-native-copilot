@@ -50,7 +50,7 @@ export default StyleSheet.create({
     borderWidth: 2,
     borderRadius: STEP_NUMBER_RADIUS,
     borderColor: '#FFFFFF',
-    backgroundColor: '#27ae60',
+    backgroundColor: '#0073ad',
   },
   stepNumberText: {
     fontSize: 10,
@@ -61,7 +61,7 @@ export default StyleSheet.create({
     padding: 10,
   },
   buttonText: {
-    color: '#27ae60',
+    color: '#0073ad',
   },
   bottomBar: {
     marginTop: 10,

@@ -260,7 +260,7 @@ Along with `this.props.start()`, `copilot` HOC passes `copilotEvents` function t
 List of available events is:
 
 - `start` — Copilot tutorial has started.
-- `stop` — Copilot tutorial has ended or skipped.
+- `stop` — Copilot tutorial has ended.
 - `stepChange` — Next step is triggered. Passes [`Step`](https://github.com/mohebifar/react-native-copilot/blob/master/src/types.js#L2) instance as event handler argument.
 
 

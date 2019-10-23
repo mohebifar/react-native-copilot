@@ -155,9 +155,19 @@ const copilot = ({
         }
       }
 
-      stop = async (): void => {
+      stop = async (wasSkipped: boolean): void => {
         await this.setVisibility(false);
-        this.eventEmitter.emit('stop');
+        this.eventEmitter.emit('stop', wasSkipped
+          ? {
+            wasSkipped: true,
+            skippedStep: this.state.currentStep,
+            nextStep: this.getNextStep()
+          }
+          : {
+            wasSkipped: false,
+            skippedStep: null,
+            nextStep: null
+        });
       }
 
       async moveToCurrentStep(): void {
