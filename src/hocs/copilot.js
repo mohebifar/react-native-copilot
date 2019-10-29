@@ -148,7 +148,7 @@ const copilot = ({
       start = async (fromStep?: string, scrollView?: React.RefObject): void => {
         const { steps } = this.state;
 
-        if (this.state.scrollView) {
+        if (!this.state.scrollView) {
           this.setState({ scrollView });
         }
 
