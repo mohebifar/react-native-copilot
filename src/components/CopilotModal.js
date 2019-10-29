@@ -26,6 +26,7 @@ type Props = {
   backdropColor: string,
   labels: Object,
   svgMaskPath?: SvgMaskPathFn,
+  stopOnOutsideClick?: boolean,
 };
 
 type State = {
@@ -55,6 +56,7 @@ class CopilotModal extends Component<Props, State> {
     androidStatusBarVisible: false,
     backdropColor: 'rgba(0, 0, 0, 0.4)',
     labels: {},
+    stopOnOutsideClick: false,
   };
 
   state = {
@@ -225,6 +227,12 @@ class CopilotModal extends Component<Props, State> {
     this.props.stop();
   }
 
+  handleMaskClick = () => {
+    if (this.props.stopOnOutsideClick) {
+      this.handleStop();
+    }
+  };
+
   renderMask() {
     /* eslint-disable global-require */
     const MaskComponent = this.props.overlay === 'svg'
@@ -242,6 +250,7 @@ class CopilotModal extends Component<Props, State> {
         animationDuration={this.props.animationDuration}
         backdropColor={this.props.backdropColor}
         svgMaskPath={this.props.svgMaskPath}
+        onClick={this.handleMaskClick}
       />
     );
   }

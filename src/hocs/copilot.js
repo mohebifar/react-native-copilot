@@ -27,6 +27,7 @@ type State = {
   androidStatusBarVisible: boolean,
   backdropColor: string,
   scrollView?: React.RefObject,
+  stopOnOutsideClick?: boolean,
 };
 
 const copilot = ({
@@ -38,6 +39,7 @@ const copilot = ({
   labels,
   androidStatusBarVisible,
   backdropColor,
+  stopOnOutsideClick = false,
   svgMaskPath,
   verticalOffset = 0,
   wrapperStyle,
@@ -215,6 +217,7 @@ const copilot = ({
               androidStatusBarVisible={androidStatusBarVisible}
               backdropColor={backdropColor}
               svgMaskPath={svgMaskPath}
+              stopOnOutsideClick={stopOnOutsideClick}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>

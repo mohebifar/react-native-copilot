@@ -18,6 +18,7 @@ type Props = {
   animationDuration: number,
   animated: boolean,
   backdropColor: string,
+  onClick?: () => void,
 };
 
 type State = {
@@ -74,7 +75,7 @@ class ViewMask extends Component<Props, State> {
     );
 
     return (
-      <View style={this.props.style}>
+      <View style={this.props.style} onStartShouldSetResponder={this.props.onClick}>
         <Animated.View
           style={[
             styles.overlayRectangle,
