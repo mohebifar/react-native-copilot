@@ -21,6 +21,7 @@ type Props = {
   tooltipStyle?: Object,
   stepNumberComponent: ?React$Component,
   overlay: 'svg' | 'view',
+  overlayEvent: 'next' | 'previous' | 'stop' | 'none',
   animated: boolean,
   androidStatusBarVisible: boolean,
   backdropColor: string,
@@ -233,6 +234,12 @@ class CopilotModal extends Component<Props, State> {
     /* eslint-enable */
     return (
       <MaskComponent
+        overlayEvent={this.props.overlayEvent}
+        handleNext={this.handleNext}
+        handlePrev={this.handlePrev}
+        handleStop={this.handleStop}
+        isFirstStep={this.props.isFirstStep}
+        isLastStep={this.props.isLastStep}
         animated={this.props.animated}
         layout={this.state.layout}
         style={styles.overlayContainer}

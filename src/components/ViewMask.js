@@ -1,10 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 
-import { View, Animated } from 'react-native';
+import { View, Animated, TouchableOpacity } from 'react-native';
 import styles from './style';
 
 import type { valueXY } from '../types';
+import { getEventOnOverlay, isValidEventOnOverlay } from '../utilities';
 
 type Props = {
   size: valueXY,
@@ -28,8 +29,14 @@ type State = {
 
 class ViewMask extends Component<Props, State> {
   state = {
-    size: new Animated.ValueXY({ x: 0, y: 0 }),
-    position: new Animated.ValueXY({ x: 0, y: 0 }),
+    size: new Animated.ValueXY({
+      x: 0,
+      y: 0,
+    }),
+    position: new Animated.ValueXY({
+      x: 0,
+      y: 0,
+    }),
   };
 
   componentWillReceiveProps(nextProps) {
@@ -51,13 +58,14 @@ class ViewMask extends Component<Props, State> {
           duration: this.props.animationDuration,
           easing: this.props.easing,
         }),
-      ]).start();
+      ])
+        .start();
     } else {
       this.state.size.setValue(size);
       this.state.position.setValue(position);
       this.setState({ animated: this.props.animated });
     }
-  }
+  };
 
   render() {
     const { size, position } = this.state;
@@ -73,8 +81,13 @@ class ViewMask extends Component<Props, State> {
       width, Animated.multiply(-1, rightOverlayLeft),
     );
 
+    // eslint-disable-next-line react/prop-types
+    const { overlayEvent } = this.props;
+    const Wrapper = isValidEventOnOverlay(overlayEvent) ? TouchableOpacity : View;
+    const eventOnOverlay = getEventOnOverlay(overlayEvent, this.props);
+
     return (
-      <View style={this.props.style}>
+      <Wrapper style={this.props.style} onPress={() => eventOnOverlay && eventOnOverlay()}>
         <Animated.View
           style={[
             styles.overlayRectangle,
@@ -113,7 +126,7 @@ class ViewMask extends Component<Props, State> {
             },
           ]}
         />
-      </View>
+      </Wrapper>
     );
   }
 }

@@ -30,6 +30,7 @@ type State = {
 
 const copilot = ({
   overlay,
+  overlayEvent,
   tooltipComponent,
   tooltipStyle,
   stepNumberComponent,
@@ -195,6 +196,7 @@ const copilot = ({
               tooltipComponent={tooltipComponent}
               tooltipStyle={tooltipStyle}
               overlay={overlay}
+              overlayEvent={overlayEvent}
               animated={animated}
               androidStatusBarVisible={androidStatusBarVisible}
               backdropColor={backdropColor}

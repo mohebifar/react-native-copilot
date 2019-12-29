@@ -180,6 +180,19 @@ copilot({
 })(RootComponent)
 ```
 
+### Add overlay events
+You can customize the events handled when the user clicks outside of the tooltip dialog - default `no event`.
+
+```js
+copilot({
+  overlayEvent: "next", // or "previous", "stop", "none"
+})(RootComponent)
+```
+- `next`: will go through each of the steps and finish when the end is reached
+- `previous`: will go to the previous step, if there are any previous steps
+- `stop`: will skip all the steps and end the walk-through
+- `none` or any other params: will perform no actions in case the overlay is pressed | tapped
+
 ### Custom svg mask Path 
 You can customize the mask svg path by passing a function to the `copilot` HOC maker. 
 

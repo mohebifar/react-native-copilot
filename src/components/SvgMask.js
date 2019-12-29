@@ -5,11 +5,13 @@ import {
   Animated,
   Easing,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import Svg from 'react-native-svg';
 import AnimatedSvgPath from './AnimatedPath';
 
 import type { valueXY, svgMaskPath } from '../types';
+import { getEventOnOverlay, isValidEventOnOverlay } from '../utilities';
 
 const windowDimensions = Dimensions.get('window');
 const defaultSvgPath = ({ size, position, canvasSize }): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
@@ -100,8 +102,17 @@ class SvgMask extends Component<Props, State> {
   }
 
   render() {
+    // eslint-disable-next-line react/prop-types
+    const { overlayEvent } = this.props;
+    const Wrapper = isValidEventOnOverlay(overlayEvent) ? TouchableOpacity : View;
+    const eventOnOverlay = getEventOnOverlay(overlayEvent, this.props);
     return (
-      <View pointerEvents="box-none" style={this.props.style} onLayout={this.handleLayout}>
+      <Wrapper
+        onPress={() => eventOnOverlay && eventOnOverlay()}
+        pointerEvents="box-none"
+        style={this.props.style}
+        onLayout={this.handleLayout}
+      >
         {
           this.state.canvasSize
             ? (
@@ -121,7 +132,7 @@ class SvgMask extends Component<Props, State> {
             )
             : null
         }
-      </View>
+      </Wrapper>
     );
   }
 }
