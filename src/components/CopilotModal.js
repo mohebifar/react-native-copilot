@@ -25,6 +25,7 @@ type Props = {
   animated: boolean,
   androidStatusBarVisible: boolean,
   backdropColor: string,
+  borderColor: string,
   labels: Object,
   svgMaskPath?: SvgMaskPathFn,
 };
@@ -137,11 +138,11 @@ class CopilotModal extends Component<Props, State> {
 
     if (verticalPosition === 'bottom') {
       tooltip.top = obj.top + obj.height + MARGIN;
-      arrow.borderBottomColor = '#fff';
+      arrow.borderBottomColor = this.props.borderColor || '#fff';
       arrow.top = tooltip.top - (ARROW_SIZE * 2);
     } else {
       tooltip.bottom = layout.height - (obj.top - MARGIN);
-      arrow.borderTopColor = '#fff';
+      arrow.borderTopColor = this.props.borderColor ||'#fff';
       arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
     }
 

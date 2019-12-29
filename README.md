@@ -153,6 +153,15 @@ copilot({
 })(RootComponent)
 ```
 
+### Tooltip arrow color
+You can customize tooltip's arrow color. Default `white`
+
+```js
+copilot({
+    borderColor: 'red'
+})(RootComponent)
+```
+
 ### Custom step number component
 You can customize the step number by passing a component to the `copilot` HOC maker. If you are looking for an example step number component, take a look at [the default step number implementation](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/StepNumber.js).
 

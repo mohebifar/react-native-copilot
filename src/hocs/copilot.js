@@ -38,6 +38,7 @@ const copilot = ({
   labels,
   androidStatusBarVisible,
   backdropColor,
+  borderColor,
   svgMaskPath,
   verticalOffset = 0,
   wrapperStyle,
@@ -200,6 +201,7 @@ const copilot = ({
               animated={animated}
               androidStatusBarVisible={androidStatusBarVisible}
               backdropColor={backdropColor}
+              borderColor={borderColor}
               svgMaskPath={svgMaskPath}
               ref={(modal) => { this.modal = modal; }}
             />
