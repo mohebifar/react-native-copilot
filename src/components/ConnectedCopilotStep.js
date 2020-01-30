@@ -23,9 +23,9 @@ class ConnectedCopilotStep extends Component<Props> {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.active !== this.props.active) {
-      if (nextProps.active) {
+  componentDidUpdate(prevProps) {
+    if (this.props.active !== prevProps.active) {
+      if (this.props.active) {
         this.register();
       } else {
         this.unregister();
