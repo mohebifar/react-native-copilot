@@ -1,4 +1,4 @@
-declare module '@okgrow/react-native-copilot' {
+declare module 'react-native-copilot' {
   import { Component, ComponentProps, ComponentType, ReactElement, ReactNode } from 'react';
 
   export type Step = {
