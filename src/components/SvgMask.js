@@ -22,7 +22,8 @@ type Props = {
   animationDuration: number,
   animated: boolean,
   backdropColor: string,
-  svgMaskPath?: svgMaskPath
+  svgMaskPath?: svgMaskPath,
+  onClick?: () => void,
 };
 
 type State = {
@@ -101,7 +102,11 @@ class SvgMask extends Component<Props, State> {
 
   render() {
     return (
-      <View pointerEvents="box-none" style={this.props.style} onLayout={this.handleLayout}>
+      <View
+        style={this.props.style}
+        onLayout={this.handleLayout}
+        onStartShouldSetResponder={this.props.onClick}
+      >
         {
           this.state.canvasSize
             ? (
