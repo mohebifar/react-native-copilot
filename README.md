@@ -287,7 +287,7 @@ eg `this.props.start(false, ScrollViewRef)`
 
 ```js
 import { ScrollView } from "react-native";
-import { copilot } from "@okgrow/react-native-copilot";
+import { copilot } from "react-native-copilot";
 
 class HomeScreen {
   componentDidMount() {
