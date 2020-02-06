@@ -85,22 +85,58 @@ const copilot = ({
         getNextStep(this.state.steps, step);
 
       setCurrentStep = async (step: Step, move?: boolean = true): void => {
-        await this.setState({ currentStep: step });
+        this.setState({ currentStep: step });
         this.eventEmitter.emit('stepChange', step);
 
-        if (this.state.scrollView) {
-          const { scrollView } = this.state;
-          await this.state.currentStep.wrapper.measureLayout(
-            findNodeHandle(scrollView), (x, y, w, h) => {
-              const yOffsett = y > 0 ? y - (h / 2) : 0;
-              scrollView.scrollTo({ y: yOffsett, animated: false });
-            });
-        }
-        setTimeout(() => {
+        return new Promise(async (resolve) => {
           if (move) {
-            this.moveToCurrentStep();
+            const { scrollView } = this.state;
+
+            if (scrollView) {
+              const [wrapperLayout, scrollViewLayout] = await Promise.all([
+                new Promise(resolve =>
+                  this.state.currentStep.wrapper.measureLayout(
+                    findNodeHandle(scrollView),
+                    (...args) => resolve(args)
+                  )
+                ),
+                new Promise(resolve =>
+                  scrollView._scrollViewRef.measure((...args) => resolve(args))
+                )
+              ])
+
+              const [_x, y, _w, h] = wrapperLayout
+              const [_x1, _y1, _w1, height] = scrollViewLayout
+
+              const elementBottomY = y + h
+
+              // if element is not visible or barely visible in the scroll view
+              if (elementBottomY > height - basePadding) {
+                const yOffsett = elementBottomY - height + basePadding * 2
+
+                const originalHandleScroll = this.state.scrollView._scrollResponder.scrollResponderHandleScroll
+                this.state.scrollView._scrollResponder.scrollResponderHandleScroll = (e) => {
+                  originalHandleScroll(e)
+
+                  if (e.nativeEvent.contentOffset.y >= yOffsett) {
+                    scrollView._scrollResponder.scrollResponderHandleScroll = originalHandleScroll
+
+                    resolve()
+                  }
+                }
+
+                scrollView.scrollTo({ y: yOffsett, animated: true });
+              } else {
+                resolve()
+              }
+            } else {
+              this.moveToCurrentStep()
+              resolve()
+            }
+          } else {
+            resolve()
           }
-        }, this.state.scrollView ? 100 : 0);
+        })
       }
 
       setVisibility = (visible: boolean): void => new Promise((resolve) => {
