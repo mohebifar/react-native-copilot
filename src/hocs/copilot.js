@@ -43,6 +43,7 @@ const copilot = ({
   svgMaskPath,
   verticalOffset = 0,
   wrapperStyle,
+  basePadding = 16
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
