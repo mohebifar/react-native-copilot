@@ -265,7 +265,7 @@ class CopilotModal extends Component<Props, State> {
           styles.stepNumberContainer,
           {
             // left: this.state.animatedValues.stepNumberLeft,
-            top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
+            // top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
           },
         ]}
       >
