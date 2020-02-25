@@ -165,21 +165,14 @@ class CopilotModal extends Component<Props, State> {
       stepNumberLeft,
     };
 
-    if (this.state.animated) {
-      Animated
-        .parallel(Object.keys(animate)
-          .map(key => Animated.timing(this.state.animatedValues[key], {
-            toValue: animate[key],
-            duration: this.props.animationDuration,
-            easing: this.props.easing,
-            useNativeDriver: true,
-          })))
-        .start();
-    } else {
-      Object.keys(animate).forEach((key) => {
-        this.state.animatedValues[key].setValue(animate[key]);
-      });
-    }
+    Animated.timing(this.state.animatedValues.top, {
+        toValue: obj.top,
+        duration: this.props.animationDuration,
+        easing: this.props.easing,
+        useNativeDriver: true,
+      })
+    .start();
+    this.state.animatedValues.left.setValue(stepNumberLeft);
 
     this.setState({
       tooltip,
