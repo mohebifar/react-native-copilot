@@ -172,7 +172,7 @@ class CopilotModal extends Component<Props, State> {
         useNativeDriver: true,
       })
     .start();
-    this.state.animatedValues.left.setValue(stepNumberLeft);
+    this.state.animatedValues.stepNumberLeft.setValue(stepNumberLeft);
 
     this.setState({
       tooltip,
