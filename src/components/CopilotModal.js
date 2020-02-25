@@ -27,6 +27,7 @@ type Props = {
   labels: Object,
   svgMaskPath?: SvgMaskPathFn,
   stopOnOutsideClick?: boolean,
+  hideArrow?: boolean,
 };
 
 type State = {
@@ -57,6 +58,7 @@ class CopilotModal extends Component<Props, State> {
     backdropColor: 'rgba(0, 0, 0, 0.4)',
     labels: {},
     stopOnOutsideClick: false,
+    hideArrow: false
   };
 
   state = {
@@ -259,6 +261,7 @@ class CopilotModal extends Component<Props, State> {
     const {
       tooltipComponent: TooltipComponent,
       stepNumberComponent: StepNumberComponent,
+      hideArrow
     } = this.props;
 
     return [
@@ -279,7 +282,7 @@ class CopilotModal extends Component<Props, State> {
           currentStepNumber={this.props.currentStepNumber}
         />
       </Animated.View>,
-      <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
+      hideArrow ? null : <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
       <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip, this.props.tooltipStyle]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
