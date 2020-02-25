@@ -68,7 +68,7 @@ class CopilotModal extends Component<Props, State> {
       top: new Animated.Value(0),
       stepNumberLeft: new Animated.Value(0),
     },
-    animated: false,
+    animated: true,
     containerVisible: false,
   };
 
@@ -172,6 +172,7 @@ class CopilotModal extends Component<Props, State> {
             toValue: animate[key],
             duration: this.props.animationDuration,
             easing: this.props.easing,
+            useNativeDriver: true,
           })))
         .start();
     } else {
