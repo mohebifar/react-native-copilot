@@ -23,6 +23,15 @@ declare module '@okgrow/react-native-copilot' {
     currentStepNumber: number;
   };
 
+  export interface SVGMaskPath {
+    size: Animated.ValueXY
+    position: Animated.ValueXY
+    canvasSize: {
+      x: number
+      y: number
+    }
+  }
+
   /**
    * Options for the copilot HOC
    */
@@ -35,6 +44,9 @@ declare module '@okgrow/react-native-copilot' {
     backdropColor?: string; // You can customize the mask color - default is rgba(0, 0, 0, 0.4)
     verticalOffset?: number; // In order to adjust vertical position
     stopOnOutsideClick?: boolean; // Whether the tutorial should stop after clicking outside the step component
+    hideArrow?: boolean;
+    svgMaskPath?(s: SVGMaskPath): string
+    tooltipStyle?: StyleProp<ViewStyle>
   };
 
   /**
