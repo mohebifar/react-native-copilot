@@ -43,6 +43,7 @@ const copilot = ({
   svgMaskPath,
   verticalOffset = 0,
   wrapperStyle,
+  hideArrow
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -219,6 +220,7 @@ const copilot = ({
               svgMaskPath={svgMaskPath}
               stopOnOutsideClick={stopOnOutsideClick}
               ref={(modal) => { this.modal = modal; }}
+              hideArrow={hideArrow}
             />
           </View>
         );
