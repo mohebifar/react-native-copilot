@@ -70,6 +70,7 @@ class CopilotModal extends Component<Props, State> {
     },
     animated: true,
     containerVisible: false,
+    tooltipTranslateY: new Animated.Value(400)
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -165,14 +166,12 @@ class CopilotModal extends Component<Props, State> {
       stepNumberLeft,
     };
 
-    Animated.timing(this.state.animatedValues.top, {
-        toValue: obj.top,
-        duration: this.props.animationDuration,
-        easing: this.props.easing,
+    Animated.spring(this.state.tooltipTranslateY, {
+        toValue: tooltip.top,
         useNativeDriver: true,
       })
     .start();
-    this.state.animatedValues.stepNumberLeft.setValue(stepNumberLeft);
+    // this.state.animatedValues.stepNumberLeft.setValue(stepNumberLeft);
 
     this.setState({
       tooltip,
@@ -277,7 +276,7 @@ class CopilotModal extends Component<Props, State> {
         />
       </Animated.View>,
       hideArrow ? null : <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip, this.props.tooltipStyle]}>
+      <Animated.View key="tooltip" style={[styles.tooltip, /* this.state.tooltip */, this.props.tooltipStyle, { transform: [{translateY: this.state.tooltipTranslateY}]}]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
