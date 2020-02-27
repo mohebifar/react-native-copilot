@@ -106,6 +106,7 @@ class SvgMask extends Component<Props, State> {
         style={this.props.style}
         onLayout={this.handleLayout}
         onStartShouldSetResponder={this.props.onClick}
+        pointerEvents='none'
       >
         {
           this.state.canvasSize
