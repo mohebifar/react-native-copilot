@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
+import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform, StyleSheet } from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -161,13 +161,13 @@ class CopilotModal extends Component<Props, State> {
       arrow.left = tooltip.left + MARGIN;
     }
 
-    const animate = {
-      top: obj.top,
-      stepNumberLeft,
-    };
+    // const animate = {
+    //   top: obj.top,
+    //   stepNumberLeft,
+    // };
 
     Animated.spring(this.state.tooltipTranslateY, {
-        toValue: tooltip.top,
+        toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 150,
         useNativeDriver: true,
       })
     .start();
@@ -276,7 +276,7 @@ class CopilotModal extends Component<Props, State> {
         />
       </Animated.View>,
       hideArrow ? null : <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, /* this.state.tooltip */, this.props.tooltipStyle, { transform: [{translateY: this.state.tooltipTranslateY}]}]}>
+      <Animated.View key="tooltip" style={[styles.tooltip, this.props.tooltipStyle, { transform: [{translateY: this.state.tooltipTranslateY}]}]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
@@ -293,23 +293,23 @@ class CopilotModal extends Component<Props, State> {
   render() {
     const containerVisible = this.state.containerVisible || this.props.visible;
     const contentVisible = this.state.layout && containerVisible;
-
+    if(!containerVisible) {
+      return null
+    }
     return (
-      <Modal
-        animationType="none"
-        visible={containerVisible}
-        onRequestClose={noop}
-        transparent
-        supportedOrientations={['portrait', 'landscape']}
+      <View
+        style={[StyleSheet.absoluteFill, { backgroundColor: 'transparent'}]}
+        pointerEvents='box-none'
       >
         <View
           style={styles.container}
           onLayout={this.handleLayoutChange}
+          pointerEvents='box-none'
         >
           {contentVisible && this.renderMask()}
           {contentVisible && this.renderTooltip()}
         </View>
-      </Modal>
+      </View>
     );
   }
 }
