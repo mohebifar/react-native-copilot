@@ -167,7 +167,7 @@ class CopilotModal extends Component<Props, State> {
     // };
 
     Animated.spring(this.state.tooltipTranslateY, {
-        toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 150,
+        toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 125,
         useNativeDriver: true,
       })
     .start();
@@ -246,6 +246,7 @@ class CopilotModal extends Component<Props, State> {
         backdropColor={this.props.backdropColor}
         svgMaskPath={this.props.svgMaskPath}
         onClick={this.handleMaskClick}
+        currentStepNumber={this.props.currentStepNumber}
       />
     );
   }
@@ -262,10 +263,6 @@ class CopilotModal extends Component<Props, State> {
         key="stepNumber"
         style={[
           styles.stepNumberContainer,
-          {
-            // left: this.state.animatedValues.stepNumberLeft,
-            // top: Animated.add(this.state.animatedValues.top, -STEP_NUMBER_RADIUS),
-          },
         ]}
       >
         <StepNumberComponent
