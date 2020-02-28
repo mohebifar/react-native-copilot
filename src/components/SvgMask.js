@@ -61,11 +61,14 @@ class SvgMask extends Component<Props, State> {
   }
 
   animationListener = (): void => {
-    const d: string = this.props.svgMaskPath({
+    const path: string = this.props.svgMaskPath({
       size: this.state.size,
       position: this.state.position,
       canvasSize: this.state.canvasSize,
+      currentStepNumber: this.props.currentStepNumber
     });
+    const hasTwoPath = typeof path !== 'string'
+    const d = !hasTwoPath ? path : path[0]
     if (this.mask) {
       this.mask.setNativeProps({ d });
     }
@@ -101,6 +104,15 @@ class SvgMask extends Component<Props, State> {
   }
 
   render() {
+    const path = this.props.svgMaskPath({
+      size: this.state.size,
+      position: this.state.position,
+      canvasSize: this.state.canvasSize,
+      currentStepNumber: this.props.currentStepNumber
+    })
+    const hasTwoPath = typeof path !== 'string'
+    const path1 = !hasTwoPath ? path : path[0]
+    const path2 = hasTwoPath ? path[1] : undefined
     return (
       <View
         style={this.props.style}
@@ -115,14 +127,18 @@ class SvgMask extends Component<Props, State> {
                 <AnimatedSvgPath
                   ref={(ref) => { this.mask = ref; }}
                   fill={this.props.backdropColor}
-                  fillRule="evenodd"
                   strokeWidth={1}
-                  d={this.props.svgMaskPath({
-                    size: this.state.size,
-                    position: this.state.position,
-                    canvasSize: this.state.canvasSize,
-                  })}
-                />
+                  fillRule="evenodd"
+                  d={path1}
+                  />
+                  {path2 &&
+                    <AnimatedSvgPath
+                      fill={this.props.backdropColor}
+                      fillRule="evenodd"
+                      strokeWidth={1}
+                      d={path2}
+                    />
+                  }
               </Svg>
             )
             : null
