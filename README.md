@@ -1,4 +1,4 @@
-<h1 align="center">React Native Copilot</h1>
+<h1 align="center">[WIP] rewriting: React Native Copilot</h1>
 
 <div align="center">
   <p align="center">
