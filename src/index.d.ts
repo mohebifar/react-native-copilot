@@ -46,7 +46,7 @@ declare module '@okgrow/react-native-copilot' {
     verticalOffset?: number; // In order to adjust vertical position
     stopOnOutsideClick?: boolean; // Whether the tutorial should stop after clicking outside the step component
     hideArrow?: boolean;
-    svgMaskPath?(s: SVGMaskPath): string
+    svgMaskPath?(s: SVGMaskPath): string | string[]
     tooltipStyle?: StyleProp<ViewStyle>
   };
 
