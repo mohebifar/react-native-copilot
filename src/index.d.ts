@@ -24,6 +24,7 @@ declare module '@okgrow/react-native-copilot' {
   };
 
   export interface SVGMaskPath {
+    currentStepNumber: number
     size: Animated.ValueXY
     position: Animated.ValueXY
     canvasSize: {
