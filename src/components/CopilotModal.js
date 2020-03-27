@@ -246,6 +246,7 @@ class CopilotModal extends Component<Props, State> {
         style={styles.overlayContainer}
         size={this.state.size}
         position={this.state.position}
+        currentStepNumber={this.props.currentStepNumber}
         easing={this.props.easing}
         animationDuration={this.props.animationDuration}
         backdropColor={this.props.backdropColor}

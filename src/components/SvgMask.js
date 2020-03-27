@@ -12,11 +12,12 @@ import AnimatedSvgPath from './AnimatedPath';
 import type { valueXY, svgMaskPath } from '../types';
 
 const windowDimensions = Dimensions.get('window');
-const defaultSvgPath = ({ size, position, canvasSize }): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+const defaultSvgPath = ({ size, position, canvasSize, currentStepNumber }): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
 
 type Props = {
   size: valueXY,
   position: valueXY,
+  currentStepNumber: number,
   style: object | number | Array,
   easing: func,
   animationDuration: number,
@@ -64,6 +65,7 @@ class SvgMask extends Component<Props, State> {
     const d: string = this.props.svgMaskPath({
       size: this.state.size,
       position: this.state.position,
+      currentStepNumber: this.props.currentStepNumber,
       canvasSize: this.state.canvasSize,
     });
     if (this.mask) {
@@ -119,6 +121,7 @@ class SvgMask extends Component<Props, State> {
                   d={this.props.svgMaskPath({
                     size: this.state.size,
                     position: this.state.position,
+                    currentStepNumber: this.props.currentStepNumber,
                     canvasSize: this.state.canvasSize,
                   })}
                 />

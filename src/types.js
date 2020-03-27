@@ -21,6 +21,7 @@ export type valueXY = {
 export type SvgMaskPathFn = (args: {
   size: Animated.valueXY,
   position: Animated.valueXY,
+  currentStepNumber: number,
   canvasSize: {
     x: number,
     y: number
