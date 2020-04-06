@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
+import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform, TouchableOpacity } from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
@@ -299,6 +299,7 @@ class CopilotModal extends Component<Props, State> {
   render() {
     const containerVisible = this.state.containerVisible || this.props.visible;
     const contentVisible = this.state.layout && containerVisible;
+    const { isLastStep } = this.props
 
     return (
       <Modal
@@ -308,13 +309,16 @@ class CopilotModal extends Component<Props, State> {
         transparent
         supportedOrientations={['portrait', 'landscape']}
       >
-        <View
-          style={styles.container}
-          onLayout={this.handleLayoutChange}
-        >
-          {contentVisible && this.renderMask()}
-          {contentVisible && this.renderTooltip()}
-        </View>
+        <TouchableOpacity activeOpacity={1} style={styles.container} onPress={ !isLastStep ? this.handleNext: this.handleStop}>
+            <View
+              style={styles.container}
+              onLayout={this.handleLayoutChange}
+            >
+              {contentVisible && this.renderMask()}
+              {contentVisible && this.renderTooltip()}
+            </View>
+        </TouchableOpacity>
+      
       </Modal>
     );
   }
