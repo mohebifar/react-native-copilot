@@ -180,7 +180,7 @@ const copilot = ({
 
       async moveToCurrentStep(): void {
         const size = await this.state.currentStep.target.measure();
-
+		    if (typeof verticalOffset === "function") verticalOffset = await verticalOffset();
         await this.modal.animateMove({
           width: size.width + OFFSET_WIDTH,
           height: size.height + OFFSET_WIDTH,
