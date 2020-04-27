@@ -78,7 +78,6 @@ class SvgMask extends Component<Props, State> {
   };
 
   animate = (size: valueXY = this.props.size, position: valueXY = this.props.position): void => {
-    if (this.props.animated) {
       Animated.parallel([
         Animated.timing(this.state.size, {
           toValue: size,
@@ -91,20 +90,13 @@ class SvgMask extends Component<Props, State> {
           easing: this.props.easing,
           useNativeDriver: true
         }),
-        this.props.currentStepNumber === 1 ?
-          Animated.timing(this.state.opacity, {
-            toValue: 1,
-            duration: this.props.animationDuration,
-            easing: this.props.easing,
-            useNativeDriver: true
-          })
-          :
-          undefined
+        Animated.timing(this.state.opacity, {
+          toValue: 1,
+          duration: this.props.animationDuration,
+          easing: this.props.easing,
+          useNativeDriver: true
+        })
       ]).start();
-    } else {
-      this.state.size.setValue(size);
-      this.state.position.setValue(position);
-    }
   }
 
   handleLayout = ({ nativeEvent: { layout: { width, height } } }) => {
