@@ -1,160 +1,296 @@
 // @flow
 import React, { Component } from 'react';
-import {
-  View,
-  Animated,
-  Easing,
-  Dimensions,
-} from 'react-native';
-import Svg from 'react-native-svg';
-import AnimatedSvgPath from './AnimatedPath';
-
-import type { valueXY, svgMaskPath } from '../types';
-
-const windowDimensions = Dimensions.get('window');
-const defaultSvgPath = ({ size, position, canvasSize }): string => `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform, StyleSheet } from 'react-native';
+import Tooltip from './Tooltip';
+import StepNumber from './StepNumber';
+import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
+import type { SvgMaskPathFn } from '../types';
 
 type Props = {
-  size: valueXY,
-  position: valueXY,
-  style: object | number | Array,
-  easing: func,
-  animationDuration: number,
+  stop: () => void,
+  next: () => void,
+  prev: () => void,
+  currentStepNumber: number,
+  currentStep: ?Step,
+  visible: boolean,
+  isFirstStep: boolean,
+  isLastStep: boolean,
+  easing: ?func,
+  animationDuration: ?number,
+  tooltipComponent: ?React$Component,
+  tooltipStyle?: Object,
+  stepNumberComponent: ?React$Component,
+  overlay: 'svg' | 'view',
   animated: boolean,
+  androidStatusBarVisible: boolean,
   backdropColor: string,
-  svgMaskPath?: svgMaskPath,
-  currentStepNumber?: number,
-  onClick?: () => void,
+  labels: Object,
+  svgMaskPath?: SvgMaskPathFn,
+  stopOnOutsideClick?: boolean,
+  hideArrow?: boolean,
 };
 
 type State = {
-  size: Animated.ValueXY,
-  position: Animated.ValueXY,
-  opacity: Animated.Value,
-  canvasSize: ?valueXY,
+  tooltip: Object,
+  arrow: Object,
+  animatedValues: Object,
+  notAnimated: boolean,
+  layout: ?{
+    width: number,
+    height: number,
+  },
 };
 
-class SvgMask extends Component<Props, State> {
+const noop = () => {};
+
+class CopilotModal extends Component<Props, State> {
   static defaultProps = {
-    animationDuration: 300,
-    easing: Easing.linear,
-    svgMaskPath: defaultSvgPath,
+    easing: Easing.elastic(0.7),
+    animationDuration: 400,
+    tooltipComponent: Tooltip,
+    tooltipStyle: {},
+    stepNumberComponent: StepNumber,
+    // If react-native-svg native module was avaialble, use svg as the default overlay component
+    overlay: typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
+    // If animated was not specified, rely on the default overlay type
+    animated: typeof NativeModules.RNSVGSvgViewManager !== 'undefined',
+    androidStatusBarVisible: false,
+    backdropColor: 'rgba(0, 0, 0, 0.4)',
+    labels: {},
+    stopOnOutsideClick: false,
+    hideArrow: false
   };
 
-  constructor(props) {
-    super(props);
+  state = {
+    tooltip: {},
+    arrow: {},
+    animatedValues: {
+      top: new Animated.Value(0),
+      stepNumberLeft: new Animated.Value(0),
+    },
+    animated: true,
+    containerVisible: false,
+    tooltipTranslateY: new Animated.Value(400),
+    opacity: new Animated.Value(1)
+  };
 
-    this.state = {
-      canvasSize: {
-        x: windowDimensions.width,
-        y: windowDimensions.height,
-      },
-      size: new Animated.ValueXY(props.size),
-      position: new Animated.ValueXY(props.position),
-      opacity: new Animated.Value(this.props.currentStepNumber === 1 ? 1 : 1),
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.visible === true && this.props.visible === false) {
+      this.reset();
+    }
+  }
+
+  layout = {
+    width: 0,
+    height: 0,
+  }
+
+  handleLayoutChange = ({ nativeEvent: { layout } }) => {
+    this.layout = layout;
+  }
+
+  measure(): Promise {
+    if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
+      return new Promise(resolve => resolve({
+        x: 0, y: 0, width: 0, height: 0,
+      }));
+    }
+
+
+    return new Promise((resolve) => {
+      const setLayout = () => {
+        if (this.layout.width !== 0) {
+          resolve(this.layout);
+        } else {
+          requestAnimationFrame(setLayout);
+        }
+      };
+      setLayout();
+    });
+  }
+
+  async _animateMove(obj = {}): void {
+    const layout = await this.measure();
+    if (!this.props.androidStatusBarVisible && Platform.OS === 'android') {
+      obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
+    }
+
+    let stepNumberLeft = obj.left - STEP_NUMBER_RADIUS;
+
+    if (stepNumberLeft < 0) {
+      stepNumberLeft = (obj.left + obj.width) - STEP_NUMBER_RADIUS;
+      if (stepNumberLeft > layout.width - STEP_NUMBER_DIAMETER) {
+        stepNumberLeft = layout.width - STEP_NUMBER_DIAMETER;
+      }
+    }
+
+    const center = {
+      x: obj.left + (obj.width / 2),
+      y: obj.top + (obj.height / 2),
     };
 
-    this.state.position.addListener(this.animationListener);
-  }
+    const relativeToLeft = center.x;
+    const relativeToTop = center.y;
+    const relativeToBottom = Math.abs(center.y - layout.height);
+    const relativeToRight = Math.abs(center.x - layout.width);
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.position !== this.props.position || prevProps.size !== this.props.size) {
-      this.animate(this.props.size, this.props.position);
+    const verticalPosition = relativeToBottom > relativeToTop ? 'bottom' : 'top';
+    const horizontalPosition = relativeToLeft > relativeToRight ? 'left' : 'right';
+
+    const tooltip = {};
+    const arrow = {};
+
+    if (verticalPosition === 'bottom') {
+      tooltip.top = obj.top + obj.height + MARGIN;
+      arrow.borderBottomColor = '#fff';
+      arrow.top = tooltip.top - (ARROW_SIZE * 2);
+    } else {
+      tooltip.bottom = layout.height - (obj.top - MARGIN);
+      arrow.borderTopColor = '#fff';
+      arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
     }
+
+    if (horizontalPosition === 'left') {
+      tooltip.right = Math.max(layout.width - (obj.left + obj.width), 0);
+      tooltip.right = tooltip.right === 0 ? tooltip.right + MARGIN : tooltip.right;
+      tooltip.maxWidth = layout.width - tooltip.right - MARGIN;
+      arrow.right = tooltip.right + MARGIN;
+    } else {
+      tooltip.left = Math.max(obj.left, 0);
+      tooltip.left = tooltip.left === 0 ? tooltip.left + MARGIN : tooltip.left;
+      tooltip.maxWidth = layout.width - tooltip.left - MARGIN;
+      arrow.left = tooltip.left + MARGIN;
+    }
+
+    Animated.spring(this.state.tooltipTranslateY, {
+      delay: 100,
+      toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 125,
+      useNativeDriver: true,
+    }).start()
+
+
+    this.setState({
+      tooltip,
+      arrow,
+      layout,
+      animated: this.props.animated,
+      size: {
+        x: obj.width,
+        y: obj.height,
+      },
+      position: {
+        x: Math.floor(Math.max(obj.left, 0)),
+        y: Math.floor(Math.max(obj.top, 0)),
+      },
+    });
   }
 
-  animationListener = (): void => {
-    const path: string = this.props.svgMaskPath({
-      size: this.state.size,
-      position: this.state.position,
-      canvasSize: this.state.canvasSize,
-      currentStepNumber: this.props.currentStepNumber
+  animateMove(obj = {}): void {
+    return new Promise((resolve) => {
+      this.setState(
+        { containerVisible: true },
+        () => requestAnimationFrame(async () => {
+          await this._animateMove(obj);
+          resolve();
+        }),
+      );
     });
-    const hasTwoPath = typeof path !== 'string'
-    const d = !hasTwoPath ? path : path[0]
-    if (this.mask) {
-      this.mask.setNativeProps({ d });
+  }
+
+  reset(): void {
+    this.setState({
+      animated: false,
+      containerVisible: false,
+      layout: undefined,
+    });
+  }
+
+  handleNext = () => {
+    this.props.next();
+  }
+
+  handlePrev = () => {
+    this.props.prev();
+  }
+
+  handleStop = () => {
+    this.reset();
+    this.props.stop();
+  }
+
+  handleMaskClick = () => {
+    if (this.props.stopOnOutsideClick) {
+      this.handleStop();
     }
   };
 
-  animate = (size: valueXY = this.props.size, position: valueXY = this.props.position): void => {
-    if (this.props.animated) {
-      Animated.parallel([
-        Animated.timing(this.state.size, {
-          toValue: size,
-          duration: this.props.animationDuration,
-          easing: this.props.easing,
-        }),
-        Animated.timing(this.state.position, {
-          toValue: position,
-          duration: this.props.animationDuration,
-          easing: this.props.easing,
-          useNativeDriver: true
-        }),
-        // Animated.timing(this.state.opacity, {
-        //   toValue: 1,
-        //   duration: this.props.animationDuration,
-        //   easing: this.props.easing,
-        //   useNativeDriver: true
-        // })
-      ]).start();
-    } else {
-      this.state.size.setValue(size);
-      this.state.position.setValue(position);
-    }
+  renderMask() {
+    const MaskComponent = require('./SvgMask').default
+    return (
+      <MaskComponent
+        animated={this.props.animated}
+        layout={this.state.layout}
+        style={styles.overlayContainer}
+        size={this.state.size}
+        position={this.state.position}
+        easing={this.props.easing}
+        animationDuration={this.props.animationDuration}
+        backdropColor={this.props.backdropColor}
+        svgMaskPath={this.props.svgMaskPath}
+        onClick={this.handleMaskClick}
+        currentStepNumber={this.props.currentStepNumber}
+      />
+    );
   }
 
-  handleLayout = ({ nativeEvent: { layout: { width, height } } }) => {
-    this.setState({
-      canvasSize: {
-        x: width,
-        y: height,
-      },
-    });
+  renderTooltip() {
+    const {
+      tooltipComponent: TooltipComponent,
+    } = this.props;
+
+    return [
+      <Animated.View
+        key="tooltip"
+        style={[
+          styles.tooltip,
+          this.props.tooltipStyle,
+          { transform: [{translateY: this.state.tooltipTranslateY}]}
+        ]}>
+        <TooltipComponent
+          currentStep={this.props.currentStep}
+          handleNext={this.handleNext}
+          labels={this.props.labels}
+        />
+      </Animated.View>,
+    ];
   }
 
   render() {
-    const path = this.props.svgMaskPath({
-      size: this.state.size,
-      position: this.state.position,
-      canvasSize: this.state.canvasSize,
-      currentStepNumber: this.props.currentStepNumber
-    })
-    const hasTwoPath = typeof path !== 'string'
-    const path1 = !hasTwoPath ? path : path[0]
-    const path2 = hasTwoPath ? path[1] : undefined
+    const containerVisible = this.state.containerVisible || this.props.visible;
+    const contentVisible = this.state.layout && containerVisible;
+    if(!containerVisible) {
+      return null
+    }
     return (
-      <Animated.View
-        style={[this.props.style, { opacity: this.state.opacity }]}
-        onLayout={this.handleLayout}
-        pointerEvents='none'
+      <View
+        style={[StyleSheet.absoluteFill, { backgroundColor: 'transparent'}]}
+        pointerEvents='box-none'
       >
-        {
-          this.state.canvasSize
-            ? (
-              <Svg pointerEvents="none" width={this.state.canvasSize.x} height={this.state.canvasSize.y}>
-                <AnimatedSvgPath
-                  ref={(ref) => { this.mask = ref; }}
-                  fill={this.props.backdropColor}
-                  strokeWidth={0}
-                  fillRule="evenodd"
-                  d={path1}
-                  />
-                  {path2 &&
-                    <AnimatedSvgPath
-                      fill={this.props.backdropColor}
-                      fillRule="evenodd"
-                      strokeWidth={0}
-                      d={path2}
-                    />
-                  }
-              </Svg>
-            )
-            : null
-        }
-      </Animated.View>
+        <View
+          style={styles.container}
+          onLayout={this.handleLayoutChange}
+          pointerEvents='box-none'
+        >
+          {contentVisible && (
+            <>
+              {this.renderMask()}
+              {this.renderTooltip()}
+            </>
+          )}
+        </View>
+      </View>
     );
   }
 }
 
-export default SvgMask;
+export default CopilotModal;
