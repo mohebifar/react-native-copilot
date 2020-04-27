@@ -162,10 +162,11 @@ class CopilotModal extends Component<Props, State> {
       arrow.left = tooltip.left + MARGIN;
     }
 
-    Animated.spring(this.state.tooltipTranslateY, {
-      delay: 100,
+    Animated.timing(this.state.tooltipTranslateY, {
       toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 125,
-      useNativeDriver: true,
+      duration: this.props.animationDuration,
+      easing: this.props.easing,
+      useNativeDriver: true
     }).start()
 
 
