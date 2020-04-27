@@ -54,7 +54,7 @@ class SvgMask extends Component<Props, State> {
       opacity: new Animated.Value(this.props.currentStepNumber === 1 ? 0 : 1),
     };
 
-    this.state.position.addListener(this.animationListener);
+    this.listenerID = this.state.position.addListener(this.animationListener);
   }
 
   componentDidUpdate(prevProps) {
@@ -62,6 +62,13 @@ class SvgMask extends Component<Props, State> {
       this.animate(this.props.size, this.props.position);
     }
   }
+
+  componentWillUnmount() {
+    if(this.listenerID) {
+      this.state.position.removeListener(this.listenerID)
+    }
+  }
+
 
   animationListener = (): void => {
     const path: string = this.props.svgMaskPath({
@@ -77,25 +84,28 @@ class SvgMask extends Component<Props, State> {
     }
   };
 
-  animate = (size: valueXY = this.props.size, position: valueXY = this.props.position): void => {
+  animate = (size = this.props.size, position = this.props.position) => {
       Animated.parallel([
-        Animated.timing(this.state.size, {
-          toValue: size,
-          duration: this.props.animationDuration,
-          easing: this.props.easing,
-        }),
         Animated.timing(this.state.position, {
           toValue: position,
           duration: this.props.animationDuration,
           easing: this.props.easing,
           useNativeDriver: true
         }),
+        Animated.timing(this.state.size, {
+          toValue: size,
+          duration: this.props.animationDuration,
+          easing: this.props.easing,
+          // useNativeDriver: true
+        }),
         Animated.timing(this.state.opacity, {
           toValue: 1,
           duration: this.props.animationDuration,
           easing: this.props.easing,
           useNativeDriver: true
-        })
+        },
+        { stopTogether: false }
+        )
       ]).start();
   }
 
