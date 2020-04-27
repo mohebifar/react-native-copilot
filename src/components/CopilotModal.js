@@ -71,7 +71,7 @@ class CopilotModal extends Component<Props, State> {
     animated: true,
     containerVisible: false,
     tooltipTranslateY: new Animated.Value(400),
-    opacity: new Animated.Value(0)
+    opacity: new Animated.Value(1)
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -162,30 +162,11 @@ class CopilotModal extends Component<Props, State> {
       arrow.left = tooltip.left + MARGIN;
     }
 
-    const duration = this.props.animationDuration + 250
-    Animated.sequence([
-      Animated.timing(this.state.opacity, {
-        easing: this.props.easing,
-        toValue: 0,
-        duration: duration / 2,
-        useNativeDriver: true,
-      }),
-      Animated.parallel([
-        Animated.timing(this.state.tooltipTranslateY, {
-          easing: this.props.easing,
-          toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 125,
-          duration,
-          useNativeDriver: true,
-        }),
-        Animated.timing(this.state.opacity, {
-          easing: this.props.easing,
-          toValue: 1,
-          duration,
-          useNativeDriver: true,
-        })
-      ])
-    ]).start();
-
+    Animated.spring(this.state.tooltipTranslateY, {
+      delay: 100,
+      toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 125,
+      useNativeDriver: true,
+    }).start()
 
 
     this.setState({
@@ -244,11 +225,7 @@ class CopilotModal extends Component<Props, State> {
   };
 
   renderMask() {
-    /* eslint-disable global-require */
-    const MaskComponent = this.props.overlay === 'svg'
-      ? require('./SvgMask').default
-      : require('./ViewMask').default;
-    /* eslint-enable */
+    const MaskComponent = require('./SvgMask').default
     return (
       <MaskComponent
         animated={this.props.animated}
@@ -269,33 +246,19 @@ class CopilotModal extends Component<Props, State> {
   renderTooltip() {
     const {
       tooltipComponent: TooltipComponent,
-      stepNumberComponent: StepNumberComponent,
-      hideArrow
     } = this.props;
 
     return [
       <Animated.View
-        key="stepNumber"
+        key="tooltip"
         style={[
-          styles.stepNumberContainer,
-        ]}
-      >
-        <StepNumberComponent
-          isFirstStep={this.props.isFirstStep}
-          isLastStep={this.props.isLastStep}
-          currentStep={this.props.currentStep}
-          currentStepNumber={this.props.currentStepNumber}
-        />
-      </Animated.View>,
-      hideArrow ? null : <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, this.props.tooltipStyle, { opacity: this.state.opacity, transform: [{translateY: this.state.tooltipTranslateY}]}]}>
+          styles.tooltip,
+          this.props.tooltipStyle,
+          { transform: [{translateY: this.state.tooltipTranslateY}]}
+        ]}>
         <TooltipComponent
-          isFirstStep={this.props.isFirstStep}
-          isLastStep={this.props.isLastStep}
           currentStep={this.props.currentStep}
           handleNext={this.handleNext}
-          handlePrev={this.handlePrev}
-          handleStop={this.handleStop}
           labels={this.props.labels}
         />
       </Animated.View>,
@@ -318,8 +281,12 @@ class CopilotModal extends Component<Props, State> {
           onLayout={this.handleLayoutChange}
           pointerEvents='box-none'
         >
-          {contentVisible && this.renderMask()}
-          {contentVisible && this.renderTooltip()}
+          {contentVisible && (
+            <>
+              {this.renderMask()}
+              {this.renderTooltip()}
+            </>
+          )}
         </View>
       </View>
     );
