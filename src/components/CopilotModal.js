@@ -70,7 +70,8 @@ class CopilotModal extends Component<Props, State> {
     },
     animated: true,
     containerVisible: false,
-    tooltipTranslateY: new Animated.Value(400)
+    tooltipTranslateY: new Animated.Value(400),
+    opacity: new Animated.Value(0)
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -161,17 +162,31 @@ class CopilotModal extends Component<Props, State> {
       arrow.left = tooltip.left + MARGIN;
     }
 
-    // const animate = {
-    //   top: obj.top,
-    //   stepNumberLeft,
-    // };
-
-    Animated.spring(this.state.tooltipTranslateY, {
-        toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 125,
+    const duration = this.props.animationDuration + 250
+    Animated.sequence([
+      Animated.timing(this.state.opacity, {
+        easing: this.props.easing,
+        toValue: 0,
+        duration: duration / 2,
         useNativeDriver: true,
-      })
-    .start();
-    // this.state.animatedValues.stepNumberLeft.setValue(stepNumberLeft);
+      }),
+      Animated.parallel([
+        Animated.timing(this.state.tooltipTranslateY, {
+          easing: this.props.easing,
+          toValue: verticalPosition === 'bottom' ? tooltip.top : obj.top - MARGIN - 125,
+          duration,
+          useNativeDriver: true,
+        }),
+        Animated.timing(this.state.opacity, {
+          easing: this.props.easing,
+          toValue: 1,
+          duration,
+          useNativeDriver: true,
+        })
+      ])
+    ]).start();
+
+
 
     this.setState({
       tooltip,
@@ -273,7 +288,7 @@ class CopilotModal extends Component<Props, State> {
         />
       </Animated.View>,
       hideArrow ? null : <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, this.props.tooltipStyle, { transform: [{translateY: this.state.tooltipTranslateY}]}]}>
+      <Animated.View key="tooltip" style={[styles.tooltip, this.props.tooltipStyle, { opacity: this.state.opacity, transform: [{translateY: this.state.tooltipTranslateY}]}]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
