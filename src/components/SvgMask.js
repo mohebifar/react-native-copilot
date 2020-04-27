@@ -23,12 +23,14 @@ type Props = {
   animated: boolean,
   backdropColor: string,
   svgMaskPath?: svgMaskPath,
+  currentStepNumber?: number,
   onClick?: () => void,
 };
 
 type State = {
   size: Animated.ValueXY,
   position: Animated.ValueXY,
+  opacity: Animated.Value,
   canvasSize: ?valueXY,
 };
 
@@ -49,6 +51,7 @@ class SvgMask extends Component<Props, State> {
       },
       size: new Animated.ValueXY(props.size),
       position: new Animated.ValueXY(props.position),
+      opacity: new Animated.Value(this.props.currentStepNumber === 1 ? 0 : 1),
     };
 
     this.state.position.addListener(this.animationListener);
@@ -88,6 +91,15 @@ class SvgMask extends Component<Props, State> {
           easing: this.props.easing,
           useNativeDriver: true
         }),
+        this.props.currentStepNumber === 1 ?
+          Animated.timing(this.state.opacity, {
+            toValue: 1,
+            duration: this.props.animationDuration,
+            easing: this.props.easing,
+            useNativeDriver: true
+          })
+          :
+          undefined
       ]).start();
     } else {
       this.state.size.setValue(size);
@@ -131,6 +143,7 @@ class SvgMask extends Component<Props, State> {
                   strokeWidth={0}
                   fillRule="evenodd"
                   d={path1}
+                  opacity={this.state.opacity}
                   />
                   {path2 &&
                     <AnimatedSvgPath
@@ -138,6 +151,7 @@ class SvgMask extends Component<Props, State> {
                       fillRule="evenodd"
                       strokeWidth={0}
                       d={path2}
+                      opacity={this.state.opacity}
                     />
                   }
               </Svg>
