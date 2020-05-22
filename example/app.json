@@ -1,8 +1,0 @@
-{
-  "expo": {
-    "sdkVersion": "34.0.0",
-    "packagerOpts": {
-      "assetExts": ["ttf"]
-    }
-  }
-}

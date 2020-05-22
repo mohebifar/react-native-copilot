@@ -1,16 +1,26 @@
 {
-  "name": "react-native-copilot",
-  "version": "2.4.7",
-  "description": "Make an interactive step by step tour guide for you react-native app",
-  "main": "src/index.js",
+  "name": "@applications-developer/react-native-copilot",
+  "version": "3.0.0",
+  "description": "Make an interactive step by step tour guide for you react-native app (a rewrite of react-native-copilot)",
+  "main": "node_modules/expo/AppEntry.js",
+  "types": "lib/index.d.ts",
   "private": false,
   "scripts": {
-    "lint": "eslint src/",
-    "test": "jest src/"
+    "start": "yarn config:dev && expo start -c",
+    "tsc": "node_modules/.bin/tsc --noEmit",
+    "bundle": "./scripts/gen_bundle_string.js",
+    "build": "yarn bundle && rm -rf lib/ && node_modules/.bin/tsc",
+    "config:dev": "json -I -f package.json -e 'this.main=\"node_modules/expo/AppEntry.js\"'",
+    "config:npm": "json -I -f package.json -e 'this.main=\"lib/index.js\"'",
+    "lint": "tslint --project .",
+    "verify": "yarn lint && yarn tsc && yarn build",
+    "prepublishOnly": "yarn verify && yarn config:npm",
+    "postpublish": "yarn config:dev",
+    "cleaning": "rm -rf node_modules && rm -f yarn.lock && yarn cache clean && yarn install && watchman watch-del-all && rm -fr $TMPDIR/react-*"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mohebifar/react-native-copilot.git"
+    "url": "git+https://github.com/xcarpentier/react-native-copilot.git"
   },
   "keywords": [
     "react-native",
@@ -20,38 +30,33 @@
     "intro.js",
     "intro"
   ],
-  "files": [
-    "src"
-  ],
-  "author": "Mohamad Mohebifar <mohamad@mohebifar.com>",
+  "author": "Xavier Carpentier <xcapetir@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mohebifar/react-native-copilot/issues"
+    "url": "https://github.com/xcapentier/react-native-copilot/issues"
   },
-  "homepage": "https://github.com/mohebifar/react-native-copilot#readme",
+  "homepage": "https://github.com/xcapentier/react-native-copilot#readme",
   "devDependencies": {
-    "babel-eslint": "^8.0.1",
-    "babel-jest": "^21.2.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-flow": "^6.23.0",
-    "babel-preset-react-native": "^4.0.0",
-    "eslint": "^4.8.0",
-    "eslint-config-airbnb": "^16.0.0",
-    "eslint-plugin-flowtype": "^2.39.1",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^6.0.2",
-    "eslint-plugin-react": "^7.4.0",
+    "babel-preset-expo": "~8.2.1",
+    "@types/react": "16.9.17",
+    "@types/react-dom": "16.9.4",
+    "@types/react-native": "0.60.28",
+    "expo": "~37.0.6",
     "jest": "^24.8.0",
     "jest-react-native": "^18.0.0",
-    "react": ">=16.8.0",
-    "react-native": ">=0.59.0",
-    "react-native-svg": "^9.5.1",
-    "react-test-renderer": ">=16.8.0"
+    "react": "16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.1.tar.gz",
+    "json": "^9.0.6",
+    "react-native-svg": "11.0.1",
+    "react-test-renderer": ">=16.8.0",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "3.7.4"
   },
   "jest": {
     "preset": "react-native",
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+      "^.+\\.tsx?$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!(jest-)?react-native|react-clone-referenced-element)"

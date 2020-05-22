@@ -123,7 +123,7 @@ You can specify the overlay when applying the `copilot` HOC:
 ```js
 copilot({
   overlay: "svg", // or 'view'
-  animated: true // or false
+  animated: true, // or false
 })(RootComponent);
 ```
 
@@ -156,11 +156,11 @@ You can customize tooltip's style:
 const style = {
   backgroundColor: "#9FA8DA",
   borderRadius: 10,
-  paddingTop: 5
+  paddingTop: 5,
 };
 
 copilot({
-  tooltipStyle: style
+  tooltipStyle: style,
 })(RootComponent);
 ```
 
@@ -189,7 +189,7 @@ You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a
 
 ```js
 copilot({
-  backdropColor: "rgba(50, 50, 100, 0.9)"
+  backdropColor: "rgba(50, 50, 100, 0.9)",
 })(RootComponent);
 ```
 
@@ -205,8 +205,8 @@ SvgMaskPathFn = (args: {
   position: Animated.valueXY,
   canvasSize: {
     x: number,
-    y: number
-  }
+    y: number,
+  },
 }) => string;
 ```
 
@@ -217,7 +217,7 @@ const circleSvgPath = ({ position, canvasSize }): string =>
   `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
 
 copilot({
-  svgMaskPath: circleSvgPath
+  svgMaskPath: circleSvgPath,
 })(RootComponent);
 ```
 
@@ -261,8 +261,8 @@ copilot({
     previous: "Vorheriger",
     next: "Nächster",
     skip: "Überspringen",
-    finish: "Beenden"
-  }
+    finish: "Beenden",
+  },
 })(RootComponent);
 ```
 
@@ -272,7 +272,7 @@ In order to adjust vertical position pass `verticalOffset` to the `copilot` HOC.
 
 ```js
 copilot({
-  verticalOffset: 36
+  verticalOffset: 36,
 })(RootComponent);
 ```
 
@@ -301,7 +301,7 @@ class HomeScreen {
   }
 
   render() {
-    <ScrollView ref={ref => (this.scrollView = ref)}>// ...</ScrollView>;
+    <ScrollView ref={(ref) => (this.scrollView = ref)}>// ...</ScrollView>;
   }
 }
 export default copilot()(HomeScreen);
