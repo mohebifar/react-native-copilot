@@ -1,12 +1,11 @@
-// @flow
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
-export const STEP_NUMBER_RADIUS: number = 14;
-export const STEP_NUMBER_DIAMETER: number = STEP_NUMBER_RADIUS * 2;
-export const ZINDEX: number = 100;
-export const MARGIN: number = 13;
-export const OFFSET_WIDTH: number = 4;
-export const ARROW_SIZE: number = 6;
+export const STEP_NUMBER_RADIUS: number = 14
+export const STEP_NUMBER_DIAMETER: number = STEP_NUMBER_RADIUS * 2
+export const Z_INDEX: number = 100
+export const MARGIN: number = 13
+export const OFFSET_WIDTH: number = 4
+export const ARROW_SIZE: number = 6
 
 export default StyleSheet.create({
   container: {
@@ -15,7 +14,7 @@ export default StyleSheet.create({
     top: 0,
     right: 0,
     bottom: 0,
-    zIndex: ZINDEX,
+    zIndex: Z_INDEX,
   },
   arrow: {
     position: 'absolute',
@@ -30,9 +29,7 @@ export default StyleSheet.create({
     borderRadius: 3,
     overflow: 'hidden',
   },
-  tooltipText: {
-
-  },
+  tooltipText: {},
   tooltipContainer: {
     flex: 1,
   },
@@ -41,7 +38,7 @@ export default StyleSheet.create({
     width: STEP_NUMBER_DIAMETER,
     height: STEP_NUMBER_DIAMETER,
     overflow: 'hidden',
-    zIndex: ZINDEX + 1,
+    zIndex: Z_INDEX + 1,
   },
   stepNumber: {
     flex: 1,
@@ -83,4 +80,4 @@ export default StyleSheet.create({
     bottom: 0,
     right: 0,
   },
-});
+})

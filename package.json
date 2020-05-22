@@ -1,5 +1,5 @@
 {
-  "name": "@applications-developer/react-native-copilot",
+  "name": "@applications-developer/rn-copilot",
   "version": "3.0.0",
   "description": "Make an interactive step by step tour guide for you react-native app (a rewrite of react-native-copilot)",
   "main": "node_modules/expo/AppEntry.js",
