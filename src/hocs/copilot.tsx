@@ -81,6 +81,10 @@ const copilot = ({
 
     modal: any
 
+    constructor(props: any) {
+      super(props)
+    }
+
     getChildContext(): { _copilot: CopilotContext } {
       return {
         _copilot: {

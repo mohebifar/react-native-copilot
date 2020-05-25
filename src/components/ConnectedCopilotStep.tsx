@@ -43,13 +43,17 @@ class ConnectedCopilotStep extends React.Component<Props> {
   }
 
   register() {
-    this.props._copilot.registerStep({
-      name: this.props.name,
-      text: this.props.text,
-      order: this.props.order,
-      target: this,
-      wrapper: this.wrapper,
-    })
+    if (this.props._copilot) {
+      this.props._copilot.registerStep({
+        name: this.props.name,
+        text: this.props.text,
+        order: this.props.order,
+        target: this,
+        wrapper: this.wrapper,
+      })
+    } else {
+      console.warn('_copilot undefined')
+    }
   }
 
   unregister() {

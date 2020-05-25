@@ -115,6 +115,10 @@ class CopilotModal extends React.Component<Props, State> {
     position: undefined,
   }
 
+  constructor(props: Props) {
+    super(props)
+  }
+
   componentDidUpdate(prevProps: Props) {
     if (prevProps.visible === true && this.props.visible === false) {
       this.reset()

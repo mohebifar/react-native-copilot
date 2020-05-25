@@ -1,12 +1,14 @@
 import { Step, Steps } from './types'
 
 export const getFirstStep = (steps: Steps): Step | null =>
+  steps &&
   Object.values(steps).reduce(
     (a: Step | null, b) => (!a || a.order > b.order ? b : a),
     null,
   )
 
 export const getLastStep = (steps: Steps): Step | null =>
+  steps &&
   Object.values(steps).reduce(
     (a: Step | null, b) => (!a || a.order < b.order ? b : a),
     null,
