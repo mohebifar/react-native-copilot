@@ -17,7 +17,13 @@ import {
   getNextStep,
 } from '../utilities'
 
-import { Step, Steps, StepObject, SVGMaskPath } from '../types'
+import {
+  Step,
+  Steps,
+  StepObject,
+  SVGMaskPath,
+  SVGMaskPathMorph,
+} from '../types'
 
 /*
 This is the maximum wait time for the steps to be registered before starting the tutorial
@@ -31,7 +37,6 @@ interface State {
   visible: boolean
   androidStatusBarVisible?: boolean
   backdropColor?: string
-  scrollView?: any
   stopOnOutsideClick?: boolean
 }
 
@@ -45,9 +50,11 @@ export interface CopilotOptionProps {
   backdropColor?: string
   stopOnOutsideClick?: boolean
   svgMaskPath?: SVGMaskPath
+  svgMaskPathMorph?: SVGMaskPathMorph
   verticalOffset?: number
   wrapperStyle?: StyleProp<ViewStyle>
   hideArrow?: boolean
+  animationDuration?: number
 }
 
 export const copilot = ({
@@ -60,16 +67,17 @@ export const copilot = ({
   backdropColor,
   stopOnOutsideClick = false,
   svgMaskPath,
+  svgMaskPathMorph,
   verticalOffset = 0,
   wrapperStyle,
   hideArrow,
+  animationDuration,
 }: CopilotOptionProps = {}) => (WrappedComponent: any) => {
   class CopilotClass extends React.Component<any, State> {
     state: State = {
       steps: undefined,
       currentStep: undefined,
       visible: false,
-      scrollView: undefined,
     }
 
     startTries = 0
@@ -126,24 +134,11 @@ export const copilot = ({
       this.setState({ currentStep: step })
       this.eventEmitter.emit('stepChange', step)
 
-      if (this.state.scrollView) {
-        const { scrollView } = this.state
-        await this.state.currentStep!.wrapper!.measureLayout(
-          findNodeHandle(scrollView),
-          (_x: number, y: number, _w: number, h: number) => {
-            const yOffset = y > 0 ? y - h / 2 : 0
-            scrollView.scrollTo({ y: yOffset, animated: false })
-          },
-        )
-      }
-      setTimeout(
-        () => {
-          if (move) {
-            this.moveToCurrentStep()
-          }
-        },
-        this.state.scrollView ? 100 : 0,
-      )
+      setTimeout(() => {
+        if (move) {
+          this.moveToCurrentStep()
+        }
+      }, 0)
     }
 
     setVisibility = (visible: boolean): Promise<void> =>
@@ -183,12 +178,8 @@ export const copilot = ({
       await this.setCurrentStep(this.getPrevStep()!)
     }
 
-    start = async (fromStep?: string, scrollView?: any): Promise<void> => {
+    start = async (fromStep?: string): Promise<void> => {
       const { steps } = this.state
-
-      if (!this.state.scrollView) {
-        this.setState({ scrollView })
-      }
 
       const currentStep = fromStep
         ? (steps as StepObject)[fromStep]
@@ -239,6 +230,9 @@ export const copilot = ({
             copilotEvents={this.eventEmitter}
           />
           <CopilotModal
+            ref={(modal) => {
+              this.modal = modal
+            }}
             next={this.next}
             prev={this.prev}
             stop={this.stop}
@@ -256,11 +250,10 @@ export const copilot = ({
             androidStatusBarVisible={androidStatusBarVisible}
             backdropColor={backdropColor}
             svgMaskPath={svgMaskPath}
+            svgMaskPathMorph={svgMaskPathMorph}
             stopOnOutsideClick={stopOnOutsideClick}
-            ref={(modal) => {
-              this.modal = modal
-            }}
             hideArrow={hideArrow}
+            animationDuration={animationDuration}
           />
         </View>
       )

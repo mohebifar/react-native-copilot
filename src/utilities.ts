@@ -31,3 +31,12 @@ export const getNextStep = (
     .filter((_step) => _step.order > step!.order)
     .reduce((a: Step | null, b) => (!a || a.order > b.order ? b : a), null) ||
   step
+
+export const hasTwoPath = (pathOrPaths: string | string[]) =>
+  typeof pathOrPaths !== 'string' && Array.isArray(pathOrPaths)
+
+export const getFirstPath = (pathOrPaths: string | string[]): string =>
+  (!hasTwoPath(pathOrPaths) ? pathOrPaths : pathOrPaths[0]) as string
+
+export const getSecondPath = (pathOrPaths: string | string[]) =>
+  hasTwoPath(pathOrPaths) ? pathOrPaths[1] : undefined

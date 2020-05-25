@@ -2,12 +2,13 @@ import * as React from 'react'
 import PropTypes from 'prop-types'
 
 import ConnectedCopilotStep from './ConnectedCopilotStep'
-import { CopilotContext } from '../types'
+import { CopilotContext, Shape } from '../types'
 
 interface Props {
   name: string
   order: number
   text: string
+  shape?: Shape
   active?: boolean
 }
 

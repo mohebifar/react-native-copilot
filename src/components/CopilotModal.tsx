@@ -17,7 +17,7 @@ import styles, {
   STEP_NUMBER_DIAMETER,
   STEP_NUMBER_RADIUS,
 } from './style'
-import { SVGMaskPath, Step, ValueXY } from '../types'
+import { SVGMaskPath, Step, ValueXY, SVGMaskPathMorph } from '../types'
 import SvgMask from './SvgMask'
 
 declare var __TEST__: boolean
@@ -40,6 +40,7 @@ interface Props {
   stopOnOutsideClick?: boolean
   hideArrow?: boolean
   svgMaskPath?: SVGMaskPath
+  svgMaskPathMorph?: SVGMaskPathMorph
   easing(value: number): number
   stop(): void
   next(): void
@@ -298,7 +299,9 @@ class CopilotModal extends React.Component<Props, State> {
       animationDuration={this.props.animationDuration}
       backdropColor={this.props.backdropColor}
       svgMaskPath={this.props.svgMaskPath}
+      svgMaskPathMorph={this.props.svgMaskPathMorph}
       currentStepNumber={this.props.currentStepNumber}
+      currentStep={this.props.currentStep}
     />
   )
 

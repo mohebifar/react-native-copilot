@@ -1938,6 +1938,20 @@
     jest-diff "^25.2.1"
     pretty-format "^25.2.1"
 
+"@types/lodash.clamp@4.0.6":
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/@types/lodash.clamp/-/lodash.clamp-4.0.6.tgz#ca51ac61e11c6c6109638f44179abb97031619cb"
+  integrity sha512-+Rn39PbxYSbFFVXGEpw5t7EM8clP4P3d5rtbBFJYZUsgyWO1S0EYiNf+vKc2dRUy5eSI+oAVVlpgMF0vJcMUtA==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash.memoize@4.1.6":
+  version "4.1.6"
+  resolved "https://registry.yarnpkg.com/@types/lodash.memoize/-/lodash.memoize-4.1.6.tgz#3221f981790a415cab1a239f25c17efd8b604c23"
+  integrity sha512-mYxjKiKzRadRJVClLKxS4wb3Iy9kzwJ1CkbyKiadVxejnswnRByyofmPMscFKscmYpl36BEEhCMPuWhA1R/1ZQ==
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash.zipobject@^4.1.4":
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/@types/lodash.zipobject/-/lodash.zipobject-4.1.6.tgz#75e140f44ac7d7682a18d3aae8ee4594fad094d7"
@@ -5260,6 +5274,16 @@ locate-path@^5.0.0:
   integrity sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
   dependencies:
     p-locate "^4.1.0"
+
+lodash.clamp@4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/lodash.clamp/-/lodash.clamp-4.0.3.tgz#5c24bedeeeef0753560dc2b4cb4671f90a6ddfaa"
+  integrity sha1-XCS+3u7vB1NWDcK0y0Zx+Qpt36o=
+
+lodash.memoize@4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
+  integrity sha1-vMbEmkKihA7Zl/Mj6tpezRguC/4=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"

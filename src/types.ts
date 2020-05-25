@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Animated, StyleProp, ViewStyle } from 'react-native'
 
+export type Shape = 'circle' | 'rectangle' | 'custom'
+
 export interface Step {
   name: string
   order: number
@@ -8,6 +10,7 @@ export interface Step {
   target: any
   text: string
   wrapper: any
+  shape?: Shape
 }
 export interface StepObject {
   [key: string]: Step
@@ -34,29 +37,30 @@ export interface CopilotStepNumberProps {
 
 export interface SVGMaskPathParam {
   currentStepNumber: number
-  size: Animated.ValueXY
-  position: Animated.ValueXY
+  size: ValueXY
+  position: ValueXY
   canvasSize: ValueXY
-  animation: Animated.Value
 }
-export type SVGMaskPath = (param: SVGMaskPathParam) => string
+export type SvgPath = string
+export type SVGMaskPath = (param: SVGMaskPathParam) => SvgPath | SvgPath[]
 
-/**
- * Options for the copilot HOC
- */
-export interface CopilotOptions {
-  animated?: boolean // Use animation between steps
-  overlay?: 'svg' | 'view' // The overlay in react-native copilot is the component that draws the dark transparent over the root component.
-  tooltipComponent?: any // You can customize the tooltip by passing a component here
-  stepNumberComponent?: any // You can customize the step number by passing a component here
-  androidStatusBarVisible?: boolean // Whether the Android status bar should be visible
-  backdropColor?: string // You can customize the mask color - default is rgba(0, 0, 0, 0.4)
-  verticalOffset?: number // In order to adjust vertical position
-  stopOnOutsideClick?: boolean // Whether the tutorial should stop after clicking outside the step component
-  hideArrow?: boolean
-  tooltipStyle?: StyleProp<ViewStyle>
-  svgMaskPath?(s: SVGMaskPath): string | string[]
+// with flubber
+export interface AnimJSValue {
+  _value: number
 }
+export interface SVGMaskPathMorphParam {
+  animation: AnimJSValue
+  previousPath: SvgPath
+  nextPath: SvgPath
+  to: {
+    position: ValueXY
+    size: ValueXY
+    shape?: Shape
+  }
+}
+export type SVGMaskPathMorph = (
+  param: SVGMaskPathMorphParam,
+) => string | string[]
 
 /**
  * Props received by walkthroughable components

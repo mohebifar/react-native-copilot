@@ -4,19 +4,25 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Switch,
   Image,
+  Dimensions,
 } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { interpolate, toCircle } from 'flubber'
+import memoize from 'lodash.memoize'
+
 import {
   copilot,
-  CopilotStep,
   TourGuideZone,
   CopilotWrapper,
   Step,
-  defaultSvgPath,
   TourGuideZoneByPosition,
+  SVGMaskPathMorphParam,
+  Shape,
+  ValueXY,
+  SVGMaskPathParam,
 } from './src'
+import clamp from 'lodash.clamp'
 
 const styles = StyleSheet.create({
   container: {
@@ -43,6 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2980b9',
     paddingVertical: 10,
     paddingHorizontal: 15,
+    margin: 2,
   },
   buttonText: {
     color: 'white',
@@ -66,9 +73,10 @@ const styles = StyleSheet.create({
 interface Props {
   copilotEvents: any
   start(stepNumber?: number): void
+  stop(): void
 }
 
-function App({ copilotEvents, start }: Props) {
+function App({ copilotEvents, start, stop }: Props) {
   const handleStepChange = (step: Step) =>
     console.log(`Current step is: ${step.name}`)
 
@@ -86,12 +94,12 @@ function App({ copilotEvents, start }: Props) {
         <TourGuideZone zone={1} isTourGuide>
           <CopilotWrapper>
             <Text style={styles.title}>
-              {'Welcome to the demo of\n"React Native Copilot"'}
+              {'Welcome to the demo of\n"RN-Copilot"'}
             </Text>
           </CopilotWrapper>
         </TourGuideZone>
         <View style={styles.middleView}>
-          <TourGuideZone zone={6} isTourGuide>
+          <TourGuideZone zone={2} isTourGuide shape='circle'>
             <CopilotWrapper>
               <Image
                 source={{
@@ -106,12 +114,26 @@ function App({ copilotEvents, start }: Props) {
           <TouchableOpacity style={styles.button} onPress={() => start()}>
             <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => start(4)}>
-            <Text style={styles.buttonText}>step 4</Text>
+
+          <TourGuideZone zone={3} isTourGuide>
+            <CopilotWrapper>
+              <TouchableOpacity style={styles.button} onPress={() => start(4)}>
+                <Text style={styles.buttonText}>step 4</Text>
+              </TouchableOpacity>
+            </CopilotWrapper>
+          </TourGuideZone>
+          <TouchableOpacity style={styles.button} onPress={() => start(2)}>
+            <Text style={styles.buttonText}>step 2</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => start(7)}>
+            <Text style={styles.buttonText}>step 7</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={stop}>
+            <Text style={styles.buttonText}>stop</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
-          <TourGuideZone zone={2} isTourGuide>
+          <TourGuideZone zone={4} isTourGuide shape={'circle'}>
             <CopilotWrapper>
               <Ionicons name='ios-contact' {...iconProps} />
             </CopilotWrapper>
@@ -123,7 +145,7 @@ function App({ copilotEvents, start }: Props) {
               <Ionicons name='ios-navigate' {...iconProps} />
             </CopilotWrapper>
           </TourGuideZone>
-          <TourGuideZone zone={3} isTourGuide>
+          <TourGuideZone zone={6} isTourGuide shape={'circle'}>
             <CopilotWrapper>
               <Ionicons name='ios-rainy' {...iconProps} />
             </CopilotWrapper>
@@ -131,45 +153,72 @@ function App({ copilotEvents, start }: Props) {
         </View>
       </View>
       <TourGuideZoneByPosition
-        zone={4}
+        zone={7}
+        shape={'circle'}
         isTourGuide
-        top={100}
-        left={70}
-        width={200}
+        top={70}
+        left={50}
+        width={300}
         height={300}
       />
     </>
   )
 }
 
+const svgMaskPath = ({ size, position, canvasSize }: SVGMaskPathParam) => {
+  return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x},${
+    position.y
+  }H${position.x + size.x}V${position.y + size.y}H${position.x}V${position.y}Z`
+}
+
+const headPath = /^M0,0H\d*\.?\d*V\d*\.?\d*H0V0Z/
+const cleanPath = memoize((path: string) => path.replace(headPath, '').trim())
+const getCanvasPath = memoize((path: string) => {
+  const canvasPath = path.match(headPath)
+  if (canvasPath) {
+    return canvasPath[0]
+  }
+  return ''
+})
+
+const getInterpolator = (
+  previousPath: string,
+  nextPath: string,
+  shape: Shape,
+  position: ValueXY,
+  size: ValueXY,
+) => {
+  return shape === 'circle'
+    ? toCircle(
+        cleanPath(previousPath),
+        position.x + size.x / 2,
+        position.y + size.y / 2,
+        Math.max(size.x, size.y) / 2,
+      )
+    : interpolate(cleanPath(previousPath), cleanPath(nextPath))
+}
+
+const svgMaskPathMorph = ({
+  previousPath,
+  nextPath,
+  animation,
+  to: { position, size, shape },
+}: SVGMaskPathMorphParam) => {
+  const interpolator = getInterpolator(
+    previousPath,
+    nextPath,
+    shape,
+    position,
+    size,
+  )
+  return `${getCanvasPath(nextPath)}${interpolator(
+    clamp(animation._value, 0, 1),
+  )}`
+}
+
 export default copilot({
   animated: true,
-  svgMaskPath: ({ size, position, canvasSize, currentStepNumber }) => {
-    const {
-      // @ts-ignore
-      x: { _value: posX },
-      // @ts-ignore
-      y: { _value: posY },
-    } = position
-    const {
-      // @ts-ignore
-      x: { _value: sizeX },
-      // @ts-ignore
-      y: { _value: sizeY },
-    } = size
-    if (currentStepNumber === 2 || currentStepNumber === 3) {
-      const circleRadius = Math.max(sizeX, sizeY) / 2
-      return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${posX - sizeX / 8},${
-        posY + sizeY / 2
-      }Z a${circleRadius} ${circleRadius} 0 1 0 ${
-        circleRadius * 2
-      } 0 ${circleRadius} ${circleRadius} 0 1 0 -${circleRadius * 2} 0`
-    } else {
-      return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${posX},${posY}H${
-        posX + sizeX
-      }V${posY + sizeY}H${posX}V${posY}Z`
-    }
-  },
-  hideArrow: true,
+  svgMaskPath,
+  svgMaskPathMorph,
   androidStatusBarVisible: false,
 })(App)

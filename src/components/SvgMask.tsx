@@ -12,7 +12,8 @@ import {
 import Svg from 'react-native-svg'
 
 import { AnimatedSvgPath } from './AnimatedPath'
-import { ValueXY, SVGMaskPath } from '../types'
+import { ValueXY, SVGMaskPath, SVGMaskPathMorph, Step } from '../types'
+import { getFirstPath, getSecondPath } from '../utilities'
 
 const windowDimensions = Dimensions.get('window')
 
@@ -31,17 +32,23 @@ interface Props {
   animated: boolean
   backdropColor: string
   svgMaskPath?: SVGMaskPath
+  svgMaskPathMorph?: SVGMaskPathMorph
   currentStepNumber?: number
+  currentStep?: Step
   easing?: (value: number) => number
   onClick?(event: GestureResponderEvent): boolean
 }
 
 interface State {
-  size: Animated.ValueXY
-  position: Animated.ValueXY
+  size: ValueXY
+  position: ValueXY
+  previousSize?: ValueXY
+  previousPosition?: ValueXY
+  previousStepNumber?: number
   opacity: Animated.Value
   animation: Animated.Value
   canvasSize?: ValueXY
+  previousPath: string
 }
 
 class SvgMask extends Component<Props, State> {
@@ -64,10 +71,16 @@ class SvgMask extends Component<Props, State> {
         x: windowDimensions.width,
         y: windowDimensions.height,
       },
-      size: new Animated.ValueXY(props.size),
-      position: new Animated.ValueXY(props.position),
+      size: props.size,
+      position: props.position,
       opacity: new Animated.Value(this.props.currentStepNumber === 1 ? 0 : 1),
       animation: new Animated.Value(0),
+      previousSize: undefined,
+      previousPosition: undefined,
+      previousStepNumber: undefined,
+      previousPath: `M${windowDimensions.width / 2} ${
+        windowDimensions.height / 2
+      } h 1 v 1 h -1 Z`,
     }
 
     this.listenerID = this.state.animation.addListener(this.animationListener)
@@ -78,7 +91,7 @@ class SvgMask extends Component<Props, State> {
       prevProps.position !== this.props.position ||
       prevProps.size !== this.props.size
     ) {
-      this.animate(this.props.size, this.props.position)
+      this.animate()
     }
   }
 
@@ -89,17 +102,24 @@ class SvgMask extends Component<Props, State> {
   }
 
   getPath = () => {
-    const path = this.props.svgMaskPath!({
-      animation: this.state.animation,
-      size: this.state.size,
-      position: this.state.position,
+    const previousPath = this.state.previousPath
+    const nextPath = this.props.svgMaskPath!({
+      size: this.props.size,
+      position: this.props.position,
       canvasSize: this.state.canvasSize!,
       currentStepNumber: this.props.currentStepNumber!,
     })
-    const hasTwoPath = typeof path !== 'string'
-    const path1 = !hasTwoPath ? path : path[0]
-    const path2 = hasTwoPath ? path[1] : undefined
-    return [path1, path2]
+    const path = this.props.svgMaskPathMorph({
+      animation: this.state.animation as any,
+      previousPath: getFirstPath(previousPath),
+      nextPath: getFirstPath(nextPath),
+      to: {
+        position: this.props.position,
+        size: this.props.size,
+        shape: this.props.currentStep?.shape,
+      },
+    })
+    return [getFirstPath(path), getSecondPath(path)]
   }
 
   animationListener = (): void => {
@@ -109,37 +129,44 @@ class SvgMask extends Component<Props, State> {
     }
   }
 
-  animate = (size = this.props.size, position = this.props.position) => {
-    this.state.animation.setValue(0)
-    Animated.parallel(
-      [
-        Animated.timing(this.state.animation, {
+  animate = () => {
+    const animations = [
+      Animated.timing(this.state.animation, {
+        toValue: 1,
+        duration: this.props.animationDuration,
+        easing: this.props.easing,
+        useNativeDriver: true,
+      }),
+    ]
+    // @ts-ignore
+    if (this.state.opacity._value !== 1) {
+      animations.push(
+        Animated.timing(this.state.opacity, {
           toValue: 1,
           duration: this.props.animationDuration,
           easing: this.props.easing,
           useNativeDriver: true,
         }),
-        Animated.timing(this.state.size, {
-          toValue: size,
-          duration: this.props.animationDuration,
-          easing: this.props.easing,
-          useNativeDriver: false,
-        }),
-        Animated.timing(this.state.position, {
-          toValue: position,
-          duration: this.props.animationDuration,
-          easing: this.props.easing,
-          useNativeDriver: false,
-        }),
-        Animated.timing(this.state.opacity, {
-          toValue: 1,
-          duration: this.props.animationDuration,
-          easing: this.props.easing,
-          useNativeDriver: false,
-        }),
-      ],
-      { stopTogether: false },
-    ).start()
+      )
+    }
+    Animated.parallel(animations, { stopTogether: false }).start((result) => {
+      if (result.finished) {
+        this.setState(
+          {
+            previousPosition: this.props.position,
+            previousSize: this.props.size,
+            previousStepNumber: this.props.currentStepNumber,
+            previousPath: this.getPath()[0],
+          },
+          () => {
+            // @ts-ignore
+            if (this.state.animation._value === 1) {
+              this.state.animation.setValue(0)
+            }
+          },
+        )
+      }
+    })
   }
 
   handleLayout = ({

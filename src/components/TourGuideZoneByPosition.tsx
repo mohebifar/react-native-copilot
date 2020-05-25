@@ -2,6 +2,7 @@ import * as React from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { TourGuideZone } from './TourGuideZone'
 import { CopilotWrapper } from './CopilotWrapper'
+import { Shape } from '../types'
 
 interface TourGuideZoneByPositionProps {
   zone: number
@@ -12,6 +13,7 @@ interface TourGuideZoneByPositionProps {
   bottom?: number
   width?: number
   height?: number
+  shape?: Shape
   containerStyle?: StyleProp<ViewStyle>
 }
 
@@ -24,6 +26,7 @@ export const TourGuideZoneByPosition = ({
   left,
   right,
   bottom,
+  shape,
   containerStyle,
 }: TourGuideZoneByPositionProps) => {
   if (!isTourGuide) {
@@ -35,7 +38,7 @@ export const TourGuideZoneByPosition = ({
       pointerEvents='none'
       style={[StyleSheet.absoluteFillObject, containerStyle]}
     >
-      <TourGuideZone zone={zone} isTourGuide>
+      <TourGuideZone zone={zone} isTourGuide shape={shape}>
         <CopilotWrapper
           style={{
             height,

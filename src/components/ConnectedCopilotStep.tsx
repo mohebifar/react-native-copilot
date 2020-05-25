@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { CopilotContext } from '../types'
+import { CopilotContext, Shape } from '../types'
 
 declare var __TEST__: boolean
 
@@ -9,6 +9,7 @@ interface Props {
   text: string
   order: number
   active?: boolean
+  shape?: Shape
   _copilot: CopilotContext
   children?: any
 }
@@ -50,6 +51,7 @@ class ConnectedCopilotStep extends React.Component<Props> {
         order: this.props.order,
         target: this,
         wrapper: this.wrapper,
+        shape: this.props.shape,
       })
     } else {
       console.warn('_copilot undefined')

@@ -24,7 +24,17 @@ const Tooltip = ({
   currentStep,
   labels,
 }: Props) => (
-  <View>
+  <View
+    style={{
+      borderRadius: 16,
+      paddingTop: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingBottom: 16,
+      width: '80%',
+      backgroundColor: '#ffffffef',
+    }}
+  >
     <View style={styles.tooltipContainer}>
       <Text testID='stepDescription' style={styles.tooltipText}>
         {currentStep.text}
