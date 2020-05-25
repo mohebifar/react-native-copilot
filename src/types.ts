@@ -37,6 +37,7 @@ export interface SVGMaskPathParam {
   size: Animated.ValueXY
   position: Animated.ValueXY
   canvasSize: ValueXY
+  animation: Animated.Value
 }
 export type SVGMaskPath = (param: SVGMaskPathParam) => string
 

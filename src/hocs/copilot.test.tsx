@@ -3,7 +3,6 @@ import { View, Modal } from 'react-native'
 import renderer from 'react-test-renderer'
 import { copilot, walkthroughable, CopilotStep } from '../index'
 import CopilotModal from '../components/CopilotModal'
-import ViewMask from '../components/ViewMask'
 import SvgMask from '../components/SvgMask'
 
 const WalkthroughableView = walkthroughable(View)
@@ -63,23 +62,8 @@ it.skip('renders the modal once the tutorial is started', async () => {
   expect(modal.props.visible).toBeTruthy()
 })
 
-it.skip('renders <ViewMask /> when the overlay is `view`', async () => {
-  const CopilotComponent = copilot({
-    overlay: 'view',
-  })(SampleComponent)
-
-  const tree = renderer.create(<CopilotComponent />)
-  await tree.root.findByType(SampleComponent).props.start()
-
-  const maskComponent = tree.root.findByType(ViewMask)
-
-  expect(maskComponent).toBeDefined()
-})
-
 it.skip('renders <SvgMask /> when the overlay is `svg`', async () => {
-  const CopilotComponent = copilot({
-    overlay: 'svg',
-  })(SampleComponent)
+  const CopilotComponent = copilot({})(SampleComponent)
 
   const tree = renderer.create(<CopilotComponent />)
   await tree.root.findByType(SampleComponent).props.start()

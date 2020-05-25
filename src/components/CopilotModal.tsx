@@ -3,7 +3,6 @@ import {
   Animated,
   Easing,
   View,
-  NativeModules,
   StatusBar,
   Platform,
   StyleSheet,
@@ -80,11 +79,9 @@ class CopilotModal extends React.Component<Props, State> {
     tooltipComponent: undefined,
     tooltipStyle: {},
     stepNumberComponent: undefined,
-    // If react-native-svg native module was avaialble, use svg as the default overlay component
-    overlay:
-      typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
+    overlay: 'svg',
     // If animated was not specified, rely on the default overlay type
-    animated: typeof NativeModules.RNSVGSvgViewManager !== 'undefined',
+    animated: true,
     androidStatusBarVisible: false,
     backdropColor: 'rgba(0, 0, 0, 0.4)',
     labels: {},

@@ -3,7 +3,7 @@ import { View, StyleProp, ViewStyle } from 'react-native'
 
 interface CopilotWrapperProps {
   copilot?: any
-  children: React.ReactNode
+  children?: React.ReactNode
   style?: StyleProp<ViewStyle>
 }
 export const CopilotWrapper = ({

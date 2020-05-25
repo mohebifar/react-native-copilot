@@ -1,8 +1,22 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { StyleSheet, Text, View, TouchableOpacity, Switch } from 'react-native'
+import * as React from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Switch,
+  Image,
+} from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { copilot, CopilotStep, TourGuideZone, CopilotWrapper } from './src'
+import {
+  copilot,
+  CopilotStep,
+  TourGuideZone,
+  CopilotWrapper,
+  Step,
+  defaultSvgPath,
+  TourGuideZoneByPosition,
+} from './src'
 
 const styles = StyleSheet.create({
   container: {
@@ -35,12 +49,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   row: {
+    width: '100%',
+    padding: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  tabItem: {
-    flex: 1,
-    textAlign: 'center',
   },
   activeSwitchContainer: {
     flexDirection: 'row',
@@ -52,32 +64,24 @@ const styles = StyleSheet.create({
 })
 
 interface Props {
-  start(): void
+  copilotEvents: any
+  start(stepNumber?: number): void
 }
 
-class App extends Component<Props> {
-  static propTypes = {
-    start: PropTypes.func.isRequired,
-    copilotEvents: PropTypes.shape({
-      on: PropTypes.func.isRequired,
-    }).isRequired,
-  }
+function App({ copilotEvents, start }: Props) {
+  const handleStepChange = (step: Step) =>
+    console.log(`Current step is: ${step.name}`)
 
-  state = {
-    secondStepActive: true,
-  }
+  React.useEffect(() => {
+    copilotEvents.on('stepChange', handleStepChange)
 
-  componentDidMount() {
-    // this.props.copilotEvents.on('stepChange', this.handleStepChange)
-    // this.props.start()
-  }
-
-  // handleStepChange = (step) => {
-  //   console.log(`Current step is: ${step.name}`)
-  // }
-
-  render() {
-    return (
+    return () => {
+      copilotEvents.off('*')
+    }
+  }, [])
+  const iconProps = { size: 40, color: '#888' }
+  return (
+    <>
       <View style={styles.container}>
         <TourGuideZone zone={1} isTourGuide>
           <CopilotWrapper>
@@ -86,89 +90,86 @@ class App extends Component<Props> {
             </Text>
           </CopilotWrapper>
         </TourGuideZone>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => this.props.start()}
-        >
-          <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
-        </TouchableOpacity>
-        {/* <View style={styles.middleView}>
-          <CopilotStep
-            active={this.state.secondStepActive}
-            text='Here goes your profile picture!'
-            order={2}
-            name='secondText'
-          >
-            <WalkthroughableImage
-              source={{
-                uri:
-                  'https://pbs.twimg.com/profile_images/527584017189982208/l3wwN-l-_400x400.jpeg',
-              }}
-              style={styles.profilePhoto}
-            />
-          </CopilotStep>
-          <View style={styles.activeSwitchContainer}>
-            <Text>Profile photo step activated?</Text>
-            <View style={{ flexGrow: 1 }} />
-            <Switch
-              onValueChange={(secondStepActive) =>
-                this.setState({ secondStepActive })
-              }
-              value={this.state.secondStepActive}
-            />
-          </View>
+        <View style={styles.middleView}>
+          <TourGuideZone zone={6} isTourGuide>
+            <CopilotWrapper>
+              <Image
+                source={{
+                  uri:
+                    'https://pbs.twimg.com/profile_images/1223192265969016833/U8AX9Lfn_400x400.jpg',
+                }}
+                style={styles.profilePhoto}
+              />
+            </CopilotWrapper>
+          </TourGuideZone>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.props.start()}
-          >
+          <TouchableOpacity style={styles.button} onPress={() => start()}>
             <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={() => start(4)}>
+            <Text style={styles.buttonText}>step 4</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
-          <CopilotStep
-            text='Here is an item in the corner of the screen.'
-            order={3}
-            name='thirdText'
-          >
-            <WalkthroughableText style={styles.tabItem}>
-              <Ionicons name='ios-contact' size={40} color='#888' />
-            </WalkthroughableText>
-          </CopilotStep>
-
-          <Ionicons
-            style={styles.tabItem}
-            name='ios-chatbubbles'
-            size={40}
-            color='#888'
-          />
-          <Ionicons
-            style={styles.tabItem}
-            name='ios-globe'
-            size={40}
-            color='#888'
-          />
-          <Ionicons
-            style={styles.tabItem}
-            name='ios-navigate'
-            size={40}
-            color='#888'
-          />
-          <Ionicons
-            style={styles.tabItem}
-            name='ios-rainy'
-            size={40}
-            color='#888'
-          />
-        </View> */}
+          <TourGuideZone zone={2} isTourGuide>
+            <CopilotWrapper>
+              <Ionicons name='ios-contact' {...iconProps} />
+            </CopilotWrapper>
+          </TourGuideZone>
+          <Ionicons name='ios-chatbubbles' {...iconProps} />
+          <Ionicons name='ios-globe' {...iconProps} />
+          <TourGuideZone zone={5} isTourGuide>
+            <CopilotWrapper>
+              <Ionicons name='ios-navigate' {...iconProps} />
+            </CopilotWrapper>
+          </TourGuideZone>
+          <TourGuideZone zone={3} isTourGuide>
+            <CopilotWrapper>
+              <Ionicons name='ios-rainy' {...iconProps} />
+            </CopilotWrapper>
+          </TourGuideZone>
+        </View>
       </View>
-    )
-  }
+      <TourGuideZoneByPosition
+        zone={4}
+        isTourGuide
+        top={100}
+        left={70}
+        width={200}
+        height={300}
+      />
+    </>
+  )
 }
 
 export default copilot({
   animated: true,
-  overlay: 'svg',
+  svgMaskPath: ({ size, position, canvasSize, currentStepNumber }) => {
+    const {
+      // @ts-ignore
+      x: { _value: posX },
+      // @ts-ignore
+      y: { _value: posY },
+    } = position
+    const {
+      // @ts-ignore
+      x: { _value: sizeX },
+      // @ts-ignore
+      y: { _value: sizeY },
+    } = size
+    if (currentStepNumber === 2 || currentStepNumber === 3) {
+      const circleRadius = Math.max(sizeX, sizeY) / 2
+      return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${posX - sizeX / 8},${
+        posY + sizeY / 2
+      }Z a${circleRadius} ${circleRadius} 0 1 0 ${
+        circleRadius * 2
+      } 0 ${circleRadius} ${circleRadius} 0 1 0 -${circleRadius * 2} 0`
+    } else {
+      return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${posX},${posY}H${
+        posX + sizeX
+      }V${posY + sizeY}H${posX}V${posY}Z`
+    }
+  },
   hideArrow: true,
   androidStatusBarVisible: false,
 })(App)

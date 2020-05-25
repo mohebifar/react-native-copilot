@@ -17,7 +17,7 @@ import {
   getNextStep,
 } from '../utilities'
 
-import { Step, Steps, StepObject } from '../types'
+import { Step, Steps, StepObject, SVGMaskPath } from '../types'
 
 /*
 This is the maximum wait time for the steps to be registered before starting the tutorial
@@ -36,7 +36,6 @@ interface State {
 }
 
 export interface CopilotOptionProps {
-  overlay?: any
   tooltipComponent?: any
   tooltipStyle?: StyleProp<ViewStyle>
   stepNumberComponent?: any
@@ -45,14 +44,13 @@ export interface CopilotOptionProps {
   androidStatusBarVisible?: boolean
   backdropColor?: string
   stopOnOutsideClick?: boolean
-  svgMaskPath?: any
+  svgMaskPath?: SVGMaskPath
   verticalOffset?: number
   wrapperStyle?: StyleProp<ViewStyle>
   hideArrow?: boolean
 }
 
-const copilot = ({
-  overlay,
+export const copilot = ({
   tooltipComponent,
   tooltipStyle,
   stepNumberComponent,
@@ -253,7 +251,7 @@ const copilot = ({
             stepNumberComponent={stepNumberComponent}
             tooltipComponent={tooltipComponent}
             tooltipStyle={tooltipStyle}
-            overlay={overlay}
+            overlay={'svg'}
             animated={animated}
             androidStatusBarVisible={androidStatusBarVisible}
             backdropColor={backdropColor}
@@ -275,5 +273,3 @@ const copilot = ({
 
   return hoistStatics(CopilotClass, WrappedComponent)
 }
-
-export default copilot
