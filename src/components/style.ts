@@ -32,7 +32,9 @@ export default StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 16,
   },
-  tooltipText: {},
+  tooltipText: {
+    textAlign: 'center',
+  },
   tooltipContainer: {
     flex: 1,
     alignItems: 'center',

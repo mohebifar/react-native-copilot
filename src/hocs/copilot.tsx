@@ -1,7 +1,7 @@
 import * as React from 'react'
 import PropTypes from 'prop-types'
 
-import { findNodeHandle, View, StyleProp, ViewStyle } from 'react-native'
+import { View, StyleProp, ViewStyle } from 'react-native'
 
 import mitt from 'mitt'
 import hoistStatics from 'hoist-non-react-statics'
@@ -17,13 +17,7 @@ import {
   getNextStep,
 } from '../utilities'
 
-import {
-  Step,
-  Steps,
-  StepObject,
-  SVGMaskPath,
-  SVGMaskPathMorph,
-} from '../types'
+import { Step, Steps, StepObject, SVGMaskPath } from '../types'
 
 /*
 This is the maximum wait time for the steps to be registered before starting the tutorial
@@ -50,7 +44,6 @@ export interface CopilotOptionProps {
   backdropColor?: string
   stopOnOutsideClick?: boolean
   svgMaskPath?: SVGMaskPath
-  svgMaskPathMorph?: SVGMaskPathMorph
   verticalOffset?: number
   wrapperStyle?: StyleProp<ViewStyle>
   hideArrow?: boolean
@@ -67,7 +60,6 @@ export const copilot = ({
   backdropColor,
   stopOnOutsideClick = false,
   svgMaskPath,
-  svgMaskPathMorph,
   verticalOffset = 0,
   wrapperStyle,
   hideArrow,
@@ -250,7 +242,6 @@ export const copilot = ({
             androidStatusBarVisible={androidStatusBarVisible}
             backdropColor={backdropColor}
             svgMaskPath={svgMaskPath}
-            svgMaskPathMorph={svgMaskPathMorph}
             stopOnOutsideClick={stopOnOutsideClick}
             hideArrow={hideArrow}
             animationDuration={animationDuration}

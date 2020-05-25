@@ -1,15 +1,6 @@
 import * as React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Dimensions,
-} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import { interpolate, toCircle } from 'flubber'
-import memoize from 'lodash.memoize'
 
 import {
   copilot,
@@ -17,12 +8,8 @@ import {
   CopilotWrapper,
   Step,
   TourGuideZoneByPosition,
-  SVGMaskPathMorphParam,
-  Shape,
-  ValueXY,
   SVGMaskPathParam,
 } from './src'
-import clamp from 'lodash.clamp'
 
 const styles = StyleSheet.create({
   container: {
@@ -91,15 +78,24 @@ function App({ copilotEvents, start, stop }: Props) {
   return (
     <>
       <View style={styles.container}>
-        <TourGuideZone zone={1} isTourGuide>
+        <TourGuideZone
+          zone={1}
+          isTourGuide
+          text={'A react-native-copilot remastered! 🎉'}
+        >
           <CopilotWrapper>
             <Text style={styles.title}>
-              {'Welcome to the demo of\n"RN-Copilot"'}
+              {'Welcome to the demo of\n"rn-tourguide"'}
             </Text>
           </CopilotWrapper>
         </TourGuideZone>
         <View style={styles.middleView}>
-          <TourGuideZone zone={2} isTourGuide shape='circle'>
+          <TourGuideZone
+            zone={2}
+            isTourGuide
+            shape='circle'
+            text={'With animated SVG morphing with awesome flubber 🍮💯'}
+          >
             <CopilotWrapper>
               <Image
                 source={{
@@ -156,8 +152,8 @@ function App({ copilotEvents, start, stop }: Props) {
         zone={7}
         shape={'circle'}
         isTourGuide
-        top={70}
-        left={50}
+        top={30}
+        left={35}
         width={300}
         height={300}
       />
@@ -171,54 +167,9 @@ const svgMaskPath = ({ size, position, canvasSize }: SVGMaskPathParam) => {
   }H${position.x + size.x}V${position.y + size.y}H${position.x}V${position.y}Z`
 }
 
-const headPath = /^M0,0H\d*\.?\d*V\d*\.?\d*H0V0Z/
-const cleanPath = memoize((path: string) => path.replace(headPath, '').trim())
-const getCanvasPath = memoize((path: string) => {
-  const canvasPath = path.match(headPath)
-  if (canvasPath) {
-    return canvasPath[0]
-  }
-  return ''
-})
-
-const getInterpolator = (
-  previousPath: string,
-  nextPath: string,
-  shape: Shape,
-  position: ValueXY,
-  size: ValueXY,
-) => {
-  return shape === 'circle'
-    ? toCircle(
-        cleanPath(previousPath),
-        position.x + size.x / 2,
-        position.y + size.y / 2,
-        Math.max(size.x, size.y) / 2,
-      )
-    : interpolate(cleanPath(previousPath), cleanPath(nextPath))
-}
-
-const svgMaskPathMorph = ({
-  previousPath,
-  nextPath,
-  animation,
-  to: { position, size, shape },
-}: SVGMaskPathMorphParam) => {
-  const interpolator = getInterpolator(
-    previousPath,
-    nextPath,
-    shape,
-    position,
-    size,
-  )
-  return `${getCanvasPath(nextPath)}${interpolator(
-    clamp(animation._value, 0, 1),
-  )}`
-}
-
 export default copilot({
   animated: true,
   svgMaskPath,
-  svgMaskPathMorph,
   androidStatusBarVisible: false,
+  animationDuration: 777,
 })(App)

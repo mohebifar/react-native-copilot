@@ -17,7 +17,7 @@ import styles, {
   STEP_NUMBER_DIAMETER,
   STEP_NUMBER_RADIUS,
 } from './style'
-import { SVGMaskPath, Step, ValueXY, SVGMaskPathMorph } from '../types'
+import { SVGMaskPath, Step, ValueXY } from '../types'
 import SvgMask from './SvgMask'
 
 declare var __TEST__: boolean
@@ -40,7 +40,6 @@ interface Props {
   stopOnOutsideClick?: boolean
   hideArrow?: boolean
   svgMaskPath?: SVGMaskPath
-  svgMaskPathMorph?: SVGMaskPathMorph
   easing(value: number): number
   stop(): void
   next(): void
@@ -77,7 +76,7 @@ class CopilotModal extends React.Component<Props, State> {
   static defaultProps = {
     easing: Easing.elastic(0.7),
     animationDuration: 400,
-    tooltipComponent: undefined,
+    tooltipComponent: Tooltip as any,
     tooltipStyle: {},
     stepNumberComponent: undefined,
     overlay: 'svg',
@@ -299,13 +298,13 @@ class CopilotModal extends React.Component<Props, State> {
       animationDuration={this.props.animationDuration}
       backdropColor={this.props.backdropColor}
       svgMaskPath={this.props.svgMaskPath}
-      svgMaskPathMorph={this.props.svgMaskPathMorph}
       currentStepNumber={this.props.currentStepNumber}
       currentStep={this.props.currentStep}
     />
   )
 
   renderTooltip() {
+    const { tooltipComponent: TooltipComponent } = this.props
     return [
       <Animated.View
         key='tooltip'
@@ -315,9 +314,11 @@ class CopilotModal extends React.Component<Props, State> {
           { transform: [{ translateY: this.state.tooltipTranslateY }] },
         ]}
       >
-        <Tooltip
+        <TooltipComponent
           currentStep={this.props.currentStep!}
           handleNext={this.handleNext}
+          handlePrev={this.handlePrev}
+          handleStop={this.handleStop}
           labels={this.props.labels}
         />
       </Animated.View>,

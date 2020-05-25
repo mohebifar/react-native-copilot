@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Animated, StyleProp, ViewStyle } from 'react-native'
 
 export type Shape = 'circle' | 'rectangle' | 'custom'
 

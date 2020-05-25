@@ -12,8 +12,8 @@ import {
 import Svg from 'react-native-svg'
 
 import { AnimatedSvgPath } from './AnimatedPath'
-import { ValueXY, SVGMaskPath, SVGMaskPathMorph, Step } from '../types'
-import { getFirstPath, getSecondPath } from '../utilities'
+import { ValueXY, SVGMaskPath, Step } from '../types'
+import { getFirstPath, getSecondPath, svgMaskPathMorph } from '../utilities'
 
 const windowDimensions = Dimensions.get('window')
 
@@ -32,7 +32,6 @@ interface Props {
   animated: boolean
   backdropColor: string
   svgMaskPath?: SVGMaskPath
-  svgMaskPathMorph?: SVGMaskPathMorph
   currentStepNumber?: number
   currentStep?: Step
   easing?: (value: number) => number
@@ -73,7 +72,7 @@ class SvgMask extends Component<Props, State> {
       },
       size: props.size,
       position: props.position,
-      opacity: new Animated.Value(this.props.currentStepNumber === 1 ? 0 : 1),
+      opacity: new Animated.Value(0),
       animation: new Animated.Value(0),
       previousSize: undefined,
       previousPosition: undefined,
@@ -109,7 +108,7 @@ class SvgMask extends Component<Props, State> {
       canvasSize: this.state.canvasSize!,
       currentStepNumber: this.props.currentStepNumber!,
     })
-    const path = this.props.svgMaskPathMorph({
+    const path = svgMaskPathMorph({
       animation: this.state.animation as any,
       previousPath: getFirstPath(previousPath),
       nextPath: getFirstPath(nextPath),
@@ -156,7 +155,7 @@ class SvgMask extends Component<Props, State> {
             previousPosition: this.props.position,
             previousSize: this.props.size,
             previousStepNumber: this.props.currentStepNumber,
-            previousPath: this.getPath()[0],
+            previousPath: this.getPath()[0]!,
           },
           () => {
             // @ts-ignore

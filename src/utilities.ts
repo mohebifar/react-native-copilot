@@ -1,4 +1,8 @@
-import { Step, Steps } from './types'
+import { Step, Steps, SVGMaskPathMorphParam, ValueXY, Shape } from './types'
+// @ts-ignore
+import { interpolate, toCircle } from 'flubber'
+import memoize from 'lodash.memoize'
+import clamp from 'lodash.clamp'
 
 export const getFirstStep = (steps: Steps): Step | null =>
   steps &&
@@ -40,3 +44,48 @@ export const getFirstPath = (pathOrPaths: string | string[]): string =>
 
 export const getSecondPath = (pathOrPaths: string | string[]) =>
   hasTwoPath(pathOrPaths) ? pathOrPaths[1] : undefined
+
+const headPath = /^M0,0H\d*\.?\d*V\d*\.?\d*H0V0Z/
+const cleanPath = memoize((path: string) => path.replace(headPath, '').trim())
+const getCanvasPath = memoize((path: string) => {
+  const canvasPath = path.match(headPath)
+  if (canvasPath) {
+    return canvasPath[0]
+  }
+  return ''
+})
+
+const getInterpolator = (
+  previousPath: string,
+  nextPath: string,
+  shape: Shape,
+  position: ValueXY,
+  size: ValueXY,
+) => {
+  return shape === 'circle'
+    ? toCircle(
+        cleanPath(previousPath),
+        position.x + size.x / 2,
+        position.y + size.y / 2,
+        Math.max(size.x, size.y) / 2,
+      )
+    : interpolate(cleanPath(previousPath), cleanPath(nextPath))
+}
+
+export const svgMaskPathMorph = ({
+  previousPath,
+  nextPath,
+  animation,
+  to: { position, size, shape },
+}: SVGMaskPathMorphParam) => {
+  const interpolator = getInterpolator(
+    previousPath,
+    nextPath,
+    shape!,
+    position,
+    size,
+  )
+  return `${getCanvasPath(nextPath)}${interpolator(
+    clamp(animation._value, 0, 1),
+  )}`
+}

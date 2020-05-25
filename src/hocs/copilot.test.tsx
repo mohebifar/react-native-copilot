@@ -1,11 +1,9 @@
 import React from 'react'
 import { View, Modal } from 'react-native'
 import renderer from 'react-test-renderer'
-import { copilot, walkthroughable, CopilotStep } from '../index'
+import { copilot, CopilotStep } from '../index'
 import CopilotModal from '../components/CopilotModal'
 import SvgMask from '../components/SvgMask'
-
-const WalkthroughableView = walkthroughable(View)
 
 interface SampleComponentProps {
   secondStepActive?: boolean
@@ -18,7 +16,7 @@ const SampleComponent = ({ secondStepActive }: SampleComponentProps) => (
       name='step-1'
       text='This is the description for the first step'
     >
-      <WalkthroughableView />
+      <View />
     </CopilotStep>
     <CopilotStep
       order={1}
@@ -26,14 +24,14 @@ const SampleComponent = ({ secondStepActive }: SampleComponentProps) => (
       active={secondStepActive}
       text='This is the description for the second step'
     >
-      <WalkthroughableView />
+      <View />
     </CopilotStep>
     <CopilotStep
       order={3}
       name='step-3'
       text='This is the description for the third step'
     >
-      <WalkthroughableView />
+      <View />
     </CopilotStep>
   </View>
 )
@@ -42,11 +40,11 @@ SampleComponent.defaultProps = {
   secondStepActive: true,
 }
 
-it.skip('only renders the component within a wrapper as long as tutorial has not been started', () => {
+it('only renders the component within a wrapper as long as tutorial has not been started', () => {
   const CopilotComponent = copilot()(SampleComponent)
 
   const tree = renderer.create(<CopilotComponent />)
-  const modal = tree.root.findByType(CopilotModal).findByType(Modal)
+  const modal = tree.root.findByType(CopilotModal)
 
   expect(modal.props.visible).toBeFalsy()
 })
@@ -57,7 +55,7 @@ it.skip('renders the modal once the tutorial is started', async () => {
   const tree = renderer.create(<CopilotComponent />)
   await tree.root.findByType(SampleComponent).props.start()
 
-  const modal = tree.root.findByType(CopilotModal).findByType(Modal)
+  const modal = tree.root.findByType(CopilotModal)
 
   expect(modal.props.visible).toBeTruthy()
 })
