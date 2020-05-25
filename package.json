@@ -1,6 +1,6 @@
 {
-  "name": "@applications-developer/rn-copilot",
-  "version": "3.0.0",
+  "name": "rn-tourguide",
+  "version": "1.0.0",
   "description": "Make an interactive step by step tour guide for you react-native app (a rewrite of react-native-copilot)",
   "main": "node_modules/expo/AppEntry.js",
   "types": "lib/index.d.ts",
