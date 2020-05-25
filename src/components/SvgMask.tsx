@@ -10,11 +10,12 @@ import {
   LayoutChangeEvent,
 } from 'react-native'
 import Svg from 'react-native-svg'
-import AnimatedSvgPath from './AnimatedPath'
 
+import { AnimatedSvgPath } from './AnimatedPath'
 import { ValueXY, SVGMaskPath } from '../types'
 
 const windowDimensions = Dimensions.get('window')
+
 const defaultSvgPath = ({ size, position, canvasSize }: any): string =>
   `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${
     position.y._value
@@ -47,6 +48,8 @@ class SvgMask extends Component<Props, State> {
     animationDuration: 300,
     easing: Easing.linear,
     svgMaskPath: defaultSvgPath,
+    size: { x: 0, y: 0 },
+    position: { x: 0, y: 0 },
   }
 
   listenerID: any
@@ -84,40 +87,41 @@ class SvgMask extends Component<Props, State> {
   }
 
   animationListener = (): void => {
-    const path: string = this.props.svgMaskPath!({
-      size: this.state.size,
-      position: this.state.position,
-      canvasSize: this.state.canvasSize!,
-      currentStepNumber: this.props.currentStepNumber!,
-    })
-    const hasTwoPath = typeof path !== 'string'
-    const d = !hasTwoPath ? path : path[0]
-    if (this.mask) {
-      this.mask.setNativeProps({ d })
-    }
+    // const path: string = this.props.svgMaskPath!({
+    //   size: this.state.size,
+    //   position: this.state.position,
+    //   canvasSize: this.state.canvasSize!,
+    //   currentStepNumber: this.props.currentStepNumber!,
+    // })
+    // const hasTwoPath = typeof path !== 'string'
+    // const d = !hasTwoPath ? path : path[0]
+    // if (this.mask) {
+    //   this.mask.setNativeProps({ d })
+    // }
   }
 
   animate = (size = this.props.size, position = this.props.position) => {
-    Animated.parallel([
-      Animated.timing(this.state.position, {
-        toValue: position,
-        duration: this.props.animationDuration,
-        easing: this.props.easing,
-        useNativeDriver: true,
-      }),
-      Animated.timing(this.state.size, {
-        toValue: size,
-        duration: this.props.animationDuration,
-        easing: this.props.easing,
-        // useNativeDriver: true
-      }),
-      Animated.timing(this.state.opacity, {
-        toValue: 1,
-        duration: this.props.animationDuration,
-        easing: this.props.easing,
-        useNativeDriver: true,
-      }),
-    ]).start()
+    console.warn({ size, position })
+    // Animated.parallel([
+    //   Animated.timing(this.state.position, {
+    //     toValue: position,
+    //     duration: this.props.animationDuration,
+    //     easing: this.props.easing,
+    //     useNativeDriver: true,
+    //   }),
+    //   Animated.timing(this.state.size, {
+    //     toValue: size,
+    //     duration: this.props.animationDuration,
+    //     easing: this.props.easing,
+    //     // useNativeDriver: true
+    //   }),
+    //   Animated.timing(this.state.opacity, {
+    //     toValue: 1,
+    //     duration: this.props.animationDuration,
+    //     easing: this.props.easing,
+    //     useNativeDriver: true,
+    //   }),
+    // ]).start()
   }
 
   handleLayout = ({

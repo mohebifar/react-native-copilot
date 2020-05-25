@@ -1,19 +1,5 @@
 <h1 align="center">[WIP] rewriting: React Native Copilot</h1>
 
-<div align="center">
-  <p align="center">
-    <a href="https://travis-ci.org/mohebifar/react-native-copilot">
-      <img src="https://img.shields.io/travis/mohebifar/react-native-copilot.svg" alt="Travis (.org)">
-    </a>
-    <a href="https://www.npmjs.com/package/react-native-copilot">
-      <img src="https://img.shields.io/npm/v/react-native-copilot.svg" alt="NPM Version" />
-    </a>
-    <a href="https://www.npmjs.com/package/react-native-copilot">
-      <img src="https://img.shields.io/npm/dm/react-native-copilot.svg" alt="NPM Downloads" />
-    </a>
-  </p>
-</div>
-
 <p align="center">
   Step-by-step walkthrough for your react native app!
 </p>

@@ -1,19 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  TouchableOpacity,
-  Switch,
-} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Switch } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-
-import { copilot, walkthroughable, CopilotStep } from 'react-native-copilot'
-
-const WalkthroughableText = walkthroughable(Text)
-const WalkthroughableImage = walkthroughable(Image)
+import { copilot, CopilotStep, TourGuideZone, CopilotWrapper } from './src'
 
 const styles = StyleSheet.create({
   container: {
@@ -62,7 +51,11 @@ const styles = StyleSheet.create({
   },
 })
 
-class App extends Component {
+interface Props {
+  start(): void
+}
+
+class App extends Component<Props> {
   static propTypes = {
     start: PropTypes.func.isRequired,
     copilotEvents: PropTypes.shape({
@@ -75,27 +68,31 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.copilotEvents.on('stepChange', this.handleStepChange)
-    this.props.start()
+    // this.props.copilotEvents.on('stepChange', this.handleStepChange)
+    // this.props.start()
   }
 
-  handleStepChange = (step) => {
-    console.log(`Current step is: ${step.name}`)
-  }
+  // handleStepChange = (step) => {
+  //   console.log(`Current step is: ${step.name}`)
+  // }
 
   render() {
     return (
       <View style={styles.container}>
-        <CopilotStep
-          text='Hey! This is the first step of the tour!'
-          order={1}
-          name='openApp'
+        <TourGuideZone zone={1} isTourGuide>
+          <CopilotWrapper>
+            <Text style={styles.title}>
+              {'Welcome to the demo of\n"React Native Copilot"'}
+            </Text>
+          </CopilotWrapper>
+        </TourGuideZone>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => this.props.start()}
         >
-          <WalkthroughableText style={styles.title}>
-            {'Welcome to the demo of\n"React Native Copilot"'}
-          </WalkthroughableText>
-        </CopilotStep>
-        <View style={styles.middleView}>
+          <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
+        </TouchableOpacity>
+        {/* <View style={styles.middleView}>
           <CopilotStep
             active={this.state.secondStepActive}
             text='Here goes your profile picture!'
@@ -141,7 +138,7 @@ class App extends Component {
 
           <Ionicons
             style={styles.tabItem}
-            name='ios-game-controller-b'
+            name='ios-chatbubbles'
             size={40}
             color='#888'
           />
@@ -153,7 +150,7 @@ class App extends Component {
           />
           <Ionicons
             style={styles.tabItem}
-            name='ios-navigate-outline'
+            name='ios-navigate'
             size={40}
             color='#888'
           />
@@ -163,13 +160,15 @@ class App extends Component {
             size={40}
             color='#888'
           />
-        </View>
+        </View> */}
       </View>
     )
   }
 }
 
 export default copilot({
-  animated: true, // Can be true or false
-  overlay: 'svg', // Can be either view or svg
+  animated: true,
+  overlay: 'svg',
+  hideArrow: true,
+  androidStatusBarVisible: false,
 })(App)

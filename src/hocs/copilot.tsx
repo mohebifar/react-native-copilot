@@ -1,4 +1,5 @@
 import * as React from 'react'
+import PropTypes from 'prop-types'
 
 import { findNodeHandle, View, StyleProp, ViewStyle } from 'react-native'
 
@@ -16,7 +17,7 @@ import {
   getNextStep,
 } from '../utilities'
 
-import { Step, CopilotContext, Steps, StepObject } from '../types'
+import { Step, Steps, StepObject } from '../types'
 
 /*
 This is the maximum wait time for the steps to be registered before starting the tutorial
@@ -85,7 +86,7 @@ const copilot = ({
       super(props)
     }
 
-    getChildContext(): { _copilot: CopilotContext } {
+    getChildContext() {
       return {
         _copilot: {
           registerStep: this.registerStep,
@@ -266,6 +267,10 @@ const copilot = ({
         </View>
       )
     }
+  }
+  // @ts-ignore
+  CopilotClass.childContextTypes = {
+    _copilot: PropTypes.object.isRequired,
   }
 
   return hoistStatics(CopilotClass, WrappedComponent)
