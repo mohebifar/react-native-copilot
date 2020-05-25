@@ -4,9 +4,9 @@ import { View, Text, StyleProp, ViewStyle } from 'react-native'
 import styles from './style'
 
 interface Props {
-  wrapperStyle: StyleProp<ViewStyle>
-  style: StyleProp<ViewStyle>
-  children?: React.ReactElement
+  wrapperStyle?: StyleProp<ViewStyle>
+  style?: StyleProp<ViewStyle>
+  children?: any
 }
 
 const Button = ({ wrapperStyle, style, children, ...rest }: Props) => (

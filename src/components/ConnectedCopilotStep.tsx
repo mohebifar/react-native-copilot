@@ -10,7 +10,7 @@ interface Props {
   order: number
   active?: boolean
   _copilot: CopilotContext
-  children: React.ReactElement
+  children?: any
 }
 
 class ConnectedCopilotStep extends React.Component<Props> {
@@ -58,7 +58,6 @@ class ConnectedCopilotStep extends React.Component<Props> {
 
   measure() {
     if (typeof __TEST__ !== 'undefined' && __TEST__) {
-      // eslint-disable-line no-undef
       return new Promise((resolve) =>
         resolve({
           x: 0,

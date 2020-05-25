@@ -1,14 +1,18 @@
-import { ComponentProps, ReactNode } from 'react'
+import * as React from 'react'
 import { Animated, StyleProp, ViewStyle } from 'react-native'
 
 export interface Step {
   name: string
   order: number
   visible?: boolean
-  target: ReactNode
+  target: any
   text: string
-  wrapper: ReactNode
+  wrapper: any
 }
+export interface StepObject {
+  [key: string]: Step
+}
+export type Steps = StepObject | Step[]
 
 export interface ValueXY {
   x: number
@@ -76,7 +80,7 @@ export type CopilotWrappedComponentProps = {
   currentStep: Step
   visible: boolean
   start: () => void // Use this function in the root component in order to trigger the tutorial
-} & ComponentProps<any>
+} & React.ComponentProps<any>
 
 /**
  * Props of the copilot step element

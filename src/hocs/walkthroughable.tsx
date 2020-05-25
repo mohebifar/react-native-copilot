@@ -1,13 +1,12 @@
-// @flow
-import React from 'react';
+import * as React from 'react'
 
-type Props = {
-  copilot: Object,
-};
+interface Props {
+  copilot?: any
+}
 
-const walkthroughable =
-  WrappedComponent =>
-    ({ copilot, ...props }: Props) =>
-      <WrappedComponent {...copilot} {...props} />;
+const walkthroughable = (WrappedComponent: any) => ({
+  copilot,
+  ...props
+}: Props) => <WrappedComponent {...copilot} {...props} />
 
-export default walkthroughable;
+export default walkthroughable

@@ -8,6 +8,7 @@ interface Props {
   name: string
   order: number
   text: string
+  active?: boolean
 }
 
 class CopilotStep extends React.Component<Props> {
@@ -20,13 +21,11 @@ class CopilotStep extends React.Component<Props> {
   }
 
   render() {
-    const currentStep = this.context._copilot.getCurrentStep()
-
-    return React.createElement(ConnectedCopilotStep, {
-      ...this.props,
-      _copilot: this.context._copilot,
-      visible: currentStep && currentStep.name === this.props.name,
-    })
+    return (
+      <ConnectedCopilotStep
+        {...{ ...this.props, _copilot: this.context._copilot }}
+      />
+    )
   }
 }
 

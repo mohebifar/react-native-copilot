@@ -18,28 +18,16 @@
   Step-by-step walkthrough for your react native app!
 </p>
 
-<p align="center">
-  <img src="https://media.giphy.com/media/65VKIzGWZmHiEgEBi7/giphy.gif" alt="React Native Copilot" />
-</p>
-
-<p align="center">
-  <a href="https://expo.io/@mohebifar/copilot-example" >
-    Demo
-  </a>
-</p>
-
-Creation of this project was sponsored by **[OK GROW!](https://www.okgrow.com/)**
-
 ## Installation
 
 ```
-npm install --save react-native-copilot
+yarn add @applications-developer/rn-copilot
 ```
 
 **Optional**: If you want to have the smooth SVG animation, you should install and link `react-native-svg`. If you are using Expo, **you can skip** this as Expo comes with `react-native-svg`.
 
 ```
-npm install --save react-native-svg
+yarn add react-native-svg
 react-native link react-native-svg
 ```
 
@@ -48,35 +36,39 @@ react-native link react-native-svg
 Use the `copilot()` higher order component for the screen component that you want to use copilot with:
 
 ```js
-import { copilot } from "react-native-copilot";
+import { copilot } from '@applications-developer/rn-copilot'
 
 class HomeScreen extends Component {
   /* ... */
 }
 
-export default copilot()(HomeScreen);
+export default copilot()(HomeScreen)
 ```
 
 Before defining walkthrough steps for your react elements, you must make them `walkthroughable`. The easiest way to do that for built-in react native components, is using the `walkthroughable` HOC. Then you must wrap the element with `CopilotStep`.
 
 ```js
-import { copilot, walkthroughable, CopilotStep } from "react-native-copilot";
+import {
+  copilot,
+  walkthroughable,
+  CopilotStep,
+} from '@applications-developer/rn-copilot'
 
-const CopilotText = walkthroughable(Text);
+const CopilotText = walkthroughable(Text)
 
 class HomeScreen {
   render() {
     return (
       <View>
         <CopilotStep
-          text="This is a hello world example!"
+          text='This is a hello world example!'
           order={1}
-          name="hello"
+          name='hello'
         >
           <CopilotText>Hello world!</CopilotText>
         </CopilotStep>
       </View>
-    );
+    )
   }
 }
 ```
@@ -92,7 +84,7 @@ In order to start the tutorial, you can call the `start` prop function in the ro
 ```js
 class HomeScreen extends Component {
   handleStartButtonPress() {
-    this.props.start();
+    this.props.start()
   }
 
   render() {
@@ -100,7 +92,7 @@ class HomeScreen extends Component {
   }
 }
 
-export default copilot()(HomeScreen);
+export default copilot()(HomeScreen)
 ```
 
 If you are looking for a working example, please check out [this link](https://github.com/mohebifar/react-native-copilot/blob/master/example/App.js).
@@ -114,7 +106,7 @@ The `view` overlay uses 4 rectangles drawn around the target element using the `
 The `svg` overlay uses an SVG path component for drawing the overlay. It offers a nice and smooth animation but it depends on `react-native-svg`. If you are using expo, you don't need to install anything and the svg overlay works out of the box. If not, you need to install and this package:
 
 ```
-npm install --save react-native-svg
+yarn add react-native-svg
 react-native link react-native-svg
 ```
 
@@ -122,9 +114,9 @@ You can specify the overlay when applying the `copilot` HOC:
 
 ```js
 copilot({
-  overlay: "svg", // or 'view'
+  overlay: 'svg', // or 'view'
   animated: true, // or false
-})(RootComponent);
+})(RootComponent)
 ```
 
 ### Custom tooltip component
@@ -150,18 +142,18 @@ copilot({
 
 ### Custom tooltip styling
 
-You can customize tooltip's style:
+You can customize tooltips style:
 
 ```js
 const style = {
-  backgroundColor: "#9FA8DA",
+  backgroundColor: '#9FA8DA',
   borderRadius: 10,
   paddingTop: 5,
-};
+}
 
 copilot({
   tooltipStyle: style,
-})(RootComponent);
+})(RootComponent)
 ```
 
 ### Custom step number component
@@ -189,8 +181,8 @@ You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a
 
 ```js
 copilot({
-  backdropColor: "rgba(50, 50, 100, 0.9)",
-})(RootComponent);
+  backdropColor: 'rgba(50, 50, 100, 0.9)',
+})(RootComponent)
 ```
 
 ### Custom svg mask Path
@@ -207,18 +199,18 @@ SvgMaskPathFn = (args: {
     x: number,
     y: number,
   },
-}) => string;
+}) => string
 ```
 
 Example with circle:
 
 ```js
 const circleSvgPath = ({ position, canvasSize }): string =>
-  `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
+  `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`
 
 copilot({
   svgMaskPath: circleSvgPath,
-})(RootComponent);
+})(RootComponent)
 ```
 
 ### Custom components as steps
@@ -226,27 +218,27 @@ copilot({
 The components wrapped inside `CopilotStep`, will receive a `copilot` prop of type `Object` which the outermost rendered element of the component or the element that you want the tooltip be shown around, must extend.
 
 ```js
-import { copilot, CopilotStep } from "react-native-copilot";
+import { copilot, CopilotStep } from '@applications-developer/rn-copilot'
 
 const CustomComponent = ({ copilot }) => (
   <View {...copilot}>
     <Text>Hello world!</Text>
   </View>
-);
+)
 
 class HomeScreen {
   render() {
     return (
       <View>
         <CopilotStep
-          text="This is a hello world example!"
+          text='This is a hello world example!'
           order={1}
-          name="hello"
+          name='hello'
         >
           <CustomComponent />
         </CopilotStep>
       </View>
-    );
+    )
   }
 }
 ```
@@ -258,12 +250,12 @@ You can localize labels:
 ```js
 copilot({
   labels: {
-    previous: "Vorheriger",
-    next: "Nächster",
-    skip: "Überspringen",
-    finish: "Beenden",
+    previous: 'Vorheriger',
+    next: 'Nächster',
+    skip: 'Überspringen',
+    finish: 'Beenden',
   },
-})(RootComponent);
+})(RootComponent)
 ```
 
 ### Adjust vertical position
@@ -273,7 +265,7 @@ In order to adjust vertical position pass `verticalOffset` to the `copilot` HOC.
 ```js
 copilot({
   verticalOffset: 36,
-})(RootComponent);
+})(RootComponent)
 ```
 
 ### Triggering the tutorial
@@ -286,25 +278,25 @@ Pass the ScrollView reference as the second argument to the `this.props.start()`
 eg `this.props.start(false, ScrollViewRef)`
 
 ```js
-import { ScrollView } from "react-native";
-import { copilot } from "@okgrow/react-native-copilot";
+import { ScrollView } from 'react-native'
+import { copilot } from '@applications-developer/rn-copilot'
 
 class HomeScreen {
   componentDidMount() {
     // Starting the tutorial and passing the scrollview reference.
-    this.props.start(false, this.scrollView);
+    this.props.start(false, this.scrollView)
   }
 
   componentWillUnmount() {
     // Don't forget to disable event handlers to prevent errors
-    this.props.copilotEvents.off("stop");
+    this.props.copilotEvents.off('stop')
   }
 
   render() {
-    <ScrollView ref={(ref) => (this.scrollView = ref)}>// ...</ScrollView>;
+    ;<ScrollView ref={(ref) => (this.scrollView = ref)}>// ...</ScrollView>
   }
 }
-export default copilot()(HomeScreen);
+export default copilot()(HomeScreen)
 ```
 
 ### Listening to the events
@@ -320,24 +312,24 @@ List of available events is:
 **Example:**
 
 ```js
-import { copilot, CopilotStep } from "react-native-copilot";
+import { copilot, CopilotStep } from '@applications-developer/rn-copilot'
 
 const CustomComponent = ({ copilot }) => (
   <View {...copilot}>
     <Text>Hello world!</Text>
   </View>
-);
+)
 
 class HomeScreen {
   componentDidMount() {
-    this.props.copilotEvents.on("stop", () => {
+    this.props.copilotEvents.on('stop', () => {
       // Copilot tutorial finished!
-    });
+    })
   }
 
   componentWillUnmount() {
     // Don't forget to disable event handlers to prevent errors
-    this.props.copilotEvents.off("stop");
+    this.props.copilotEvents.off('stop')
   }
 
   render() {
@@ -350,12 +342,7 @@ class HomeScreen {
 
 Issues and Pull Requests are always welcome.
 
-Please read OK GROW!'s global [contribution guidelines](https://okgrow.github.io/guides/docs/open-source-contributing.html).
-
-If you are interested in becoming a maintainer, get in touch with us by sending an email or opening an issue. You should already have code merged into the project. Active contributors are encouraged to get in touch.
-
-Please note that all interactions in 's repos should follow our [Code of Conduct](https://okgrow.github.io/guides/docs/open-source-code-of-conduct.html).
-
 ## License
 
+[MIT](LICENSE) © 2020 Xavier CARPENTIER SAS, https://xaviercarpentier.com.
 [MIT](LICENSE) © 2017 OK GROW!, https://www.okgrow.com.

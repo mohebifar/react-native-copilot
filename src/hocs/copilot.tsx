@@ -1,7 +1,6 @@
 import * as React from 'react'
-import PropTypes from 'prop-types'
 
-import { findNodeHandle, View, ScrollView } from 'react-native'
+import { findNodeHandle, View, StyleProp, ViewStyle } from 'react-native'
 
 import mitt from 'mitt'
 import hoistStatics from 'hoist-non-react-statics'
@@ -17,7 +16,7 @@ import {
   getNextStep,
 } from '../utilities'
 
-import { Step, CopilotContext } from '../types'
+import { Step, CopilotContext, Steps, StepObject } from '../types'
 
 /*
 This is the maximum wait time for the steps to be registered before starting the tutorial
@@ -26,13 +25,29 @@ At 60fps means 2 seconds
 const MAX_START_TRIES = 120
 
 interface State {
-  steps: { [key: string]: Step }
+  steps?: Steps
   currentStep?: Step
   visible: boolean
   androidStatusBarVisible?: boolean
   backdropColor?: string
-  scrollView?: React.RefObject<ScrollView>
+  scrollView?: any
   stopOnOutsideClick?: boolean
+}
+
+export interface CopilotOptionProps {
+  overlay?: any
+  tooltipComponent?: any
+  tooltipStyle?: StyleProp<ViewStyle>
+  stepNumberComponent?: any
+  animated?: boolean
+  labels?: any
+  androidStatusBarVisible?: boolean
+  backdropColor?: string
+  stopOnOutsideClick?: boolean
+  svgMaskPath?: any
+  verticalOffset?: number
+  wrapperStyle?: StyleProp<ViewStyle>
+  hideArrow?: boolean
 }
 
 const copilot = ({
@@ -49,21 +64,29 @@ const copilot = ({
   verticalOffset = 0,
   wrapperStyle,
   hideArrow,
-} = {}) => (WrappedComponent) => {
-  class Copilot extends React.Component<any, State> {
-    state = {
-      steps: {},
+}: CopilotOptionProps = {}) => (WrappedComponent: any) => {
+  class CopilotClass extends React.Component<any, State> {
+    state: State = {
+      steps: undefined,
       currentStep: undefined,
       visible: false,
       scrollView: undefined,
     }
+
+    startTries = 0
+
+    mounted = false
+
+    eventEmitter = new mitt()
+
+    modal: any
 
     getChildContext(): { _copilot: CopilotContext } {
       return {
         _copilot: {
           registerStep: this.registerStep,
           unregisterStep: this.unregisterStep,
-          getCurrentStep: () => this.state.currentStep,
+          getCurrentStep: () => this.state.currentStep!,
         },
       }
     }
@@ -76,20 +99,22 @@ const copilot = ({
       this.mounted = false
     }
 
-    getStepNumber = (step: Step | undefined = this.state.currentStep): number =>
-      getStepNumber(this.state.steps, step)
+    getStepNumber = (
+      step: Step | undefined = this.state.currentStep,
+    ): number | undefined => getStepNumber(this.state.steps!, step)
 
-    getFirstStep = (): Step | undefined => getFirstStep(this.state.steps)
+    getFirstStep = (): Step | undefined | null =>
+      getFirstStep(this.state.steps!)
 
-    getLastStep = (): Step | undefined => getLastStep(this.state.steps)
+    getLastStep = (): Step | undefined | null => getLastStep(this.state.steps!)
 
     getPrevStep = (
       step: Step | undefined = this.state.currentStep,
-    ): Step | undefined => getPrevStep(this.state.steps, step)
+    ): Step | undefined | null => getPrevStep(this.state.steps!, step)
 
     getNextStep = (
       step: Step | undefined = this.state.currentStep,
-    ): Step | undefined => getNextStep(this.state.steps, step)
+    ): Step | undefined | null => getNextStep(this.state.steps!, step)
 
     setCurrentStep = async (
       step: Step,
@@ -100,11 +125,11 @@ const copilot = ({
 
       if (this.state.scrollView) {
         const { scrollView } = this.state
-        await this.state.currentStep!.wrapper.measureLayout(
+        await this.state.currentStep!.wrapper!.measureLayout(
           findNodeHandle(scrollView),
-          (x, y, w, h) => {
-            const yOffsett = y > 0 ? y - h / 2 : 0
-            scrollView.scrollTo({ y: yOffsett, animated: false })
+          (_x: number, y: number, _w: number, h: number) => {
+            const yOffset = y > 0 ? y - h / 2 : 0
+            scrollView.scrollTo({ y: yOffset, animated: false })
           },
         )
       }
@@ -118,16 +143,10 @@ const copilot = ({
       )
     }
 
-    setVisibility = (visible: boolean): void =>
+    setVisibility = (visible: boolean): Promise<void> =>
       new Promise((resolve) => {
         this.setState({ visible }, () => resolve())
       })
-
-    startTries = 0
-
-    mounted = false
-
-    eventEmitter = mitt()
 
     isFirstStep = (): boolean => this.state.currentStep === this.getFirstStep()
 
@@ -147,28 +166,30 @@ const copilot = ({
         return
       }
       this.setState(({ steps }) => ({
-        steps: Object.entries(steps)
+        steps: Object.entries(steps as StepObject)
           .filter(([key]) => key !== stepName)
           .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {}),
       }))
     }
 
-    next = async (): void => {
-      await this.setCurrentStep(this.getNextStep())
+    next = async (): Promise<void> => {
+      await this.setCurrentStep(this.getNextStep()!)
     }
 
-    prev = async (): void => {
-      await this.setCurrentStep(this.getPrevStep())
+    prev = async (): Promise<void> => {
+      await this.setCurrentStep(this.getPrevStep()!)
     }
 
-    start = async (fromStep?: string, scrollView?: React.RefObject): void => {
+    start = async (fromStep?: string, scrollView?: any): Promise<void> => {
       const { steps } = this.state
 
       if (!this.state.scrollView) {
         this.setState({ scrollView })
       }
 
-      const currentStep = fromStep ? steps[fromStep] : this.getFirstStep()
+      const currentStep = fromStep
+        ? (steps as StepObject)[fromStep]
+        : this.getFirstStep()
 
       if (this.startTries > MAX_START_TRIES) {
         this.startTries = 0
@@ -187,13 +208,13 @@ const copilot = ({
       }
     }
 
-    stop = async (): void => {
+    stop = async (): Promise<void> => {
       await this.setVisibility(false)
       this.eventEmitter.emit('stop')
     }
 
-    async moveToCurrentStep(): void {
-      const size = await this.state.currentStep.target.measure()
+    async moveToCurrentStep(): Promise<void> {
+      const size = await this.state.currentStep!.target.measure()
 
       await this.modal.animateMove({
         width: size.width + OFFSET_WIDTH,
@@ -221,7 +242,7 @@ const copilot = ({
             visible={this.state.visible}
             isFirstStep={this.isFirstStep()}
             isLastStep={this.isLastStep()}
-            currentStepNumber={this.getStepNumber()}
+            currentStepNumber={this.getStepNumber()!}
             currentStep={this.state.currentStep}
             labels={labels}
             stepNumberComponent={stepNumberComponent}
@@ -243,11 +264,7 @@ const copilot = ({
     }
   }
 
-  Copilot.childContextTypes = {
-    _copilot: PropTypes.object.isRequired,
-  }
-
-  return hoistStatics(Copilot, WrappedComponent)
+  return hoistStatics(CopilotClass, WrappedComponent)
 }
 
 export default copilot

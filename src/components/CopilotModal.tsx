@@ -8,16 +8,18 @@ import {
   Platform,
   StyleSheet,
   LayoutChangeEvent,
+  StyleProp,
+  ViewStyle,
 } from 'react-native'
 import Tooltip from './Tooltip'
-import StepNumber from './StepNumber'
 import styles, {
   MARGIN,
   ARROW_SIZE,
   STEP_NUMBER_DIAMETER,
   STEP_NUMBER_RADIUS,
 } from './style'
-import { SVGMaskPath, Step } from '../types'
+import { SVGMaskPath, Step, ValueXY } from '../types'
+import SvgMask from './SvgMask'
 
 declare var __TEST__: boolean
 
@@ -29,8 +31,8 @@ interface Props {
   isLastStep: boolean
   animationDuration?: number
   tooltipComponent: any
-  tooltipStyle?: object
-  stepNumberComponent: React.ReactElement
+  tooltipStyle?: StyleProp<ViewStyle>
+  stepNumberComponent: any
   overlay: 'svg' | 'view'
   animated: boolean
   androidStatusBarVisible: boolean
@@ -45,6 +47,13 @@ interface Props {
   prev(): void
 }
 
+interface Layout {
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+}
+
 interface State {
   tooltip: object
   arrow: object
@@ -52,19 +61,25 @@ interface State {
   notAnimated?: boolean
   containerVisible: boolean
   animated?: boolean
-  layout?: {
-    width: number
-    height: number
-  }
+  layout?: Layout
+  size?: ValueXY
+  position?: ValueXY
+}
+
+interface Move {
+  top: number
+  left: number
+  width: number
+  height: number
 }
 
 class CopilotModal extends React.Component<Props, State> {
   static defaultProps = {
     easing: Easing.elastic(0.7),
     animationDuration: 400,
-    tooltipComponent: Tooltip,
+    tooltipComponent: undefined,
     tooltipStyle: {},
-    stepNumberComponent: StepNumber,
+    stepNumberComponent: undefined,
     // If react-native-svg native module was avaialble, use svg as the default overlay component
     overlay:
       typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
@@ -77,7 +92,9 @@ class CopilotModal extends React.Component<Props, State> {
     hideArrow: false,
   }
 
-  layout = {
+  layout?: Layout = {
+    x: 0,
+    y: 0,
     width: 0,
     height: 0,
   }
@@ -93,6 +110,9 @@ class CopilotModal extends React.Component<Props, State> {
     containerVisible: false,
     tooltipTranslateY: new Animated.Value(400),
     opacity: new Animated.Value(1),
+    layout: undefined,
+    size: undefined,
+    position: undefined,
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -105,12 +125,7 @@ class CopilotModal extends React.Component<Props, State> {
     this.layout = layout
   }
 
-  measure(): Promise<{
-    x: number
-    y: number
-    width?: number
-    height?: number
-  }> {
+  measure(): Promise<Layout> {
     if (typeof __TEST__ !== 'undefined' && __TEST__) {
       return new Promise((resolve) =>
         resolve({
@@ -124,7 +139,7 @@ class CopilotModal extends React.Component<Props, State> {
 
     return new Promise((resolve) => {
       const setLayout = () => {
-        if (this.layout.width !== 0) {
+        if (this.layout && this.layout.width !== 0) {
           resolve(this.layout)
         } else {
           requestAnimationFrame(setLayout)
@@ -135,7 +150,7 @@ class CopilotModal extends React.Component<Props, State> {
   }
 
   async _animateMove(
-    obj: { top: number; left: number; width: number; height: number } = {
+    obj: Move = {
       top: 0,
       left: 0,
       width: 0,
@@ -272,28 +287,21 @@ class CopilotModal extends React.Component<Props, State> {
     }
   }
 
-  renderMask() {
-    const MaskComponent = require('./SvgMask').default
-    return (
-      <MaskComponent
-        animated={this.props.animated}
-        layout={this.state.layout}
-        style={styles.overlayContainer}
-        size={this.state.size}
-        position={this.state.position}
-        easing={this.props.easing}
-        animationDuration={this.props.animationDuration}
-        backdropColor={this.props.backdropColor}
-        svgMaskPath={this.props.svgMaskPath}
-        onClick={this.handleMaskClick}
-        currentStepNumber={this.props.currentStepNumber}
-      />
-    )
-  }
+  renderMask = () => (
+    <SvgMask
+      animated={this.props.animated}
+      style={styles.overlayContainer}
+      size={this.state.size!}
+      position={this.state.position!}
+      easing={this.props.easing}
+      animationDuration={this.props.animationDuration}
+      backdropColor={this.props.backdropColor}
+      svgMaskPath={this.props.svgMaskPath}
+      currentStepNumber={this.props.currentStepNumber}
+    />
+  )
 
   renderTooltip() {
-    const { tooltipComponent: TooltipComponent } = this.props
-
     return [
       <Animated.View
         key='tooltip'
@@ -303,8 +311,8 @@ class CopilotModal extends React.Component<Props, State> {
           { transform: [{ translateY: this.state.tooltipTranslateY }] },
         ]}
       >
-        <TooltipComponent
-          currentStep={this.props.currentStep}
+        <Tooltip
+          currentStep={this.props.currentStep!}
           handleNext={this.handleNext}
           labels={this.props.labels}
         />
