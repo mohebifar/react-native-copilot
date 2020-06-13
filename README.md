@@ -164,6 +164,25 @@ copilot({
 })(RootComponent);
 ```
 
+
+#### Manage tooltip width
+
+Due to the dynamic way tooltip width is calculated, it is required to override both `width` and `maxWidth`, check the example bellow:
+
+```js
+const MARGIN = 8;
+const WIDTH = Dimensions.get('window').width - (2 * MARGIN);
+copilot({
+  //....
+  tooltipStyle: {
+    width: WIDTH,
+    maxWidth: WIDTH,
+    left: MARGIN,
+  },
+});
+```
+
+
 ### Custom step number component
 
 You can customize the step number by passing a component to the `copilot` HOC maker. If you are looking for an example step number component, take a look at [the default step number implementation](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/StepNumber.js).
