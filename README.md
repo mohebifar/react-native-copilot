@@ -276,6 +276,8 @@ copilot({
 })(RootComponent);
 ```
 
+`verticalOffset` supports constant values, promises and functions as valid arguments
+
 ### Triggering the tutorial
 
 Use `this.props.start()` in the root component in order to trigger the tutorial. You can either invoke it with a touch event or in `componentDidMount`. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
