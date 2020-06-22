@@ -19,6 +19,7 @@ type Props = {
 };
 
 const Tooltip = ({
+  allowSkip,
   isFirstStep,
   isLastStep,
   handleNext,
@@ -33,7 +34,7 @@ const Tooltip = ({
     </View>
     <View style={[styles.bottomBar]}>
       {
-        !isLastStep ?
+        (!isLastStep && allowSkip) ?
           <TouchableOpacity onPress={handleStop}>
             <Button>{labels.skip || 'Skip'}</Button>
           </TouchableOpacity>

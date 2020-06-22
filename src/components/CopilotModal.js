@@ -283,6 +283,7 @@ class CopilotModal extends Component<Props, State> {
       <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
       <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip, this.props.tooltipStyle]}>
         <TooltipComponent
+          allowSkip={this.props.allowSkip}
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
           currentStep={this.props.currentStep}
