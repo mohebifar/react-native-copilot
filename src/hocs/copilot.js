@@ -43,6 +43,7 @@ const copilot = ({
   svgMaskPath,
   verticalOffset = 0,
   wrapperStyle,
+  allowSkip = true,
 } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
@@ -204,6 +205,7 @@ const copilot = ({
               prev={this.prev}
               stop={this.stop}
               visible={this.state.visible}
+              allowSkip={allowSkip}
               isFirstStep={this.isFirstStep()}
               isLastStep={this.isLastStep()}
               currentStepNumber={this.getStepNumber()}

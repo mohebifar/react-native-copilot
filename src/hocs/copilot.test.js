@@ -133,6 +133,7 @@ it('shows the custom tooltip component if specified', async () => {
   const tooltip = tree.root.findByType(TooltipComponent);
 
   expect(tooltip).toBeDefined();
+  expect(tooltip.props).toHaveProperty('allowSkip');
   expect(tooltip.props).toHaveProperty('currentStep');
   expect(tooltip.props).toHaveProperty('handlePrev');
   expect(tooltip.props).toHaveProperty('handleNext');
