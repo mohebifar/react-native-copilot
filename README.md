@@ -133,6 +133,7 @@ You can customize the tooltip by passing a component to the `copilot` HOC maker.
 
 ```js
 const TooltipComponent = ({
+  allowSkip,
   isFirstStep,
   isLastStep,
   handleNext,
