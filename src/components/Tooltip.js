@@ -9,6 +9,7 @@ import styles from './style';
 import type { Step } from '../types';
 
 type Props = {
+  allowSkip: boolean,
   isFirstStep: boolean,
   isLastStep: boolean,
   handleNext: func,

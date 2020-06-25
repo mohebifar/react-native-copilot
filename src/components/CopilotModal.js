@@ -13,6 +13,7 @@ type Props = {
   currentStepNumber: number,
   currentStep: ?Step,
   visible: boolean,
+  allowSkip: boolean,
   isFirstStep: boolean,
   isLastStep: boolean,
   easing: ?func,

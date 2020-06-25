@@ -11,6 +11,7 @@ declare module '@okgrow/react-native-copilot' {
   };
 
   export type CopilotTooltipProps = {
+    allowSkip: boolean;
     isFirstStep: boolean;
     isLastStep: boolean;
     handleNext: () => void;
