@@ -21,6 +21,7 @@ type Props = {
   tooltipComponent: ?React$Component,
   tooltipStyle?: Object,
   stepNumberComponent: ?React$Component,
+  stepCountInTooltip: any,
   overlay: 'svg' | 'view',
   animated: boolean,
   androidStatusBarVisible: boolean,
@@ -51,6 +52,7 @@ class CopilotModal extends Component<Props, State> {
     tooltipStyle: {},
     arrowConfiguration: {},
     stepNumberComponent: StepNumber,
+    stepCountInTooltip: {},
     // If react-native-svg native module was avaialble, use svg as the default overlay component
     overlay: typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
     // If animated was not specified, rely on the default overlay type
@@ -140,11 +142,11 @@ class CopilotModal extends Component<Props, State> {
     if (verticalPosition === 'bottom') {
       tooltip.top = obj.top + obj.height + (arrowSize === 'large' ? 18 : MARGIN);
       arrow.borderBottomColor = color || '#fff';
-      arrow.top = tooltip.top - (arrowSize === 'large' ? 32 : ARROW_SIZE * 2);
+      arrow.top = tooltip.top - (arrowSize === 'large' ? 28 : ARROW_SIZE * 2);
     } else {
       tooltip.bottom = layout.height - (obj.top - (arrowSize === 'large' ? 18 : MARGIN));
       arrow.borderTopColor = color || '#fff';
-      arrow.bottom = tooltip.bottom - (arrowSize === 'large' ? 32 : ARROW_SIZE * 2);
+      arrow.bottom = tooltip.bottom - (arrowSize === 'large' ? 24 : ARROW_SIZE * 2);
     }
 
     if (horizontalPosition === 'left') {
@@ -276,10 +278,11 @@ class CopilotModal extends Component<Props, State> {
     const {
       tooltipComponent: TooltipComponent,
       stepNumberComponent: StepNumberComponent,
+      stepCountInTooltip : { enable,marginRight,marginTop }
     } = this.props;
 
     return [
-      <Animated.View
+      !enable && <Animated.View
         key="stepNumber"
         style={[
           styles.stepNumberContainer,
@@ -289,7 +292,7 @@ class CopilotModal extends Component<Props, State> {
           },
         ]}
       >
-        <StepNumberComponent
+       <StepNumberComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
           currentStep={this.props.currentStep}
@@ -297,7 +300,25 @@ class CopilotModal extends Component<Props, State> {
         />
       </Animated.View>,
       <Animated.View key="arrow" style={[styles.arrow,this.props.arrowConfiguration.arrowSize && {borderWidth:18}, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip, this.props.tooltipStyle]}>
+      <Animated.View key="tooltip" style={[styles.tooltip, this.props.tooltipStyle, this.state.tooltip]}>
+        {enable && <View 
+         style={[
+          styles.stepNumberContainer,
+          {
+            right:  marginRight || 5,
+            top: marginTop ? marginTop > 0 ? marginTop : 5 : 5,
+            zIndex: Math.pow(10,6)
+          },
+        ]}
+        >
+        <StepNumberComponent
+          isFirstStep={this.props.isFirstStep}
+          isLastStep={this.props.isLastStep}
+          currentStep={this.props.currentStep}
+          currentStepNumber={this.props.currentStepNumber}
+        />
+        </View>}
+       
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}

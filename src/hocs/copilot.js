@@ -42,6 +42,7 @@ const copilot = ({
   stopOnOutsideClick = false,
   svgMaskPath,
   arrowConfiguration,
+  stepCountInTooltip,
   verticalOffset = 0,
   wrapperStyle,
 } = {}) =>
@@ -220,6 +221,7 @@ const copilot = ({
               svgMaskPath={svgMaskPath}
               stopOnOutsideClick={stopOnOutsideClick}
               arrowConfiguration={arrowConfiguration}
+              stepCountInTooltip={stepCountInTooltip}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
