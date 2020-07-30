@@ -5,6 +5,7 @@ import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
 import type { SvgMaskPathFn } from '../types';
+import { Dimensions } from 'react-native';
 
 type Props = {
   stop: () => void,
@@ -48,6 +49,7 @@ class CopilotModal extends Component<Props, State> {
     animationDuration: 400,
     tooltipComponent: Tooltip,
     tooltipStyle: {},
+    arrowConfiguration: {},
     stepNumberComponent: StepNumber,
     // If react-native-svg native module was avaialble, use svg as the default overlay component
     overlay: typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
@@ -132,30 +134,44 @@ class CopilotModal extends Component<Props, State> {
 
     const verticalPosition = relativeToBottom > relativeToTop ? 'bottom' : 'top';
     const horizontalPosition = relativeToLeft > relativeToRight ? 'left' : 'right';
-
+    const { arrowSize ,color ,position } = this.props.arrowConfiguration;
     const tooltip = {};
     const arrow = {};
-
     if (verticalPosition === 'bottom') {
-      tooltip.top = obj.top + obj.height + MARGIN;
-      arrow.borderBottomColor = '#fff';
-      arrow.top = tooltip.top - (ARROW_SIZE * 2);
+      tooltip.top = obj.top + obj.height + (arrowSize === 'large' ? 18 : MARGIN);
+      arrow.borderBottomColor = color || '#fff';
+      arrow.top = tooltip.top - (arrowSize === 'large' ? 32 : ARROW_SIZE * 2);
     } else {
-      tooltip.bottom = layout.height - (obj.top - MARGIN);
-      arrow.borderTopColor = '#fff';
-      arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
+      tooltip.bottom = layout.height - (obj.top - (arrowSize === 'large' ? 18 : MARGIN));
+      arrow.borderTopColor = color || '#fff';
+      arrow.bottom = tooltip.bottom - (arrowSize === 'large' ? 32 : ARROW_SIZE * 2);
     }
 
     if (horizontalPosition === 'left') {
       tooltip.right = Math.max(layout.width - (obj.left + obj.width), 0);
       tooltip.right = tooltip.right === 0 ? tooltip.right + MARGIN : tooltip.right;
       tooltip.maxWidth = layout.width - tooltip.right - MARGIN;
-      arrow.right = tooltip.right + MARGIN;
-    } else {
+      if(Dimensions.get('window').width - tooltip.maxWidth < 40 )
+      {
+        if(position === 'center'){
+          arrow.right =  Math.round( tooltip.maxWidth/2);
+        }
+        else arrow.right = tooltip.right + MARGIN; 
+      }
+      else arrow.right = tooltip.right + MARGIN;
+    } 
+    else {
       tooltip.left = Math.max(obj.left, 0);
       tooltip.left = tooltip.left === 0 ? tooltip.left + MARGIN : tooltip.left;
       tooltip.maxWidth = layout.width - tooltip.left - MARGIN;
-      arrow.left = tooltip.left + MARGIN;
+      if(Dimensions.get('window').width - tooltip.maxWidth < 40 )
+      {
+        if(position === 'center'){
+          arrow.left =  Math.round( tooltip.maxWidth/2);
+        }
+        else arrow.left = tooltip.left + MARGIN
+      }
+      else arrow.left = tooltip.left + MARGIN
     }
 
     const animate = {
@@ -280,7 +296,7 @@ class CopilotModal extends Component<Props, State> {
           currentStepNumber={this.props.currentStepNumber}
         />
       </Animated.View>,
-      <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
+      <Animated.View key="arrow" style={[styles.arrow,this.props.arrowConfiguration.arrowSize && {borderWidth:18}, this.state.arrow]} />,
       <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip, this.props.tooltipStyle]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}

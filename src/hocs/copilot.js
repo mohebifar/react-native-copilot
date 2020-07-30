@@ -41,6 +41,7 @@ const copilot = ({
   backdropColor,
   stopOnOutsideClick = false,
   svgMaskPath,
+  arrowConfiguration,
   verticalOffset = 0,
   wrapperStyle,
 } = {}) =>
@@ -218,6 +219,7 @@ const copilot = ({
               backdropColor={backdropColor}
               svgMaskPath={svgMaskPath}
               stopOnOutsideClick={stopOnOutsideClick}
+              arrowConfiguration={arrowConfiguration}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
