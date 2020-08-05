@@ -136,6 +136,7 @@ const copilot = ({
             .filter(([key]) => key !== stepName)
             .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {}),
         }), () => {
+          // check to stop copilot, if there is no more step remains
           if(Object.values(this.state.steps).length === 0 && this.state.visible)
             this.stop();
         });
