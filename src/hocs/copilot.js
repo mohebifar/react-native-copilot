@@ -135,7 +135,10 @@ const copilot = ({
           steps: Object.entries(steps)
             .filter(([key]) => key !== stepName)
             .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {}),
-        }));
+        }), () => {
+          if(Object.values(this.state.steps).length === 0 && this.state.visible)
+            this.stop();
+        });
       }
 
       next = async (): void => {
