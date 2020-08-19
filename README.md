@@ -182,6 +182,15 @@ copilot({
 });
 ```
 
+### Custom tooltip arrow color
+
+You can customize the tooltip's arrow color:
+
+```js
+copilot({
+  arrowColor: '#FF00FF'
+})(RootComponent);
+```
 
 ### Custom step number component
 
