@@ -234,7 +234,8 @@ SvgMaskPathFn = (args: {
   canvasSize: {
     x: number,
     y: number
-  }
+  },
+  step: Step
 }) => string;
 ```
 
@@ -248,6 +249,33 @@ copilot({
   svgMaskPath: circleSvgPath
 })(RootComponent);
 ```
+
+Example with different overlay for specific step:
+
+Give name prop for the step
+```js
+  <CopilotStep
+    text="This is a hello world example!"
+    order={1}
+    name="hello"
+  >
+    <CopilotText>Hello world!</CopilotText>
+  </CopilotStep>
+```
+
+Now you can return different svg path depending on step name
+```js
+const customSvgPath = ({ position, size, canvasSize, step }): string => {
+  if (step && step.name === 'hello') return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value-20},${position.y._value+31}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
+
+  else return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+};
+
+copilot({
+  svgMaskPath: circleSvgPath
+})(RootComponent);
+```
+
 
 ### Custom components as steps
 
