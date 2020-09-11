@@ -1,0 +1,70 @@
+{
+  "name": "react-native-copilot",
+  "version": "2.5.0",
+  "description": "Make an interactive step by step tour guide for you react-native app",
+  "main": "src/index.js",
+  "private": false,
+  "scripts": {
+    "lint": "eslint src/",
+    "test": "jest src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mohebifar/react-native-copilot.git"
+  },
+  "keywords": [
+    "react-native",
+    "react-native-joyride",
+    "react",
+    "copilot",
+    "intro.js",
+    "intro"
+  ],
+  "files": [
+    "src"
+  ],
+  "author": "Mohamad Mohebifar <mohamad@mohebifar.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mohebifar/react-native-copilot/issues"
+  },
+  "homepage": "https://github.com/mohebifar/react-native-copilot#readme",
+  "devDependencies": {
+    "babel-eslint": "^8.0.1",
+    "babel-jest": "^21.2.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react-native": "^4.0.0",
+    "eslint": "^4.8.0",
+    "eslint-config-airbnb": "^16.0.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "jest": "^24.8.0",
+    "jest-react-native": "^18.0.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.59.0",
+    "react-native-svg": "^9.5.1",
+    "react-test-renderer": ">=16.8.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/react-native/jest/preprocessor.js"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element)"
+    ],
+    "modulePathIgnorePatterns": [
+      "example"
+    ],
+    "globals": {
+      "__TEST__": true
+    }
+  },
+  "dependencies": {
+    "hoist-non-react-statics": "^3.0.1",
+    "mitt": "^1.1.3"
+  }
+}
