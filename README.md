@@ -266,7 +266,7 @@ Give name prop for the step
 Now you can return different svg path depending on step name
 ```js
 const customSvgPath = ({ position, size, canvasSize, step }): string => {
-  if (step && step.name === 'hello') return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value-20},${position.y._value+31}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
+  if (step && step.name === 'hello') return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
 
   else return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
 };
