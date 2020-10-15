@@ -254,6 +254,7 @@ class CopilotModal extends Component<Props, State> {
         backdropColor={this.props.backdropColor}
         svgMaskPath={this.props.svgMaskPath}
         onClick={this.handleMaskClick}
+        currentStep={this.props.currentStep}
       />
     );
   }
