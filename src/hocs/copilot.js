@@ -41,6 +41,8 @@ const copilot = ({
   backdropColor,
   stopOnOutsideClick = false,
   svgMaskPath,
+  arrowConfiguration,
+  stepCountInTooltip,
   verticalOffset = 0,
   wrapperStyle,
   arrowColor,
@@ -219,7 +221,8 @@ const copilot = ({
               backdropColor={backdropColor}
               svgMaskPath={svgMaskPath}
               stopOnOutsideClick={stopOnOutsideClick}
-              arrowColor={arrowColor}
+              arrowConfiguration={arrowConfiguration}
+              stepCountInTooltip={stepCountInTooltip}
               ref={(modal) => { this.modal = modal; }}
             />
           </View>
