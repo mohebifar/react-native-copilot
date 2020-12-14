@@ -27,6 +27,7 @@ type Props = {
   labels: Object,
   svgMaskPath?: SvgMaskPathFn,
   stopOnOutsideClick?: boolean,
+  arrowColor?: string,
 };
 
 type State = {
@@ -57,6 +58,7 @@ class CopilotModal extends Component<Props, State> {
     backdropColor: 'rgba(0, 0, 0, 0.4)',
     labels: {},
     stopOnOutsideClick: false,
+    arrowColor: '#fff',
   };
 
   state = {
@@ -138,11 +140,11 @@ class CopilotModal extends Component<Props, State> {
 
     if (verticalPosition === 'bottom') {
       tooltip.top = obj.top + obj.height + MARGIN;
-      arrow.borderBottomColor = '#fff';
+      arrow.borderBottomColor = this.props.arrowColor;
       arrow.top = tooltip.top - (ARROW_SIZE * 2);
     } else {
       tooltip.bottom = layout.height - (obj.top - MARGIN);
-      arrow.borderTopColor = '#fff';
+      arrow.borderTopColor = this.props.arrowColor;
       arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
     }
 
@@ -170,6 +172,7 @@ class CopilotModal extends Component<Props, State> {
             toValue: animate[key],
             duration: this.props.animationDuration,
             easing: this.props.easing,
+            useNativeDriver: false,
           })))
         .start();
     } else {
@@ -251,6 +254,7 @@ class CopilotModal extends Component<Props, State> {
         backdropColor={this.props.backdropColor}
         svgMaskPath={this.props.svgMaskPath}
         onClick={this.handleMaskClick}
+        currentStep={this.props.currentStep}
       />
     );
   }
@@ -280,7 +284,7 @@ class CopilotModal extends Component<Props, State> {
         />
       </Animated.View>,
       <Animated.View key="arrow" style={[styles.arrow, this.state.arrow]} />,
-      <Animated.View key="tooltip" style={[styles.tooltip, this.props.tooltipStyle, this.state.tooltip]}>
+      <Animated.View key="tooltip" style={[styles.tooltip, this.state.tooltip, this.props.tooltipStyle]}>
         <TooltipComponent
           isFirstStep={this.props.isFirstStep}
           isLastStep={this.props.isLastStep}
