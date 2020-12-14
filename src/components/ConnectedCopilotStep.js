@@ -65,9 +65,9 @@ class ConnectedCopilotStep extends Component<Props> {
     return new Promise((resolve, reject) => {
       const measure = () => {
         // Wait until the wrapper element appears
-        if (this.wrapper && this.wrapper.measure) {
-          this.wrapper.measure(
-            (ox, oy, width, height, x, y) => resolve({
+        if (this.wrapper && this.wrapper.measureInWindow) {
+          this.wrapper.measureInWindow(
+            (x, y, width, height) => resolve({
               x, y, width, height,
             }),
             reject,
