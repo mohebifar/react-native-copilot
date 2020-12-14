@@ -164,6 +164,34 @@ copilot({
 })(RootComponent);
 ```
 
+
+#### Manage tooltip width
+
+Due to the dynamic way tooltip width is calculated, it is required to override both `width` and `maxWidth`, check the example bellow:
+
+```js
+const MARGIN = 8;
+const WIDTH = Dimensions.get('window').width - (2 * MARGIN);
+copilot({
+  //....
+  tooltipStyle: {
+    width: WIDTH,
+    maxWidth: WIDTH,
+    left: MARGIN,
+  },
+});
+```
+
+### Custom tooltip arrow color
+
+You can customize the tooltip's arrow color:
+
+```js
+copilot({
+  arrowColor: '#FF00FF'
+})(RootComponent);
+```
+
 ### Custom step number component
 
 You can customize the step number by passing a component to the `copilot` HOC maker. If you are looking for an example step number component, take a look at [the default step number implementation](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/StepNumber.js).
@@ -206,7 +234,8 @@ SvgMaskPathFn = (args: {
   canvasSize: {
     x: number,
     y: number
-  }
+  },
+  step: Step
 }) => string;
 ```
 
@@ -220,6 +249,33 @@ copilot({
   svgMaskPath: circleSvgPath
 })(RootComponent);
 ```
+
+Example with different overlay for specific step:
+
+Give name prop for the step
+```js
+  <CopilotStep
+    text="This is a hello world example!"
+    order={1}
+    name="hello"
+  >
+    <CopilotText>Hello world!</CopilotText>
+  </CopilotStep>
+```
+
+Now you can return different svg path depending on step name
+```js
+const customSvgPath = ({ position, size, canvasSize, step }): string => {
+  if (step && step.name === 'hello') return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
+
+  else return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+};
+
+copilot({
+  svgMaskPath: circleSvgPath
+})(RootComponent);
+```
+
 
 ### Custom components as steps
 
@@ -287,7 +343,7 @@ eg `this.props.start(false, ScrollViewRef)`
 
 ```js
 import { ScrollView } from "react-native";
-import { copilot } from "@okgrow/react-native-copilot";
+import { copilot } from "react-native-copilot";
 
 class HomeScreen {
   componentDidMount() {

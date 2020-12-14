@@ -165,3 +165,27 @@ it('skips a step if disabled', async () => {
 
   expect(textComponent.props.children).toBe('This is the description for the first step');
 });
+
+it('allows to manage tooltip width', async () => {
+  const MyTooltipComponent = () => (
+    <View style={{ flex: 1 }} />
+  );
+  const customStyle = {
+    width: 123,
+    maxWidth: 321,
+  };
+  const CopilotComponent = copilot({
+    tooltipComponent: MyTooltipComponent,
+    tooltipStyle: customStyle,
+  })(SampleComponent);
+
+  const tree = renderer.create(<CopilotComponent />);
+  await tree.root.findByType(SampleComponent).props.start();
+
+  const tooltipWrapper = tree.root.findByType(CopilotModal)
+    .findByType(MyTooltipComponent)
+    .parent;
+
+  expect(tooltipWrapper.props.style)
+    .toMatchObject(customStyle);
+});
