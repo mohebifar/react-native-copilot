@@ -7,6 +7,7 @@ import {
   Easing,
   Dimensions,
   I18nManager,
+  TouchableOpacity
 } from 'react-native';
 import Svg from 'react-native-svg';
 import AnimatedSvgPath from './AnimatedPath';
