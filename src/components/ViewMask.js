@@ -72,7 +72,7 @@ class ViewMask extends Component<Props, State> {
   }
 
   render() {
-    const { onPress } = this.context._copilot.getCurrentStep().target.props; //@symbolic
+    const { onPress } = this.context._copilot.getCurrentStep().wrapper.props; // @symbolic
     const { size, position } = this.state;
     const width = this.props.layout ? this.props.layout.width : 500;
     const height = this.props.layout ? this.props.layout.height : 500;
@@ -85,7 +85,9 @@ class ViewMask extends Component<Props, State> {
     const verticalOverlayRightBoundary = Animated.add(
       width, Animated.multiply(-1, rightOverlayLeft),
     );
-
+    console.log(onPress, this.context._copilot.getCurrentStep());
+    console.log(this.context._copilot.getCurrentStep().target.wrapper.props);
+      console.log(this.context._copilot.getCurrentStep().target.props);
     return (
       <View style={this.props.style}>
         <Animated.View
@@ -131,7 +133,7 @@ class ViewMask extends Component<Props, State> {
             width: this.props.size.x,
             height: this.props.size.y,
           }}
-          onPress={onPress}
+          onPress={() => alert('test')}
         />)}
       </View>
     );
