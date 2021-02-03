@@ -5,6 +5,7 @@ import {
   Animated,
   Easing,
   Dimensions,
+  I18nManager,
 } from 'react-native';
 import Svg from 'react-native-svg';
 import AnimatedSvgPath from './AnimatedPath';
@@ -32,6 +33,10 @@ type State = {
   position: Animated.ValueXY,
   canvasSize: ?valueXY,
 };
+
+const rtl = I18nManager.isRTL;
+const start = rtl ? 'right' : 'left';
+const end = rtl ? 'left' : 'right';
 
 class SvgMask extends Component<Props, State> {
   static defaultProps = {
@@ -105,6 +110,8 @@ class SvgMask extends Component<Props, State> {
   }
 
   render() {
+    const { onPress } = this.context._copilot.getCurrentStep().target.props; // @symbolic
+
     return (
       <View
         style={this.props.style}
@@ -131,6 +138,21 @@ class SvgMask extends Component<Props, State> {
             )
             : null
         }
+        {onPress && (<TouchableOpacity
+          style={{
+            backgroundColor: 'transparent',
+            [start]: this.props.position.x,
+            [end]: (this.props.layout.width - (this.props.size.x + this.props.position.x)),
+            top: this.props.position.y,
+            width: this.props.size.x,
+            height: this.props.size.y,
+          }}
+          onPress={() => {
+            onPress();
+
+            this.props.handleStop(); // @symbolic
+          }}
+        />)}
       </View>
     );
   }
