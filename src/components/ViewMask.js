@@ -131,7 +131,11 @@ class ViewMask extends Component<Props, State> {
             width: this.props.size.x,
             height: this.props.size.y,
           }}
-          onPress={onPress}
+          onPress={() => {
+            onPress();
+
+            this.props.handleStop(); // @symbolic
+          }}
         />)}
       </View>
     );

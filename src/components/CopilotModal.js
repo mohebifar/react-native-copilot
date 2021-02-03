@@ -255,6 +255,7 @@ class CopilotModal extends Component<Props, State> {
         svgMaskPath={this.props.svgMaskPath}
         onClick={this.handleMaskClick}
         currentStep={this.props.currentStep}
+        handleStop={this.handleStop}
       />
     );
   }
