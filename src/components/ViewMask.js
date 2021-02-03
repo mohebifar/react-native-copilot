@@ -72,6 +72,7 @@ class ViewMask extends Component<Props, State> {
   }
 
   render() {
+    var onPress = true;
     // const { onPress } = this.context._copilot.getCurrentStep().wrapper.props; // @symbolic
     const { size, position } = this.state;
     const width = this.props.layout ? this.props.layout.width : 500;
