@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   Animated,
@@ -44,6 +45,10 @@ class SvgMask extends Component<Props, State> {
     easing: Easing.linear,
     svgMaskPath: defaultSvgPath,
   };
+
+  static contextTypes = {
+    _copilot: PropTypes.object,
+  }
 
   constructor(props) {
     super(props);
@@ -107,6 +112,10 @@ class SvgMask extends Component<Props, State> {
         y: height,
       },
     });
+  }
+
+  context: {
+    _copilot: CopilotContext,
   }
 
   render() {
