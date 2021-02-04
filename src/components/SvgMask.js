@@ -150,7 +150,10 @@ class SvgMask extends Component<Props, State> {
         }
         {onPress && (<TouchableOpacity
           style={{
+            position: 'absolute',
             backgroundColor: 'transparent',
+            borderWidth: 1,
+            borderColor: 'red',
             [start]: this.props.position.x,
             [end]: (this.props.layout.width - (this.props.size.x + this.props.position.x)),
             top: this.props.position.y,

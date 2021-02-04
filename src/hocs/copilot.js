@@ -2,8 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { findNodeHandle, View } from 'react-native';
-
+import { findNodeHandle, View, LayoutAnimation } from 'react-native';
 import mitt from 'mitt';
 import hoistStatics from 'hoist-non-react-statics';
 
@@ -105,6 +104,8 @@ const copilot = ({
       }
 
       setVisibility = (visible: boolean): void => new Promise((resolve) => {
+        LayoutAnimation.configureNext({...LayoutAnimation.Presets.easeInEaseOut});
+
         this.setState({ visible }, () => resolve());
       });
 
@@ -139,10 +140,14 @@ const copilot = ({
       }
 
       next = async (): void => {
+        LayoutAnimation.configureNext({...LayoutAnimation.Presets.easeInEaseOut});
+
         await this.setCurrentStep(this.getNextStep());
       }
 
       prev = async (): void => {
+        LayoutAnimation.configureNext({...LayoutAnimation.Presets.easeInEaseOut});
+
         await this.setCurrentStep(this.getPrevStep());
       }
 

@@ -226,6 +226,11 @@ class CopilotModal extends Component<Props, State> {
   }
 
   handleStop = () => {
+    //@symbolic
+    if (global.copilotOptions && global.copilotOptions.onDone) global.copilotOptions.onDone();
+
+    global.copilotIsActive = false;
+
     this.reset();
     this.props.stop();
   }
