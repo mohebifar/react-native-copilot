@@ -1,18 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 
-import type { CopilotContext } from '../types';
-
-type Props = {
-  name: string,
-  text: string,
-  order: number,
-  active?: boolean,
-  _copilot: CopilotContext,
-  children: React$Element
-};
-
-class ConnectedCopilotStep extends Component<Props> {
+class ConnectedCopilotStep extends Component {
   static defaultProps = {
     active: true,
   };

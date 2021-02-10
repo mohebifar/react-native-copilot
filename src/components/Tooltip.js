@@ -6,18 +6,6 @@ import Button from './Button';
 
 import styles from './style';
 
-import type { Step } from '../types';
-
-type Props = {
-  isFirstStep: boolean,
-  isLastStep: boolean,
-  handleNext: func,
-  handlePrev: func,
-  handleStop: func,
-  currentStep: Step,
-  labels: Object,
-};
-
 const Tooltip = ({
   isFirstStep,
   isLastStep,
@@ -26,7 +14,7 @@ const Tooltip = ({
   handleStop,
   currentStep,
   labels,
-}: Props) => (
+}) => (
   <View>
     <View style={styles.tooltipContainer}>
       <Text testID="stepDescription" style={styles.tooltipText}>{currentStep.text}</Text>

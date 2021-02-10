@@ -1,49 +1,14 @@
-// @flow
 import React, { Component } from 'react';
 import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
 import Tooltip from './Tooltip';
+import SvgMask from './SvgMask';
+import ViewMask from './ViewMask';
 import StepNumber from './StepNumber';
 import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
-import type { SvgMaskPathFn } from '../types';
-
-type Props = {
-  stop: () => void,
-  next: () => void,
-  prev: () => void,
-  currentStepNumber: number,
-  currentStep: ?Step,
-  visible: boolean,
-  isFirstStep: boolean,
-  isLastStep: boolean,
-  easing: ?func,
-  animationDuration: ?number,
-  tooltipComponent: ?React$Component,
-  tooltipStyle?: Object,
-  stepNumberComponent: ?React$Component,
-  overlay: 'svg' | 'view',
-  animated: boolean,
-  androidStatusBarVisible: boolean,
-  backdropColor: string,
-  labels: Object,
-  svgMaskPath?: SvgMaskPathFn,
-  stopOnOutsideClick?: boolean,
-  arrowColor?: string,
-};
-
-type State = {
-  tooltip: Object,
-  arrow: Object,
-  animatedValues: Object,
-  notAnimated: boolean,
-  layout: ?{
-    width: number,
-    height: number,
-  },
-};
 
 const noop = () => {};
 
-class CopilotModal extends Component<Props, State> {
+class CopilotModal extends Component {
   static defaultProps = {
     easing: Easing.elastic(0.7),
     animationDuration: 400,
@@ -72,7 +37,7 @@ class CopilotModal extends Component<Props, State> {
     containerVisible: false,
   };
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps) {
     if (prevProps.visible === true && this.props.visible === false) {
       this.reset();
     }
@@ -87,7 +52,7 @@ class CopilotModal extends Component<Props, State> {
     this.layout = layout;
   }
 
-  measure(): Promise {
+  measure() {
     if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
       return new Promise(resolve => resolve({
         x: 0, y: 0, width: 0, height: 0,
@@ -107,7 +72,7 @@ class CopilotModal extends Component<Props, State> {
     });
   }
 
-  async _animateMove(obj = {}): void {
+  async _animateMove(obj = {}) {
     const layout = await this.measure();
     if (!this.props.androidStatusBarVisible && Platform.OS === 'android') {
       obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
@@ -197,7 +162,7 @@ class CopilotModal extends Component<Props, State> {
     });
   }
 
-  animateMove(obj = {}): void {
+  animateMove(obj = {}) {
     return new Promise((resolve) => {
       this.setState(
         { containerVisible: true },
@@ -209,7 +174,7 @@ class CopilotModal extends Component<Props, State> {
     });
   }
 
-  reset(): void {
+  reset() {
     this.setState({
       animated: false,
       containerVisible: false,
@@ -244,8 +209,8 @@ class CopilotModal extends Component<Props, State> {
   renderMask() {
     /* eslint-disable global-require */
     const MaskComponent = this.props.overlay === 'svg'
-      ? require('./SvgMask').default
-      : require('./ViewMask').default;
+      ? SvgMask
+      : ViewMask;
     /* eslint-enable */
     return (
       <MaskComponent

@@ -4,33 +4,11 @@ import PropTypes from 'prop-types';
 import { View, Animated, I18nManager, TouchableOpacity } from 'react-native';
 import styles from './style';
 
-import type { CopilotContext, valueXY } from '../types';
-
-
 const rtl = I18nManager.isRTL;
 const start = rtl ? 'right' : 'left';
 const end = rtl ? 'left' : 'right';
 
-type Props = {
-  size: valueXY,
-  position: valueXY,
-  layout: {
-    width: number,
-    height: number,
-  },
-  style: object | number | Array,
-  easing: func,
-  animationDuration: number,
-  animated: boolean,
-};
-
-type State = {
-  size: Animated.ValueXY,
-  position: Animated.ValueXY,
-  canvasSize: valueXY,
-};
-
-class ViewMask extends Component<Props, State> {
+class ViewMask extends Component {
   static contextTypes = {
     _copilot: PropTypes.object,
   }
@@ -46,11 +24,7 @@ class ViewMask extends Component<Props, State> {
     }
   }
 
-  context: {
-    _copilot: CopilotContext,
-  }
-
-  animate = (size: valueXY = this.props.size, position: valueXY = this.props.position): void => {
+  animate = (size = this.props.size, position = this.props.position) => {
     if (this.state.animated) {
       Animated.parallel([
         Animated.timing(this.state.size, {
