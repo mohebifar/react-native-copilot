@@ -49,7 +49,6 @@ class CopilotModal extends Component {
   }
 
   handleLayoutChange = ({ nativeEvent: { layout } }) => {
-    console.log('*** layout change', layout)
     this.layout = layout;
   }
 
@@ -73,9 +72,8 @@ class CopilotModal extends Component {
   }
 
   async _animateMove(obj = {}) {
-    console.log('pre measure')
     const layout = await this.measure();
-    console.log('post');
+
     if (!this.props.androidStatusBarVisible && Platform.OS === 'android') {
       obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
     }
