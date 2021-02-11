@@ -155,15 +155,16 @@ const copilot = ({
           this.startTries = 0;
           return;
         }
-
         if (!currentStep) {
           this.startTries += 1;
           requestAnimationFrame(() => this.start(fromStep));
         } else {
           this.eventEmitter.emit('start');
+
           await this.setCurrentStep(currentStep);
           await this.moveToCurrentStep();
           await this.setVisibility(true);
+
           this.startTries = 0;
         }
       }

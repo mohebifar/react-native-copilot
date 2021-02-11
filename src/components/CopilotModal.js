@@ -49,6 +49,7 @@ class CopilotModal extends Component {
   }
 
   handleLayoutChange = ({ nativeEvent: { layout } }) => {
+    console.log('*** layout change', layout)
     this.layout = layout;
   }
 
@@ -58,7 +59,6 @@ class CopilotModal extends Component {
         x: 0, y: 0, width: 0, height: 0,
       }));
     }
-
 
     return new Promise((resolve) => {
       const setLayout = () => {
@@ -73,7 +73,9 @@ class CopilotModal extends Component {
   }
 
   async _animateMove(obj = {}) {
+    console.log('pre measure')
     const layout = await this.measure();
+    console.log('post');
     if (!this.props.androidStatusBarVisible && Platform.OS === 'android') {
       obj.top -= StatusBar.currentHeight; // eslint-disable-line no-param-reassign
     }
@@ -211,6 +213,7 @@ class CopilotModal extends Component {
     const MaskComponent = this.props.overlay === 'svg'
       ? SvgMask
       : ViewMask;
+
     /* eslint-enable */
     return (
       <MaskComponent
@@ -273,12 +276,13 @@ class CopilotModal extends Component {
     const containerVisible = this.state.containerVisible || this.props.visible;
     const contentVisible = this.state.layout && containerVisible;
 
-    return (
+    return containerVisible ? (
       <Modal
         animationType="none"
         visible={containerVisible}
         onRequestClose={noop}
         transparent
+        style={{height: '100%', width: '100%', position: 'fixed', top: 0, left: 0}}
         supportedOrientations={['portrait', 'landscape']}
       >
         <View
@@ -289,7 +293,7 @@ class CopilotModal extends Component {
           {contentVisible && this.renderTooltip()}
         </View>
       </Modal>
-    );
+    ) : null;
   }
 }
 
