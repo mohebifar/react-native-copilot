@@ -73,7 +73,8 @@ const copilot = ({
         getNextStep(this.state.steps, step);
 
       setCurrentStep = async (step, move = true) => {
-        await this.setState({ currentStep });
+        await this.setState({ currentStep: step });
+
         this.eventEmitter.emit('stepChange', step);
 
         if (this.state.scrollView) {
