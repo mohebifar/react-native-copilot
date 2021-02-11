@@ -1060,6 +1060,8 @@ class ConnectedCopilotStep extends React.Component {
 // @flow
 
 class CopilotStep extends React.Component {
+  static __initStatic() {this.contextTypes = {_copilot: PropTypes__default['default'].object};}
+
   render() {
     const currentStep = this.context._copilot.getCurrentStep();
 
@@ -1072,7 +1074,7 @@ class CopilotStep extends React.Component {
       },
     );
   }
-}
+} CopilotStep.__initStatic();
 
 exports.CopilotStep = CopilotStep;
 exports.copilot = copilot;
