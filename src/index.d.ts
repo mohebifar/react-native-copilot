@@ -23,6 +23,13 @@ declare module 'react-native-copilot' {
     currentStepNumber: number;
   };
 
+  export type LabeslsType = {
+    previous: string;
+    next: string;
+    skip: string;
+    finish: string;
+  }
+
   export type OverlayType = 'svg' | 'view';
   /**
    * Options for the copilot HOC
@@ -36,6 +43,7 @@ declare module 'react-native-copilot' {
     backdropColor?: string; // You can customize the mask color - default is rgba(0, 0, 0, 0.4)
     verticalOffset?: number; // In order to adjust vertical position
     stopOnOutsideClick?: boolean; // Whether the tutorial should stop after clicking outside the step component
+    labels?: LabeslsType; // You can localize labels
   };
 
   /**
