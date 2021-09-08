@@ -36,6 +36,7 @@ declare module 'react-native-copilot' {
     backdropColor?: string; // You can customize the mask color - default is rgba(0, 0, 0, 0.4)
     verticalOffset?: number; // In order to adjust vertical position
     stopOnOutsideClick?: boolean; // Whether the tutorial should stop after clicking outside the step component
+    nextOnOutsideClick?: boolean; // Whether the tutorial should advance after clicking outside the step componentstop
   };
 
   /**
