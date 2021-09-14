@@ -32,6 +32,7 @@ declare module 'react-native-copilot' {
     overlay?: OverlayType; // The overlay in react-native copilot is the component that draws the dark transparent over the root component.
     tooltipComponent?: any; // You can customize the tooltip by passing a component here
     stepNumberComponent?: any; // You can customize the step number by passing a component here
+    onBackButton: 'noop' | 'prev' | 'stop'; // specifies what to do when the back button is pressed, either no-op, move to previous step, or stop
     androidStatusBarVisible?: boolean; // Whether the Android status bar should be visible
     backdropColor?: string; // You can customize the mask color - default is rgba(0, 0, 0, 0.4)
     verticalOffset?: number; // In order to adjust vertical position

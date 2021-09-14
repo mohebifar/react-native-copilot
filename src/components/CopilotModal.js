@@ -41,8 +41,6 @@ type State = {
   },
 };
 
-const noop = () => {};
-
 class CopilotModal extends Component<Props, State> {
   static defaultProps = {
     easing: Easing.elastic(0.7),
@@ -54,6 +52,7 @@ class CopilotModal extends Component<Props, State> {
     overlay: typeof NativeModules.RNSVGSvgViewManager !== 'undefined' ? 'svg' : 'view',
     // If animated was not specified, rely on the default overlay type
     animated: typeof NativeModules.RNSVGSvgViewManager !== 'undefined',
+    onBackButton: 'noop',
     androidStatusBarVisible: false,
     backdropColor: 'rgba(0, 0, 0, 0.4)',
     labels: {},
@@ -236,6 +235,15 @@ class CopilotModal extends Component<Props, State> {
     }
   };
 
+  handleBackButton = () => {
+    if (this.props.onBackButton === 'stop') {
+      this.handleStop();
+    } else if (this.props.onBackButton === 'prev') {
+      this.handlePrev();
+    }
+    // if not otherwise specified, do nothing
+  }
+
   renderMask() {
     /* eslint-disable global-require */
     const MaskComponent = this.props.overlay === 'svg'
@@ -306,7 +314,7 @@ class CopilotModal extends Component<Props, State> {
       <Modal
         animationType="none"
         visible={containerVisible}
-        onRequestClose={noop}
+        onRequestClose={this.handleBackButton}
         transparent
         supportedOrientations={['portrait', 'landscape']}
       >
