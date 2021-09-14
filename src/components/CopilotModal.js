@@ -39,6 +39,8 @@ type State = {
     width: number,
     height: number,
   },
+  tooltipHorizontalPosition: 'left' | 'right',
+  tooltipVerticalPosition: 'top' | 'bottom',
 };
 
 const noop = () => {};
@@ -70,6 +72,8 @@ class CopilotModal extends Component<Props, State> {
     },
     animated: false,
     containerVisible: false,
+    tooltipVerticalPosition: 'top',
+    tooltipHorizontalPosition: 'left',
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -194,6 +198,8 @@ class CopilotModal extends Component<Props, State> {
         x: Math.floor(Math.max(obj.left, 0)),
         y: Math.floor(Math.max(obj.top, 0)),
       },
+      tooltipHorizontalPosition: horizontalPosition,
+      tooltipVerticalPosition: verticalPosition,
     });
   }
 
@@ -293,6 +299,8 @@ class CopilotModal extends Component<Props, State> {
           handlePrev={this.handlePrev}
           handleStop={this.handleStop}
           labels={this.props.labels}
+          horizontalPosition={this.state.tooltipHorizontalPosition}
+          verticalPosition={this.state.tooltipVerticalPosition}
         />
       </Animated.View>,
     ];
