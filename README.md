@@ -139,6 +139,8 @@ const TooltipComponent = ({
   handlePrev,
   handleStop,
   currentStep,
+  horizontalPosition,
+  verticalPosition,
 }) => (
   // ...
 );
