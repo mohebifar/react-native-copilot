@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Animated, Easing, View, NativeModules, Modal, StatusBar, Platform } from 'react-native';
 import Tooltip from './Tooltip';
 import StepNumber from './StepNumber';
-import styles, { MARGIN, ARROW_SIZE, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
+import styles, { MARGIN, STEP_NUMBER_DIAMETER, STEP_NUMBER_RADIUS } from './style';
 import type { SvgMaskPathFn } from '../types';
 
 type Props = {
@@ -28,6 +28,7 @@ type Props = {
   svgMaskPath?: SvgMaskPathFn,
   stopOnOutsideClick?: boolean,
   arrowColor?: string,
+  arrowSize?: string,
 };
 
 type State = {
@@ -59,6 +60,7 @@ class CopilotModal extends Component<Props, State> {
     labels: {},
     stopOnOutsideClick: false,
     arrowColor: '#fff',
+    arrowSize: 6,
   };
 
   state = {
@@ -136,16 +138,18 @@ class CopilotModal extends Component<Props, State> {
     const horizontalPosition = relativeToLeft > relativeToRight ? 'left' : 'right';
 
     const tooltip = {};
-    const arrow = {};
+    const arrow = {
+      borderWidth: this.props.arrowSize,
+    };
 
     if (verticalPosition === 'bottom') {
       tooltip.top = obj.top + obj.height + MARGIN;
       arrow.borderBottomColor = this.props.arrowColor;
-      arrow.top = tooltip.top - (ARROW_SIZE * 2);
+      arrow.top = tooltip.top - (this.props.arrowSize * 2);
     } else {
       tooltip.bottom = layout.height - (obj.top - MARGIN);
       arrow.borderTopColor = this.props.arrowColor;
-      arrow.bottom = tooltip.bottom - (ARROW_SIZE * 2);
+      arrow.bottom = tooltip.bottom - (this.arrowSize * 2);
     }
 
     if (horizontalPosition === 'left') {
