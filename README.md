@@ -192,6 +192,16 @@ copilot({
 })(RootComponent);
 ```
 
+### Custom tooltip arrow size
+
+You can customize the tooltip's arrow size:
+
+```js
+copilot({
+  arrowSize: 9
+})(RootComponent);
+```
+
 ### Custom step number component
 
 You can customize the step number by passing a component to the `copilot` HOC maker. If you are looking for an example step number component, take a look at [the default step number implementation](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/StepNumber.js).
