@@ -250,6 +250,21 @@ copilot({
 })(RootComponent);
 ```
 
+Example with rounded corners:
+
+```js
+const roundedRectangleSvgPath = ({ position, canvasSize, size }) => {
+  const br = 10; // border radius
+  const sizeX = size.x._value - 2 * br;
+  const sizeY = size.y._value - 2 * br;
+  return `M 0 0 H ${canvasSize.x} V ${canvasSize.y} H 0 V 0 Z M ${position.x._value+br} ${position.y._value} Z h ${sizeX} a ${br} ${br} 0 0 1 ${br} ${br} v ${sizeY} a ${br} ${br} 0 0 1 -${br} ${br} h -${sizeX} a ${br} ${br} 0 0 1 -${br} -${br} v -${sizeY} a ${br} ${br} 0 0 1 ${br} -${br} z`;
+}
+
+copilot({
+  svgMaskPath: circleSvgPath
+})(RootComponent);
+```
+
 Example with different overlay for specific step:
 
 Give name prop for the step
