@@ -87,6 +87,8 @@ Every `CopilotStep` must have these props:
 2. **order**: A positive number indicating the order of the step in the entire walkthrough.
 3. **text**: The text shown as the description for the step.
 
+Additionally, a step may set the **active** prop, a boolean that controls whether the step is used or skipped.
+
 In order to start the tutorial, you can call the `start` prop function in the root component that is injected by `copilot`:
 
 ```js
