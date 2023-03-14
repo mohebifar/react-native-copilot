@@ -27,6 +27,7 @@ type Props = {
   labels: Object,
   svgMaskPath?: SvgMaskPathFn,
   stopOnOutsideClick?: boolean,
+  nextOnOutsideClick?: boolean,
   arrowColor?: string,
 };
 
@@ -58,6 +59,7 @@ class CopilotModal extends Component<Props, State> {
     backdropColor: 'rgba(0, 0, 0, 0.4)',
     labels: {},
     stopOnOutsideClick: false,
+    nextOnOutsideClick: false,
     arrowColor: '#fff',
   };
 
@@ -233,6 +235,8 @@ class CopilotModal extends Component<Props, State> {
   handleMaskClick = () => {
     if (this.props.stopOnOutsideClick) {
       this.handleStop();
+    } else if (this.props.nextOnOutsideClick) {
+      isLastStep ? this.handleStop() : this.handleNext();
     }
   };
 
