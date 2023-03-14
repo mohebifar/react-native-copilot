@@ -149,6 +149,16 @@ copilot({
 })(RootComponent)
 ```
 
+### Navigating through the tour
+
+The above code snippet shows the functions passed to the tooltip. These are your primary navigation functions. Some notes on navigation:
+
+- `handleNext` and `handlePrev` will move the mask from the current wrapped component immediately to the next. 
+
+- You can use `handleStop` in conjunction with `handleNth` to effectively "pause" a tour, allowing for user input, animations or any other interaction that shouldn't have the mask applied. Once you want to pick the tour back up, call `handleNth` on the next tour step.
+
+Note that `handleNth` is 1-indexed, which is in line with what your step orders should look like.
+
 ### Custom tooltip styling
 
 You can customize tooltip's style:
