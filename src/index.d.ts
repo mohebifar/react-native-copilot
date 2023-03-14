@@ -14,6 +14,7 @@ declare module 'react-native-copilot' {
     isFirstStep: boolean;
     isLastStep: boolean;
     handleNext: () => void;
+    handleNthStep: (step: number) => void;
     handlePrev: () => void;
     handleStop: () => void;
     currentStep: Step;

@@ -10,7 +10,7 @@ import hoistStatics from 'hoist-non-react-statics';
 import CopilotModal from '../components/CopilotModal';
 import { OFFSET_WIDTH } from '../components/style';
 
-import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep } from '../utilities';
+import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep, getNthStep } from '../utilities';
 
 import type { Step, CopilotContext } from '../types';
 
@@ -85,6 +85,10 @@ const copilot = ({
       getNextStep = (step: ?Step = this.state.currentStep): ?Step =>
         getNextStep(this.state.steps, step);
 
+      getNthStep = (n: number): ?Step => {
+        getNthStep(this.state.steps, n);
+      }
+
       setCurrentStep = async (step: Step, move?: boolean = true): void => {
         await this.setState({ currentStep: step });
         this.eventEmitter.emit('stepChange', step);
@@ -140,6 +144,10 @@ const copilot = ({
 
       next = async (): void => {
         await this.setCurrentStep(this.getNextStep());
+      }
+
+      nth = async (n: number): void => {
+        await this.setCurrentStep(this.getNthStep(n));
       }
 
       prev = async (): void => {
@@ -202,6 +210,7 @@ const copilot = ({
             />
             <CopilotModal
               next={this.next}
+              nth={this.nth}
               prev={this.prev}
               stop={this.stop}
               visible={this.state.visible}

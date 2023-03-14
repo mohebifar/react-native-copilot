@@ -136,6 +136,7 @@ const TooltipComponent = ({
   isFirstStep,
   isLastStep,
   handleNext,
+  handleNth,
   handlePrev,
   handleStop,
   currentStep,

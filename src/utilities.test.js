@@ -171,4 +171,17 @@ describe('getNextStep', () => {
     // expect(utilities.getNextStep(steps, steps[1])).toBe(null);
     expect(utilities.getNextStep(steps, steps[2])).toBe(steps[0]);
   });
+
+  test('non-sequential, getNth steps', () => {
+    const steps = [
+      { name: 'Step2', order: 400 },
+      { name: 'Step3', order: 670 },
+      { name: 'Step1', order: 140 },
+    ];
+
+    expect(utilities.getNthStep(steps, 1)).toBe(steps[2]);
+    expect(utilities.getNthStep(steps, 2)).toBe(steps[0]);
+    expect(utilities.getNthStep(steps, 3)).toBe(steps[1]);
+    expect(utilities.getNthStep(steps, 4)).toBe(undefined);
+  });
 });

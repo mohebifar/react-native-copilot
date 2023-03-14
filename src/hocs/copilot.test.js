@@ -136,6 +136,7 @@ it('shows the custom tooltip component if specified', async () => {
   expect(tooltip.props).toHaveProperty('currentStep');
   expect(tooltip.props).toHaveProperty('handlePrev');
   expect(tooltip.props).toHaveProperty('handleNext');
+  expect(tooltip.props).toHaveProperty('handleNth');
   expect(tooltip.props).toHaveProperty('handleStop');
   expect(tooltip.props).toHaveProperty('isFirstStep');
   expect(tooltip.props).toHaveProperty('isLastStep');
