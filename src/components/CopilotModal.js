@@ -9,6 +9,7 @@ import type { SvgMaskPathFn } from '../types';
 type Props = {
   stop: () => void,
   next: () => void,
+  nth: (number) => void,
   prev: () => void,
   currentStepNumber: number,
   currentStep: ?Step,
@@ -221,6 +222,10 @@ class CopilotModal extends Component<Props, State> {
     this.props.next();
   }
 
+  handleNth = (index) => {
+    this.props.nth(index);
+  }
+
   handlePrev = () => {
     this.props.prev();
   }
@@ -290,6 +295,7 @@ class CopilotModal extends Component<Props, State> {
           isLastStep={this.props.isLastStep}
           currentStep={this.props.currentStep}
           handleNext={this.handleNext}
+          handleNth={this.handleNth}
           handlePrev={this.handlePrev}
           handleStop={this.handleStop}
           labels={this.props.labels}

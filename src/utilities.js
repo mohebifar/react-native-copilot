@@ -23,3 +23,9 @@ export const getNextStep = (steps: Array<Step>, step: ?Step): number => Object
   .values(steps)
   .filter(_step => _step.order > step.order)
   .reduce((a, b) => (!a || a.order > b.order ? b : a), null) || step;
+
+export const getNthStep = (steps: Array<Step>, n: number): ?Step => {
+  const sorted = Object.values(steps).sort((a, b) => a.order - b.order);
+
+  return sorted[n - 1] || undefined;
+}
