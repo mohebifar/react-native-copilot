@@ -1,8 +1,8 @@
 // Copied from https://github.com/leecade/react-native-swiper/blob/3f688747264a09f8fd9893037912d4c838cceeb2/examples/scripts/watch-and-copy-src.js
 
-const fs = require('fs-extra');
-const watch = require('node-watch');
-const rimraf = require('rimraf');
+const fs = require("fs-extra");
+const watch = require("node-watch");
+const rimraf = require("rimraf");
 
 function copyAndWatch(source, destination) {
   console.log(`Cleaning "${destination}"`);
@@ -28,7 +28,4 @@ function copyAndWatch(source, destination) {
   });
 }
 
-copyAndWatch(
-  '../src',
-  'node_modules/react-native-copilot/src',
-);
+copyAndWatch("../src", "node_modules/react-native-copilot/src");

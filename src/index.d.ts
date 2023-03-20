@@ -1,5 +1,11 @@
-declare module 'react-native-copilot' {
-  import { Component, ComponentProps, ComponentType, ReactElement, ReactNode } from 'react';
+declare module "react-native-copilot" {
+  import {
+    Component,
+    ComponentProps,
+    ComponentType,
+    ReactElement,
+    ReactNode,
+  } from "react";
 
   export type Step = {
     name: string;
@@ -24,7 +30,7 @@ declare module 'react-native-copilot' {
     currentStepNumber: number;
   };
 
-  export type OverlayType = 'svg' | 'view';
+  export type OverlayType = "svg" | "view";
   /**
    * Options for the copilot HOC
    */

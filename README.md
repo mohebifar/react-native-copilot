@@ -125,7 +125,7 @@ You can specify the overlay when applying the `copilot` HOC:
 ```js
 copilot({
   overlay: "svg", // or 'view'
-  animated: true // or false
+  animated: true, // or false
 })(RootComponent);
 ```
 
@@ -155,7 +155,7 @@ copilot({
 
 The above code snippet shows the functions passed to the tooltip. These are your primary navigation functions. Some notes on navigation:
 
-- `handleNext` and `handlePrev` will move the mask from the current wrapped component immediately to the next. 
+- `handleNext` and `handlePrev` will move the mask from the current wrapped component immediately to the next.
 
 - You can use `handleStop` in conjunction with `handleNth` to effectively "pause" a tour, allowing for user input, animations or any other interaction that shouldn't have the mask applied. Once you want to pick the tour back up, call `handleNth` on the next tour step.
 
@@ -169,14 +169,13 @@ You can customize tooltip's style:
 const style = {
   backgroundColor: "#9FA8DA",
   borderRadius: 10,
-  paddingTop: 5
+  paddingTop: 5,
 };
 
 copilot({
-  tooltipStyle: style
+  tooltipStyle: style,
 })(RootComponent);
 ```
-
 
 #### Manage tooltip width
 
@@ -184,7 +183,7 @@ Due to the dynamic way tooltip width is calculated, it is required to override b
 
 ```js
 const MARGIN = 8;
-const WIDTH = Dimensions.get('window').width - (2 * MARGIN);
+const WIDTH = Dimensions.get("window").width - 2 * MARGIN;
 copilot({
   //....
   tooltipStyle: {
@@ -201,7 +200,7 @@ You can customize the tooltip's arrow color:
 
 ```js
 copilot({
-  arrowColor: '#FF00FF'
+  arrowColor: "#FF00FF",
 })(RootComponent);
 ```
 
@@ -230,7 +229,7 @@ You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a
 
 ```js
 copilot({
-  backdropColor: "rgba(50, 50, 100, 0.9)"
+  backdropColor: "rgba(50, 50, 100, 0.9)",
 })(RootComponent);
 ```
 
@@ -246,9 +245,9 @@ SvgMaskPathFn = (args: {
   position: Animated.valueXY,
   canvasSize: {
     x: number,
-    y: number
+    y: number,
   },
-  step: Step
+  step: Step,
 }) => string;
 ```
 
@@ -259,36 +258,38 @@ const circleSvgPath = ({ position, canvasSize }): string =>
   `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
 
 copilot({
-  svgMaskPath: circleSvgPath
+  svgMaskPath: circleSvgPath,
 })(RootComponent);
 ```
 
 Example with different overlay for specific step:
 
 Give name prop for the step
+
 ```js
-  <CopilotStep
-    text="This is a hello world example!"
-    order={1}
-    name="hello"
-  >
-    <CopilotText>Hello world!</CopilotText>
-  </CopilotStep>
+<CopilotStep text="This is a hello world example!" order={1} name="hello">
+  <CopilotText>Hello world!</CopilotText>
+</CopilotStep>
 ```
 
 Now you can return different svg path depending on step name
+
 ```js
 const customSvgPath = ({ position, size, canvasSize, step }): string => {
-  if (step && step.name === 'hello') return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
-
-  else return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}H${position.x._value + size.x._value}V${position.y._value + size.y._value}H${position.x._value}V${position.y._value}Z`;
+  if (step && step.name === "hello")
+    return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
+  else
+    return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${
+      position.y._value
+    }H${position.x._value + size.x._value}V${
+      position.y._value + size.y._value
+    }H${position.x._value}V${position.y._value}Z`;
 };
 
 copilot({
-  svgMaskPath: circleSvgPath
+  svgMaskPath: circleSvgPath,
 })(RootComponent);
 ```
-
 
 ### Custom components as steps
 
@@ -330,8 +331,8 @@ copilot({
     previous: "Vorheriger",
     next: "Nächster",
     skip: "Überspringen",
-    finish: "Beenden"
-  }
+    finish: "Beenden",
+  },
 })(RootComponent);
 ```
 
@@ -341,7 +342,7 @@ In order to adjust vertical position pass `verticalOffset` to the `copilot` HOC.
 
 ```js
 copilot({
-  verticalOffset: 36
+  verticalOffset: 36,
 })(RootComponent);
 ```
 
@@ -370,7 +371,7 @@ class HomeScreen {
   }
 
   render() {
-    <ScrollView ref={ref => (this.scrollView = ref)}>// ...</ScrollView>;
+    <ScrollView ref={(ref) => (this.scrollView = ref)}>// ...</ScrollView>;
   }
 }
 export default copilot()(HomeScreen);

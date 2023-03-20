@@ -1,18 +1,25 @@
 // @flow
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
-import { findNodeHandle, View } from 'react-native';
+import { findNodeHandle, View } from "react-native";
 
-import mitt from 'mitt';
-import hoistStatics from 'hoist-non-react-statics';
+import mitt from "mitt";
+import hoistStatics from "hoist-non-react-statics";
 
-import CopilotModal from '../components/CopilotModal';
-import { OFFSET_WIDTH } from '../components/style';
+import CopilotModal from "../components/CopilotModal";
+import { OFFSET_WIDTH } from "../components/style";
 
-import { getFirstStep, getLastStep, getStepNumber, getPrevStep, getNextStep, getNthStep } from '../utilities';
+import {
+  getFirstStep,
+  getLastStep,
+  getStepNumber,
+  getPrevStep,
+  getNextStep,
+  getNthStep,
+} from "../utilities";
 
-import type { Step, CopilotContext } from '../types';
+import type { Step, CopilotContext } from "../types";
 
 /*
 This is the maximum wait time for the steps to be registered before starting the tutorial
@@ -30,21 +37,22 @@ type State = {
   stopOnOutsideClick?: boolean,
 };
 
-const copilot = ({
-  overlay,
-  tooltipComponent,
-  tooltipStyle,
-  stepNumberComponent,
-  animated,
-  labels,
-  androidStatusBarVisible,
-  backdropColor,
-  stopOnOutsideClick = false,
-  svgMaskPath,
-  verticalOffset = 0,
-  wrapperStyle,
-  arrowColor,
-} = {}) =>
+const copilot =
+  ({
+    overlay,
+    tooltipComponent,
+    tooltipStyle,
+    stepNumberComponent,
+    animated,
+    labels,
+    androidStatusBarVisible,
+    backdropColor,
+    stopOnOutsideClick = false,
+    svgMaskPath,
+    verticalOffset = 0,
+    wrapperStyle,
+    arrowColor,
+  } = {}) =>
   (WrappedComponent) => {
     class Copilot extends Component<any, State> {
       state = {
@@ -87,30 +95,36 @@ const copilot = ({
 
       getNthStep = (n: number): ?Step => {
         getNthStep(this.state.steps, n);
-      }
+      };
 
       setCurrentStep = async (step: Step, move?: boolean = true): void => {
         await this.setState({ currentStep: step });
-        this.eventEmitter.emit('stepChange', step);
+        this.eventEmitter.emit("stepChange", step);
 
         if (this.state.scrollView) {
           const { scrollView } = this.state;
           await this.state.currentStep.wrapper.measureLayout(
-            findNodeHandle(scrollView), (x, y, w, h) => {
-              const yOffsett = y > 0 ? y - (h / 2) : 0;
+            findNodeHandle(scrollView),
+            (x, y, w, h) => {
+              const yOffsett = y > 0 ? y - h / 2 : 0;
               scrollView.scrollTo({ y: yOffsett, animated: false });
-            });
+            }
+          );
         }
-        setTimeout(() => {
-          if (move) {
-            this.moveToCurrentStep();
-          }
-        }, this.state.scrollView ? 100 : 0);
-      }
+        setTimeout(
+          () => {
+            if (move) {
+              this.moveToCurrentStep();
+            }
+          },
+          this.state.scrollView ? 100 : 0
+        );
+      };
 
-      setVisibility = (visible: boolean): void => new Promise((resolve) => {
-        this.setState({ visible }, () => resolve());
-      });
+      setVisibility = (visible: boolean): void =>
+        new Promise((resolve) => {
+          this.setState({ visible }, () => resolve());
+        });
 
       startTries = 0;
 
@@ -118,7 +132,8 @@ const copilot = ({
 
       eventEmitter = mitt();
 
-      isFirstStep = (): boolean => this.state.currentStep === this.getFirstStep();
+      isFirstStep = (): boolean =>
+        this.state.currentStep === this.getFirstStep();
 
       isLastStep = (): boolean => this.state.currentStep === this.getLastStep();
 
@@ -129,7 +144,7 @@ const copilot = ({
             [step.name]: step,
           },
         }));
-      }
+      };
 
       unregisterStep = (stepName: string): void => {
         if (!this.mounted) {
@@ -138,21 +153,24 @@ const copilot = ({
         this.setState(({ steps }) => ({
           steps: Object.entries(steps)
             .filter(([key]) => key !== stepName)
-            .reduce((obj, [key, val]) => Object.assign(obj, { [key]: val }), {}),
+            .reduce(
+              (obj, [key, val]) => Object.assign(obj, { [key]: val }),
+              {}
+            ),
         }));
-      }
+      };
 
       next = async (): void => {
         await this.setCurrentStep(this.getNextStep());
-      }
+      };
 
       nth = async (n: number): void => {
         await this.setCurrentStep(this.getNthStep(n));
-      }
+      };
 
       prev = async (): void => {
         await this.setCurrentStep(this.getPrevStep());
-      }
+      };
 
       start = async (fromStep?: string, scrollView?: React.RefObject): void => {
         const { steps } = this.state;
@@ -161,9 +179,7 @@ const copilot = ({
           this.setState({ scrollView });
         }
 
-        const currentStep = fromStep
-          ? steps[fromStep]
-          : this.getFirstStep();
+        const currentStep = fromStep ? steps[fromStep] : this.getFirstStep();
 
         if (this.startTries > MAX_START_TRIES) {
           this.startTries = 0;
@@ -174,18 +190,18 @@ const copilot = ({
           this.startTries += 1;
           requestAnimationFrame(() => this.start(fromStep));
         } else {
-          this.eventEmitter.emit('start');
+          this.eventEmitter.emit("start");
           await this.setCurrentStep(currentStep);
           await this.moveToCurrentStep();
           await this.setVisibility(true);
           this.startTries = 0;
         }
-      }
+      };
 
       stop = async (): void => {
         await this.setVisibility(false);
-        this.eventEmitter.emit('stop');
-      }
+        this.eventEmitter.emit("stop");
+      };
 
       async moveToCurrentStep(): void {
         const size = await this.state.currentStep.target.measure();
@@ -193,8 +209,8 @@ const copilot = ({
         await this.modal.animateMove({
           width: size.width + OFFSET_WIDTH,
           height: size.height + OFFSET_WIDTH,
-          left: size.x - (OFFSET_WIDTH / 2),
-          top: (size.y - (OFFSET_WIDTH / 2)) + verticalOffset,
+          left: size.x - OFFSET_WIDTH / 2,
+          top: size.y - OFFSET_WIDTH / 2 + verticalOffset,
         });
       }
 
@@ -229,7 +245,9 @@ const copilot = ({
               svgMaskPath={svgMaskPath}
               stopOnOutsideClick={stopOnOutsideClick}
               arrowColor={arrowColor}
-              ref={(modal) => { this.modal = modal; }}
+              ref={(modal) => {
+                this.modal = modal;
+              }}
             />
           </View>
         );

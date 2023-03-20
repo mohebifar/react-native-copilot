@@ -1,7 +1,8 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { View } from "react-native";
 
-import type { CopilotContext } from '../types';
+import type { CopilotContext } from "../types";
 
 type Props = {
   name: string,
@@ -9,11 +10,13 @@ type Props = {
   order: number,
   active?: boolean,
   _copilot: CopilotContext,
-  children: React$Element
+  children: React$Node,
 };
 
 class ConnectedCopilotStep extends Component<Props> {
-  static defaultProps = {
+  wrapper: ?React$ElementRef<typeof View>;
+
+  static defaultProps: { active: true } = {
     active: true,
   };
 
@@ -23,7 +26,7 @@ class ConnectedCopilotStep extends Component<Props> {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (this.props.active !== prevProps.active) {
       if (this.props.active) {
         this.register();
@@ -56,10 +59,15 @@ class ConnectedCopilotStep extends Component<Props> {
   }
 
   measure() {
-    if (typeof __TEST__ !== 'undefined' && __TEST__) { // eslint-disable-line no-undef
-      return new Promise(resolve => resolve({
-        x: 0, y: 0, width: 0, height: 0,
-      }));
+    if (typeof __TEST__ !== "undefined" && __TEST__) {
+      return new Promise((resolve) =>
+        resolve({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+        })
+      );
     }
 
     return new Promise((resolve, reject) => {
@@ -67,10 +75,14 @@ class ConnectedCopilotStep extends Component<Props> {
         // Wait until the wrapper element appears
         if (this.wrapper && this.wrapper.measure) {
           this.wrapper.measure(
-            (ox, oy, width, height, x, y) => resolve({
-              x, y, width, height,
-            }),
-            reject,
+            (ox, oy, width, height, x, y) =>
+              resolve({
+                x,
+                y,
+                width,
+                height,
+              }),
+            reject
           );
         } else {
           requestAnimationFrame(measure);
@@ -83,8 +95,10 @@ class ConnectedCopilotStep extends Component<Props> {
 
   render() {
     const copilot = {
-      ref: (wrapper) => { this.wrapper = wrapper; },
-      onLayout: () => { }, // Android hack
+      ref: (wrapper) => {
+        this.wrapper = wrapper;
+      },
+      onLayout: () => {}, // Android hack
     };
 
     return React.cloneElement(this.props.children, { copilot });
