@@ -2,14 +2,14 @@
 
 <div align="center">
   <p align="center">
-    <a href="https://travis-ci.org/mohebifar/react-native-copilot">
-      <img src="https://img.shields.io/travis/mohebifar/react-native-copilot.svg" alt="Travis (.org)">
+    <a href="https://github.com/mohebifar/react-native-copilot/actions/workflows/release.yml">
+      <img src="https://img.shields.io/github/actions/workflow/status/mohebifar/react-native-copilot/release.yml?branch=master&style=flat-square" alt="Build Status" />
     </a>
     <a href="https://www.npmjs.com/package/react-native-copilot">
-      <img src="https://img.shields.io/npm/v/react-native-copilot.svg" alt="NPM Version" />
+      <img src="https://img.shields.io/npm/v/react-native-copilot.svg?style=flat-square" alt="NPM Version" />
     </a>
     <a href="https://www.npmjs.com/package/react-native-copilot">
-      <img src="https://img.shields.io/npm/dm/react-native-copilot.svg" alt="NPM Downloads" />
+      <img src="https://img.shields.io/npm/dm/react-native-copilot.svg?style=flat-square" alt="NPM Downloads" />
     </a>
   </p>
 </div>
