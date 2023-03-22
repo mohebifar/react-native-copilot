@@ -51,6 +51,9 @@ export const CopilotStep = ({
 
   useEffect(() => {
     if (active) {
+      if (registeredName.current && registeredName.current !== name) {
+        unregisterStep(registeredName.current);
+      }
       registerStep({
         name,
         text,

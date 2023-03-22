@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import renderer from "react-test-renderer";
-import { walkthroughable } from "./walkthroughable";
+import { walkthroughable } from "../walkthroughable";
 
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableText = walkthroughable(Text);

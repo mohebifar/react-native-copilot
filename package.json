@@ -10,7 +10,7 @@
     "build": "tsup",
     "dev": "NODE_ENV=development yarn build --watch",
     "lint": "eslint src/",
-    "test": "jest src/",
+    "test": "jest",
     "changeset": "changeset",
     "release": "changeset publish"
   },
@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/mohebifar/react-native-copilot#readme",
   "devDependencies": {
+    "@testing-library/jest-native": "^5.4.2",
     "@testing-library/react-native": "^12.0.0",
     "@tsconfig/react-native": "^2.0.3",
     "@types/jest": "^29.5.0",
