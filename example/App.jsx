@@ -1,22 +1,41 @@
-import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Switch,
-  SafeAreaView,
-} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { copilot, walkthroughable, CopilotStep } from "react-native-copilot";
+import React, { useEffect, useState } from "react";
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Switch,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import {
+  CopilotProvider,
+  CopilotStep,
+  walkthroughable,
+  useCopilot,
+} from "react-native-copilot";
 
 const WalkthroughableText = walkthroughable(Text);
 const WalkthroughableImage = walkthroughable(Image);
 
-function App(props) {
+function App() {
+  const { start, copilotEvents } = useCopilot();
   const [secondStepActive, setSecondStepActive] = useState(true);
+  const [lastEvent, setLastEvent] = useState(null);
+
+  useEffect(() => {
+    copilotEvents.on("stepChange", (step) => {
+      setLastEvent(`stepChange: ${step.name}`);
+    });
+    copilotEvents.on("start", () => {
+      setLastEvent(`start`);
+    });
+    copilotEvents.on("stop", () => {
+      setLastEvent(`stop`);
+    });
+  }, [copilotEvents]);
+
   return (
     <SafeAreaView style={styles.container}>
       <CopilotStep
@@ -53,9 +72,12 @@ function App(props) {
           />
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => props.start()}>
+        <TouchableOpacity style={styles.button} onPress={() => start()}>
           <Text style={styles.buttonText}>START THE TUTORIAL!</Text>
         </TouchableOpacity>
+        <View style={styles.eventContainer}>
+          <Text>{lastEvent && `Last event: ${lastEvent}`}</Text>
+        </View>
       </View>
       <View style={styles.row}>
         <CopilotStep
@@ -97,10 +119,13 @@ function App(props) {
   );
 }
 
-export default copilot({
-  animated: true, // Can be true or false
-  overlay: "svg", // Can be either view or svg
-})(App);
+const AppwithProvider = () => (
+  <CopilotProvider stopOnOutsideClick androidStatusBarVisible>
+    <App />
+  </CopilotProvider>
+);
+
+export default AppwithProvider;
 
 const styles = StyleSheet.create({
   container: {
@@ -146,5 +171,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignItems: "center",
     paddingHorizontal: 25,
+  },
+  eventContainer: {
+    marginTop: 20,
   },
 });

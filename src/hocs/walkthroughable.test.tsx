@@ -1,6 +1,7 @@
+import React from "react";
 import { View, Text, ScrollView, TextInput } from "react-native";
 import renderer from "react-test-renderer";
-import walkthroughable from "./walkthroughable";
+import { walkthroughable } from "./walkthroughable";
 
 const WalkthroughableView = walkthroughable(View);
 const WalkthroughableText = walkthroughable(Text);
@@ -18,6 +19,7 @@ const nativeComponents = [View, Text, ScrollView, TextInput];
 
 it("spreads the copilot prop object on the wrapped component", () => {
   const tree = renderer.create(
+    // @ts-expect-error just for testing
     <WalkthroughableView copilot={{ keyForNum: 1, keyForStr: "hello" }} />
   );
 
@@ -30,6 +32,7 @@ it("spreads the copilot prop object on the wrapped component", () => {
 it("spreads the copilot prop object on the wrapped component along with other flat props", () => {
   const tree = renderer.create(
     <WalkthroughableView
+      // @ts-expect-error just for testing
       copilot={{ keyForNum: 1, keyForStr: "hello" }}
       otherProp="the other prop"
     />
@@ -45,6 +48,7 @@ it("spreads the copilot prop object on the wrapped component along with other fl
 it("spreads the copilot prop object on the wrapped component not overriding the root props", () => {
   const tree = renderer.create(
     <WalkthroughableView
+      // @ts-expect-error just for testing
       copilot={{ keyForNum: 1, keyForStr: "hello" }}
       keyForNum={2}
     />
@@ -62,6 +66,7 @@ it("works with all types of react native built-in components", () => {
 
     const tree = renderer.create(
       <WalkthroughableComponent
+        // @ts-expect-error just for testing
         copilot={{ keyForNum: 1, keyForStr: "hello" }}
       />
     );

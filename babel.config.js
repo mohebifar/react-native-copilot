@@ -1,6 +1,4 @@
-module.exports = function (api) {
-  api.cache(true);
-  return {
-    presets: ["@babel/preset-flow", "module:metro-react-native-babel-preset"],
-  };
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
+  presets: ["module:metro-react-native-babel-preset"],
 };

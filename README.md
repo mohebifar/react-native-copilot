@@ -28,57 +28,56 @@
   </a>
 </p>
 
-Creation of this project was sponsored by **[OK GROW!](https://www.okgrow.com/)**
-
 ## Installation
 
 ```
+yarn add react-native-copilot
+
+# or with npm:
+
 npm install --save react-native-copilot
 ```
 
-**Optional**: If you want to have the smooth SVG animation, you should install and link `react-native-svg`. If you are using Expo, **you can skip** this as Expo comes with `react-native-svg`.
-
-```
-npm install --save react-native-svg
-react-native link react-native-svg
-```
+**Optional**: If you want to have the smooth SVG animation, you should install and link [`react-native-svg`](https://github.com/software-mansion/react-native-svg).
 
 ## Usage
 
-Use the `copilot()` higher order component for the screen component that you want to use copilot with:
+Wrap the portion of your app that you want to use copilot with inside `<CopilotProvider>`:
 
 ```js
-import { copilot } from "react-native-copilot";
+import { CopilotProvider } from "react-native-copilot";
 
-class HomeScreen extends Component {
-  /* ... */
-}
-
-export default copilot()(HomeScreen);
+const AppWithCopilot = () => {
+  return (
+    <CopilotProvider>
+      <HomeScreen />
+    </CopilotProvider>
+  );
+};
 ```
+
+**NOTE**: The old way of using copilot with the `copilot()` HOC maker is deprecated in v3. It will continue to work but it's not recommended and may be removed in the future.
 
 Before defining walkthrough steps for your react elements, you must make them `walkthroughable`. The easiest way to do that for built-in react native components, is using the `walkthroughable` HOC. Then you must wrap the element with `CopilotStep`.
 
-```js
-import { copilot, walkthroughable, CopilotStep } from "react-native-copilot";
+```jsx
+import {
+  CopilotProvider,
+  CopilotStep,
+  walkthroughable,
+} from "react-native-copilot";
 
 const CopilotText = walkthroughable(Text);
 
-class HomeScreen {
-  render() {
-    return (
-      <View>
-        <CopilotStep
-          text="This is a hello world example!"
-          order={1}
-          name="hello"
-        >
-          <CopilotText>Hello world!</CopilotText>
-        </CopilotStep>
-      </View>
-    );
-  }
-}
+const HomeScreen = () => {
+  return (
+    <View>
+      <CopilotStep text="This is a hello world example!" order={1} name="hello">
+        <CopilotText>Hello world!</CopilotText>
+      </CopilotStep>
+    </View>
+  );
+};
 ```
 
 Every `CopilotStep` must have these props:
@@ -89,49 +88,57 @@ Every `CopilotStep` must have these props:
 
 Additionally, a step may set the **active** prop, a boolean that controls whether the step is used or skipped.
 
-In order to start the tutorial, you can call the `start` prop function in the root component that is injected by `copilot`:
+In order to start the tutorial, you can call the `start` function from the `useCopilot` hook:
 
 ```js
-class HomeScreen extends Component {
-  handleStartButtonPress() {
-    this.props.start();
-  }
-
-  render() {
-    // ...
-  }
-}
-
-export default copilot()(HomeScreen);
+const HomeScreen = () => {
+  return (
+    <View>
+      <Button title="Start tutorial" onPress={() => start()} />
+    </View>
+  );
+};
 ```
 
 If you are looking for a working example, please check out [this link](https://github.com/mohebifar/react-native-copilot/blob/master/example/App.js).
 
 ### Overlays and animation
 
-The overlay in react-native copilot is the component that draws the dark transparent over the root component. React-native copilot comes with two overlay components: `view` and `svg`.
+The overlay in react-native-copilot is the component that draws the dark transparent over the screen. React-native-copilot comes with two overlay options: `view` and `svg`.
 
-The `view` overlay uses 4 rectangles drawn around the target element using the `<View />` component. We don't recommend using animation with this overlay since it's sluggish on some devices specially on Android devices.
+The `view` overlay uses 4 rectangles drawn around the target element using the `<View />` component. We don't recommend using animation with this overlay since it's sluggish on some devices specially on Android.
 
-The `svg` overlay uses an SVG path component for drawing the overlay. It offers a nice and smooth animation but it depends on `react-native-svg`. If you are using expo, you don't need to install anything and the svg overlay works out of the box. If not, you need to install and this package:
+The `svg` overlay uses an SVG path component for drawing the overlay. It offers a nice and smooth animation but it depends on `react-native-svg`. If you are using expo, you can install it using:
 
 ```
+expo install react-native-svg
+```
+
+Or if you are using react-native-cli:
+
+```
+yarn add react-native-svg
+
+# or with npm
+
 npm install --save react-native-svg
-react-native link react-native-svg
+
+cd ios && pod install
 ```
 
-You can specify the overlay when applying the `copilot` HOC:
+You can specify the overlay by passing the `overlay` prop to the `<CopilotProvider />` component:
 
 ```js
-copilot({
-  overlay: "svg", // or 'view'
-  animated: true, // or false
-})(RootComponent);
+<CopilotProvider overlay="svg" {/* or "view" */}>
+  <App />
+</CopilotProvider>
 ```
 
-### Custom tooltip component
+By default, if overlay is not explicitly specified, the `svg` overlay will be used if `react-native-svg` is installed, otherwise the `view` overlay will be used.
 
-You can customize the tooltip by passing a component to the `copilot` HOC maker. If you are looking for an example tooltip component, take a look at [the default tooltip implementation](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/Tooltip.js).
+### Custom tooltip and step number UI components
+
+You can customize the tooltip and the step number components by passing a component to the `CopilotProvider` component. If you are looking for an example tooltip component, take a look at [the default ui implementations](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/default-ui).
 
 ```js
 const TooltipComponent = ({
@@ -146,9 +153,10 @@ const TooltipComponent = ({
   // ...
 );
 
-copilot({
-  tooltipComponent: TooltipComponent
-})(RootComponent)
+
+<CopilotProvider tooltipComponent={TooltipComponent} stepNumberComponent={StepComponent}>
+  <App />
+</CopilotProvider>
 ```
 
 ### Navigating through the tour
@@ -163,7 +171,7 @@ Note that `handleNth` is 1-indexed, which is in line with what your step orders 
 
 ### Custom tooltip styling
 
-You can customize tooltip's style:
+You can customize tooltip's wrapper style:
 
 ```js
 const style = {
@@ -172,26 +180,22 @@ const style = {
   paddingTop: 5,
 };
 
-copilot({
-  tooltipStyle: style,
-})(RootComponent);
+<CopilotProvider tooltipStyle={style}>
+  <App />
+</CopilotProvider>;
 ```
 
 #### Manage tooltip width
 
-Due to the dynamic way tooltip width is calculated, it is required to override both `width` and `maxWidth`, check the example bellow:
+By default, the tooltip width is calculated dynamically. You can make it fixed-size by overriding both `width` and `maxWidth`, check the example bellow:
 
 ```js
 const MARGIN = 8;
 const WIDTH = Dimensions.get("window").width - 2 * MARGIN;
-copilot({
-  //....
-  tooltipStyle: {
-    width: WIDTH,
-    maxWidth: WIDTH,
-    left: MARGIN,
-  },
-});
+
+<CopioltProvider tooltipStyle={{ width: WIDTH, maxWidth: WIDTH, left: MARGIN }}>
+  <App />
+</CopilotProvider>;
 ```
 
 ### Custom tooltip arrow color
@@ -199,67 +203,46 @@ copilot({
 You can customize the tooltip's arrow color:
 
 ```js
-copilot({
-  arrowColor: "#FF00FF",
-})(RootComponent);
+<CopilotProvider arrowColor="#9FA8DA">
+  <App />
+</CopilotProvider>
 ```
 
-### Custom step number component
+### Custom overlay color
 
-You can customize the step number by passing a component to the `copilot` HOC maker. If you are looking for an example step number component, take a look at [the default step number implementation](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/StepNumber.js).
-
-```js
-const StepNumberComponent = ({
-  isFirstStep,
-  isLastStep,
-  currentStep,
-  currentStepNumber,
-}) => (
-  // ...
-);
-
-copilot({
-  stepNumberComponent: StepNumberComponent
-})(RootComponent)
-```
-
-### Custom mask color
-
-You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a color string to the `copilot` HOC maker.
+You can customize the mask color - default is `rgba(0, 0, 0, 0.4)`, by passing a color string to the `CopilotProvider` component.
 
 ```js
-copilot({
-  backdropColor: "rgba(50, 50, 100, 0.9)",
-})(RootComponent);
+<CopilotProvider backdropColor="rgba(50, 50, 100, 0.9)">
+  <App />
+</CopilotProvider>
 ```
 
 ### Custom svg mask Path
 
-You can customize the mask svg path by passing a function to the `copilot` HOC maker.
+You can customize the mask svg path by passing a function to the `CopilotProvider` component.
 
-function signature:
-
-```js
-SvgMaskPathFn = (args: {
-  size: Animated.valueXY,
-  position: Animated.valueXY,
+```ts
+function SvgMaskPathFn(args: {
+  size: Animated.valueXY;
+  position: Animated.valueXY;
   canvasSize: {
-    x: number,
-    y: number,
-  },
-  step: Step,
-}) => string;
+    x: number;
+    y: number;
+  };
+  step: Step;
+}): string;
 ```
 
 Example with circle:
 
 ```js
-const circleSvgPath = ({ position, canvasSize }): string =>
+const circleSvgPath = ({ position, canvasSize }) =>
   `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
 
-copilot({
-  svgMaskPath: circleSvgPath,
-})(RootComponent);
+<CopilotProvider svgMaskPath={circleSvgPath}>
+  <App />
+</CopilotProvider>;
 ```
 
 Example with different overlay for specific step:
@@ -275,28 +258,29 @@ Give name prop for the step
 Now you can return different svg path depending on step name
 
 ```js
-const customSvgPath = ({ position, size, canvasSize, step }): string => {
-  if (step && step.name === "hello")
+const customSvgPath = (args) => {
+  if (args.step?.name === "hello") {
     return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${position.y._value}Za50 50 0 1 0 100 0 50 50 0 1 0-100 0`;
-  else
+  } else {
     return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${position.x._value},${
       position.y._value
     }H${position.x._value + size.x._value}V${
       position.y._value + size.y._value
     }H${position.x._value}V${position.y._value}Z`;
+  }
 };
 
-copilot({
-  svgMaskPath: circleSvgPath,
-})(RootComponent);
+<CopilotProvider svgMaskPath={customSvgPath}>
+  <App />
+</CopilotProvider>;
 ```
 
 ### Custom components as steps
 
-The components wrapped inside `CopilotStep`, will receive a `copilot` prop of type `Object` which the outermost rendered element of the component or the element that you want the tooltip be shown around, must extend.
+The components wrapped inside `CopilotStep`, will receive a `copilot` prop with a mutable `ref` and `onLayou` which the outermost rendered element of the component or the element that you want the tooltip be shown around, must extend.
 
 ```js
-import { copilot, CopilotStep } from "react-native-copilot";
+import { CopilotStep } from "react-native-copilot";
 
 const CustomComponent = ({ copilot }) => (
   <View {...copilot}>
@@ -304,21 +288,15 @@ const CustomComponent = ({ copilot }) => (
   </View>
 );
 
-class HomeScreen {
-  render() {
-    return (
-      <View>
-        <CopilotStep
-          text="This is a hello world example!"
-          order={1}
-          name="hello"
-        >
-          <CustomComponent />
-        </CopilotStep>
-      </View>
-    );
-  }
-}
+const HomeScreen = () => {
+  return (
+    <View>
+      <CopilotStep text="This is a hello world example!" order={1} name="hello">
+        <CustomComponent />
+      </CopilotStep>
+    </View>
+  );
+};
 ```
 
 ### Custom labels (for i18n)
@@ -326,38 +304,35 @@ class HomeScreen {
 You can localize labels:
 
 ```js
-copilot({
-  labels: {
+<CopilotProvider
+  labels={{
     previous: "Vorheriger",
     next: "Nächster",
     skip: "Überspringen",
-    finish: "Beenden",
-  },
-})(RootComponent);
+    finish: "Beenden"
+  }}
+>
 ```
 
 ### Adjust vertical position
 
-In order to adjust vertical position pass `verticalOffset` to the `copilot` HOC.
+In order to adjust vertical position pass `verticalOffset` to the `CopilotProvider` component.
 
 ```js
-copilot({
-  verticalOffset: 36,
-})(RootComponent);
+<CopilotProvider verticalOffset={36}>
 ```
 
 ### Triggering the tutorial
 
-Use `this.props.start()` in the root component in order to trigger the tutorial. You can either invoke it with a touch event or in `componentDidMount`. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
+Use `const {start} = useCopilot()` to trigger the tutorial. You can either invoke it with a touch event or in `useEffect` to start after the comopnent mounts. Note that the component and all its descendants must be mounted before starting the tutorial since the `CopilotStep`s need to be registered first.
 
 ### Usage inside a ScrollView
 
-Pass the ScrollView reference as the second argument to the `this.props.start()` function.
-eg `this.props.start(false, ScrollViewRef)`
+Pass the ScrollView reference as the second argument to the `start()` function.
+eg `start(undefined, scrollViewRef)`
 
 ```js
 import { ScrollView } from "react-native";
-import { copilot } from "react-native-copilot";
 
 class HomeScreen {
   componentDidMount() {
@@ -374,12 +349,11 @@ class HomeScreen {
     <ScrollView ref={(ref) => (this.scrollView = ref)}>// ...</ScrollView>;
   }
 }
-export default copilot()(HomeScreen);
 ```
 
 ### Listening to the events
 
-Along with `this.props.start()`, `copilot` HOC passes `copilotEvents` function to the component to help you with tracking of tutorial progress. It utilizes [mitt](https://github.com/developit/mitt) under the hood, you can see how full API there.
+`useCopilot` provides a `copilotEvents` function prop to allow you to track the progress of the tutorial. It utilizes [mitt](https://github.com/developit/mitt) under the hood.
 
 List of available events is:
 
@@ -390,29 +364,26 @@ List of available events is:
 **Example:**
 
 ```js
-import { copilot, CopilotStep } from "react-native-copilot";
+import { useCopilot } from "react-native-copilot";
 
-const CustomComponent = ({ copilot }) => (
-  <View {...copilot}>
-    <Text>Hello world!</Text>
-  </View>
-);
+const HomeScreen = () => {
+  const { copilotEvents } = useCopilot();
 
-class HomeScreen {
-  componentDidMount() {
-    this.props.copilotEvents.on("stop", () => {
+  useEffect(() => {
+    const listener = () => {
       // Copilot tutorial finished!
-    });
-  }
+    };
 
-  componentWillUnmount() {
-    // Don't forget to disable event handlers to prevent errors
-    this.props.copilotEvents.off("stop");
-  }
+    copilotEvents.on("stop", listener);
 
-  render() {
+    return () => {
+      copilotEvents.off("stop", listener)
+    };
+  }, []);
+
+  return (
     // ...
-  }
+  );
 }
 ```
 
@@ -420,12 +391,6 @@ class HomeScreen {
 
 Issues and Pull Requests are always welcome.
 
-Please read OK GROW!'s global [contribution guidelines](https://okgrow.github.io/guides/docs/open-source-contributing.html).
-
 If you are interested in becoming a maintainer, get in touch with us by sending an email or opening an issue. You should already have code merged into the project. Active contributors are encouraged to get in touch.
 
-Please note that all interactions in 's repos should follow our [Code of Conduct](https://okgrow.github.io/guides/docs/open-source-code-of-conduct.html).
-
-## License
-
-[MIT](LICENSE) © 2017 OK GROW!, https://www.okgrow.com.
+Creation of this project was sponsored by OK GROW!
