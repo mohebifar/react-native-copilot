@@ -42,21 +42,7 @@ export type Labels = Partial<
   Record<"skip" | "previous" | "next" | "finish", string>
 >;
 
-export interface StepNumberProps {
-  currentStepNumber: number;
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  currentStep: Step;
-}
-
 export interface TooltipProps {
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  handleNext: () => void;
-  handleNth: (n: number) => void;
-  handlePrev: () => void;
-  handleStop: () => void;
-  currentStep: Step;
   labels: Labels;
 }
 
@@ -81,9 +67,9 @@ export interface CopilotOptions {
   easing?: ((value: number) => number) | undefined;
   overlay?: "svg" | "view";
   animationDuration?: number;
-  tooltipComponent?: React.ComponentType<any>;
+  tooltipComponent?: React.ComponentType<TooltipProps>;
   tooltipStyle?: ViewStyle;
-  stepNumberComponent?: React.ComponentType<any>;
+  stepNumberComponent?: React.ComponentType<any >;
   animated?: boolean;
   labels?: Labels;
   androidStatusBarVisible?: boolean;

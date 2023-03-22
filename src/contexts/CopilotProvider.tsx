@@ -28,7 +28,7 @@ type Events = {
 interface CopilotContextType {
   registerStep: (step: Step) => void;
   unregisterStep: (stepName: string) => void;
-  getCurrentStep: () => Step | undefined;
+  currentStep: Step | undefined;
   start: (
     fromStep?: string,
     suppliedScrollView?: ScrollView | null
@@ -39,6 +39,9 @@ interface CopilotContextType {
   goToPrev: () => Promise<void>;
   visible: boolean;
   copilotEvents: Emitter<Events>;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+  currentStepNumber: number;
 }
 
 /*
@@ -62,7 +65,8 @@ export const CopilotProvider = ({
   const [scrollView, setScrollView] = useState<ScrollView | null>(null);
 
   const {
-    getStepNumber,
+    currentStep,
+    currentStepNumber,
     getFirstStep,
     getPrevStep,
     getNextStep,
@@ -73,7 +77,6 @@ export const CopilotProvider = ({
     steps,
     registerStep,
     unregisterStep,
-    getCurrentStep,
   } = useStepsMap();
 
   const moveModalToStep = useCallback(
@@ -185,7 +188,7 @@ export const CopilotProvider = ({
     () => ({
       registerStep,
       unregisterStep,
-      getCurrentStep,
+      currentStep,
       start,
       stop,
       visible,
@@ -193,11 +196,14 @@ export const CopilotProvider = ({
       goToNext: next,
       goToNth: nth,
       goToPrev: prev,
+      isFirstStep,
+      isLastStep,
+      currentStepNumber,
     }),
     [
       registerStep,
       unregisterStep,
-      getCurrentStep,
+      currentStep,
       start,
       stop,
       visible,
@@ -205,6 +211,9 @@ export const CopilotProvider = ({
       next,
       nth,
       prev,
+      isFirstStep,
+      isLastStep,
+      currentStepNumber,
     ]
   );
 
@@ -212,15 +221,6 @@ export const CopilotProvider = ({
     <CopilotContext.Provider value={value}>
       <>
         <CopilotModal
-          prev={prev}
-          next={next}
-          stop={stop}
-          nth={nth}
-          currentStepNumber={getStepNumber()}
-          currentStep={getCurrentStep()}
-          visible={visible}
-          isFirstStep={isFirstStep}
-          isLastStep={isLastStep}
           ref={modal}
           {...rest}
         />

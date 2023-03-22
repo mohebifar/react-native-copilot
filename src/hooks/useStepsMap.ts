@@ -36,7 +36,7 @@ export const useStepsMap = () => {
     [steps]
   );
 
-  const getStepIndex = useCallback(
+  const stepIndex = useCallback(
     (step = currentStep) =>
       step
         ? orderedSteps.findIndex(
@@ -46,9 +46,9 @@ export const useStepsMap = () => {
     [currentStep, orderedSteps]
   );
 
-  const getStepNumber = useCallback(
-    (step = currentStep) => getStepIndex(step) + 1,
-    [currentStep, getStepIndex]
+  const currentStepNumber = useMemo(
+    (step = currentStep) => stepIndex(step) + 1,
+    [currentStep, stepIndex]
   );
 
   const getFirstStep = useCallback(() => orderedSteps[0], [orderedSteps]);
@@ -59,13 +59,13 @@ export const useStepsMap = () => {
   );
 
   const getPrevStep = useCallback(
-    (step = currentStep) => step && orderedSteps[getStepIndex(step) - 1],
-    [currentStep, getStepIndex, orderedSteps]
+    (step = currentStep) => step && orderedSteps[stepIndex(step) - 1],
+    [currentStep, stepIndex, orderedSteps]
   );
 
   const getNextStep = useCallback(
-    (step = currentStep) => step && orderedSteps[getStepIndex(step) + 1],
-    [currentStep, getStepIndex, orderedSteps]
+    (step = currentStep) => step && orderedSteps[stepIndex(step) + 1],
+    [currentStep, stepIndex, orderedSteps]
   );
 
   const getNthStep = useCallback(
@@ -91,10 +91,8 @@ export const useStepsMap = () => {
     dispatch({ type: "unregister", stepName });
   }, []);
 
-  const getCurrentStep = useCallback(() => currentStep, [currentStep]);
-
   return {
-    getStepNumber,
+    currentStepNumber,
     getFirstStep,
     getLastStep,
     getPrevStep,
@@ -102,7 +100,7 @@ export const useStepsMap = () => {
     getNthStep,
     isFirstStep,
     isLastStep,
-    getCurrentStep,
+    currentStep,
     setCurrentStepState,
     steps,
     registerStep,

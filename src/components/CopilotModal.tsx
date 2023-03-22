@@ -18,28 +18,19 @@ import {
   type LayoutRectangle,
   type ViewStyle,
 } from "react-native";
-import type { CopilotOptions, Step } from "../types";
+import { useCopilot } from "../contexts/CopilotProvider";
+import type { CopilotOptions } from "../types";
 import { StepNumber } from "./default-ui/StepNumber";
 import { Tooltip } from "./default-ui/Tooltip";
 import {
-  styles,
   ARROW_SIZE,
   MARGIN,
   STEP_NUMBER_DIAMETER,
   STEP_NUMBER_RADIUS,
+  styles,
 } from "./style";
 
-type Props = CopilotOptions & {
-  prev: () => Promise<void>;
-  next: () => Promise<void>;
-  stop: () => Promise<void>;
-  nth: (stepNumber: number) => Promise<void>;
-  currentStepNumber?: number;
-  currentStep?: Step;
-  visible: boolean;
-  isFirstStep: boolean;
-  isLastStep: boolean;
-};
+type Props = CopilotOptions;
 
 const noop = () => {};
 
@@ -57,15 +48,6 @@ export interface CopilotModalHandle {
 export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
   function CopilotModal(
     {
-      stop,
-      prev,
-      next,
-      nth,
-      currentStepNumber,
-      currentStep,
-      visible,
-      isFirstStep,
-      isLastStep,
       easing = Easing.elastic(0.7),
       animationDuration = 400,
       tooltipComponent: TooltipComponent = Tooltip,
@@ -89,6 +71,7 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
     },
     ref
   ) {
+    const { stop, currentStep, visible } = useCopilot();
     const [tooltipStyles, setTooltipStyles] = useState({});
     const [arrowStyles, setArrowStyles] = useState({});
     const [animatedValues] = useState({
@@ -262,18 +245,6 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
       setLayout(undefined);
     };
 
-    const handleNext = () => {
-      void next();
-    };
-
-    const handleNth = (index: number) => {
-      void nth(index);
-    };
-
-    const handlePrev = () => {
-      void prev();
-    };
-
     const handleStop = () => {
       reset();
       void stop();
@@ -365,12 +336,7 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
               },
             ]}
           >
-            <StepNumberComponent
-              isFirstStep={isFirstStep}
-              isLastStep={isLastStep}
-              currentStep={currentStep}
-              currentStepNumber={currentStepNumber ?? 0}
-            />
+            <StepNumberComponent />
           </Animated.View>
 
           <Animated.View key="arrow" style={[styles.arrow, arrowStyles]} />
@@ -378,16 +344,7 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
             key="tooltip"
             style={[styles.tooltip, tooltipStyles, tooltipStyle]}
           >
-            <TooltipComponent
-              isFirstStep={isFirstStep}
-              isLastStep={isLastStep}
-              currentStep={currentStep}
-              handleNext={handleNext}
-              handleNth={handleNth}
-              handlePrev={handlePrev}
-              handleStop={handleStop}
-              labels={labels}
-            />
+            <TooltipComponent labels={labels} />
           </Animated.View>
         </>
       );
