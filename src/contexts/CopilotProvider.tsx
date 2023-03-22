@@ -34,6 +34,9 @@ interface CopilotContextType {
     suppliedScrollView?: ScrollView | null
   ) => Promise<void>;
   stop: () => Promise<void>;
+  goToNext: () => Promise<void>;
+  goToNth: (n: number) => Promise<void>;
+  goToPrev: () => Promise<void>;
   visible: boolean;
   copilotEvents: Emitter<Events>;
 }
@@ -72,18 +75,6 @@ export const CopilotProvider = ({
     unregisterStep,
     getCurrentStep,
   } = useStepsMap();
-
-  const next = async () => {
-    await setCurrentStep(getNextStep());
-  };
-
-  const nth = async (n: number) => {
-    await setCurrentStep(getNthStep(n));
-  };
-
-  const prev = async () => {
-    await setCurrentStep(getPrevStep());
-  };
 
   const moveModalToStep = useCallback(
     async (step: Step) => {
@@ -175,6 +166,21 @@ export const CopilotProvider = ({
     copilotEvents.emit("stop");
   }, [copilotEvents, setVisibility]);
 
+  const next = useCallback(async () => {
+    await setCurrentStep(getNextStep());
+  }, [getNextStep, setCurrentStep]);
+
+  const nth = useCallback(
+    async (n: number) => {
+      await setCurrentStep(getNthStep(n));
+    },
+    [getNthStep, setCurrentStep]
+  );
+
+  const prev = useCallback(async () => {
+    await setCurrentStep(getPrevStep());
+  }, [getPrevStep, setCurrentStep]);
+
   const value = useMemo(
     () => ({
       registerStep,
@@ -184,6 +190,9 @@ export const CopilotProvider = ({
       stop,
       visible,
       copilotEvents,
+      goToNext: next,
+      goToNth: nth,
+      goToPrev: prev,
     }),
     [
       registerStep,
@@ -193,6 +202,9 @@ export const CopilotProvider = ({
       stop,
       visible,
       copilotEvents,
+      next,
+      nth,
+      prev,
     ]
   );
 
