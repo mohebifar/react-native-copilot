@@ -13,9 +13,10 @@
     "expo-build-properties": "~0.5.1",
     "expo-dev-client": "~2.1.5",
     "expo-status-bar": "~1.4.4",
+    "expo-updates": "~0.16.3",
     "react": "18.2.0",
     "react-native": "0.71.3",
-    "react-native-copilot": "^3.0.0",
+    "react-native-copilot": "latest",
     "react-native-svg": "13.4.0"
   },
   "devDependencies": {
