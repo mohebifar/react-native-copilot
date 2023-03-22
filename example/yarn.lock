@@ -6562,10 +6562,10 @@ react-native-codegen@^0.71.5:
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
 
-react-native-copilot@latest:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-copilot/-/react-native-copilot-3.0.1.tgz#3da03e238f1b174386f7ffdaa5dc0dfaf4018f0a"
-  integrity sha512-Y3VHZxJqKsZsQxNEaiJPLLcnFZmfIRkpk56v5n0eHWYv+OfF/kz1eeZhfYV5es+BiHwjvfG1zJjLHaepKbQsKQ==
+react-native-copilot@*:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-copilot/-/react-native-copilot-3.1.0.tgz#24fd7536f56819050a47287bcea4eeedc003d9f2"
+  integrity sha512-5RN2yJ7QMQEPQwxpIgxRYA0AT38oRIo17EG/CTluiHUBtCLQiPsvxae0fdEdHMjesWbShxWtxN+fhIz5qym8Ng==
   dependencies:
     "@changesets/changelog-github" "^0.4.8"
     "@changesets/cli" "^2.26.0"
