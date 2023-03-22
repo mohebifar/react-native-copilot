@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.0.1
+
+### Patch Changes
+
+- 3a0f6e0: Migrate to TS and add CopilotProvider
+
 ## 3.0.0
 
 ### Major Changes
