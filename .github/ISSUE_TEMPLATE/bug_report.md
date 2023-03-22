@@ -1,14 +1,14 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-labels: 
-
+labels:
 ---
 
 **Current Behavior**
 A clear and concise description of the behavior.
 
 **Input Code**
+
 - REPL or Repo link if applicable:
 
 ```js
@@ -19,6 +19,7 @@ var your => (code) => here;
 A clear and concise description of what you expected to happen (or code).
 
 **Environment**
+
 - Device: [e.g. iPhone 8 Simulator]
 - OS: [e.g. iOS12]
 - `react-native-copilot`: [e.g. v2.4.1]
@@ -26,6 +27,7 @@ A clear and concise description of what you expected to happen (or code).
 - `react-native-svg`: [e.g. v7.1.0]
 
 **Possible Solution**
+
 <!--- Only if you have suggestions on a fix for the bug -->
 
 **Additional context/Screenshots**

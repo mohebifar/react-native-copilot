@@ -1,0 +1,9 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "exclude": ["dist"],
+  "include": ["src"],
+  "compilerOptions": {
+    "types": ["react-native", "jest", "node"],
+    "target": "ES2015"
+  }
+}

@@ -1,8 +1,35 @@
 {
   "expo": {
-    "sdkVersion": "34.0.0",
-    "packagerOpts": {
-      "assetExts": ["ttf"]
+    "name": "react-native-copilot-example",
+    "slug": "react-native-copilot-example",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mohebifar.copilot"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-build-properties"],
+    "extra": {
+      "eas": {
+        "projectId": "6f4929d0-dcfa-11e7-9dbe-55b9ec5432dc"
+      }
     }
   }
 }

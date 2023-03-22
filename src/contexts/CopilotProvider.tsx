@@ -1,0 +1,218 @@
+import mitt, { type Emitter } from "mitt";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from "react";
+import { findNodeHandle, type ScrollView } from "react-native";
+import {
+  CopilotModal,
+  type CopilotModalHandle,
+} from "../components/CopilotModal";
+import { OFFSET_WIDTH } from "../components/style";
+import { useStateWithAwait } from "../hooks/useStateWithAwait";
+import { useStepsMap } from "../hooks/useStepsMap";
+import { type CopilotOptions, type Step } from "../types";
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type Events = {
+  start: undefined;
+  stop: undefined;
+  stepChange: Step | undefined;
+};
+
+interface CopilotContextType {
+  registerStep: (step: Step) => void;
+  unregisterStep: (stepName: string) => void;
+  getCurrentStep: () => Step | undefined;
+  start: (
+    fromStep?: string,
+    suppliedScrollView?: ScrollView | null
+  ) => Promise<void>;
+  visible: boolean;
+  copilotEvents: Emitter<Events>;
+}
+
+/*
+This is the maximum wait time for the steps to be registered before starting the tutorial
+At 60fps means 2 seconds
+*/
+const MAX_START_TRIES = 120;
+
+const CopilotContext = createContext<CopilotContextType | undefined>(undefined);
+
+export const CopilotProvider = ({
+  verticalOffset = 0,
+  children,
+  ...rest
+}: PropsWithChildren<CopilotOptions>) => {
+  const startTries = useRef(0);
+  const copilotEvents = useRef(mitt<Events>()).current;
+  const modal = useRef<CopilotModalHandle | null>(null);
+
+  const [visible, setVisibility] = useStateWithAwait(false);
+  const [scrollView, setScrollView] = useState<ScrollView | null>(null);
+
+  const {
+    getStepNumber,
+    getFirstStep,
+    getPrevStep,
+    getNextStep,
+    getNthStep,
+    isFirstStep,
+    isLastStep,
+    setCurrentStepState,
+    steps,
+    registerStep,
+    unregisterStep,
+    getCurrentStep,
+  } = useStepsMap();
+
+  const next = async () => {
+    await setCurrentStep(getNextStep());
+  };
+
+  const nth = async (n: number) => {
+    await setCurrentStep(getNthStep(n));
+  };
+
+  const prev = async () => {
+    await setCurrentStep(getPrevStep());
+  };
+
+  const moveModalToStep = useCallback(
+    async (step: Step) => {
+      const size = await step?.measure();
+
+      if (!size) {
+        return;
+      }
+
+      await modal.current?.animateMove({
+        width: size.width + OFFSET_WIDTH,
+        height: size.height + OFFSET_WIDTH,
+        x: size.x - OFFSET_WIDTH / 2,
+        y: size.y - OFFSET_WIDTH / 2 + verticalOffset,
+      });
+    },
+    [verticalOffset]
+  );
+
+  const setCurrentStep = useCallback(
+    async (step?: Step, move: boolean = true) => {
+      setCurrentStepState(step);
+      copilotEvents.emit("stepChange", step);
+
+      if (scrollView != null) {
+        const nodeHandle = findNodeHandle(scrollView);
+        if (nodeHandle) {
+          step?.wrapperRef.current?.measureLayout(
+            nodeHandle,
+            (_x, y, _w, h) => {
+              const yOffset = y > 0 ? y - h / 2 : 0;
+              scrollView.scrollTo({ y: yOffset, animated: false });
+            }
+          );
+        }
+      }
+
+      setTimeout(
+        () => {
+          if (move && step) {
+            void moveModalToStep(step);
+          }
+        },
+        scrollView != null ? 100 : 0
+      );
+    },
+    [copilotEvents, moveModalToStep, scrollView, setCurrentStepState]
+  );
+
+  const start = useCallback(
+    async (fromStep?: string, suppliedScrollView: ScrollView | null = null) => {
+      if (scrollView == null) {
+        setScrollView(suppliedScrollView);
+      }
+
+      const currentStep = fromStep ? steps[fromStep] : getFirstStep();
+
+      if (startTries.current > MAX_START_TRIES) {
+        startTries.current = 0;
+        return;
+      }
+
+      if (currentStep == null) {
+        startTries.current += 1;
+        requestAnimationFrame(() => {
+          void start(fromStep);
+        });
+      } else {
+        copilotEvents.emit("start");
+        await setCurrentStep(currentStep);
+        await moveModalToStep(currentStep);
+        await setVisibility(true);
+        startTries.current = 0;
+      }
+    },
+    [
+      copilotEvents,
+      getFirstStep,
+      moveModalToStep,
+      scrollView,
+      setCurrentStep,
+      setVisibility,
+      steps,
+    ]
+  );
+
+  const stop = async () => {
+    await setVisibility(false);
+    copilotEvents.emit("stop");
+  };
+
+  const value = useMemo(
+    () => ({
+      registerStep,
+      unregisterStep,
+      getCurrentStep,
+      start,
+      visible,
+      copilotEvents,
+    }),
+    [registerStep, unregisterStep, getCurrentStep, start, visible, copilotEvents]
+  );
+
+  return (
+    <CopilotContext.Provider value={value}>
+      <>
+        <CopilotModal
+          prev={prev}
+          next={next}
+          stop={stop}
+          nth={nth}
+          currentStepNumber={getStepNumber()}
+          currentStep={getCurrentStep()}
+          visible={visible}
+          isFirstStep={isFirstStep}
+          isLastStep={isLastStep}
+          ref={modal}
+          {...rest}
+        />
+        {children}
+      </>
+    </CopilotContext.Provider>
+  );
+};
+
+export const useCopilot = () => {
+  const value = useContext(CopilotContext);
+  if (value == null) {
+    throw new Error("You must wrap your app inside CopilotPorivder");
+  }
+
+  return value;
+};
