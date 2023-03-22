@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.2.0
+
+### Minor Changes
+
+- 0d8362a: Remove Tooltip and StepNumber passed props in favor of useCopilot context
+  Un-register the step after name change and re-register with the new name
+  Add tests for CopilotStep
+
 ## 3.1.0
 
 ### Minor Changes
