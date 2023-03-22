@@ -33,6 +33,7 @@ interface CopilotContextType {
     fromStep?: string,
     suppliedScrollView?: ScrollView | null
   ) => Promise<void>;
+  stop: () => Promise<void>;
   visible: boolean;
   copilotEvents: Emitter<Events>;
 }
@@ -169,10 +170,10 @@ export const CopilotProvider = ({
     ]
   );
 
-  const stop = async () => {
+  const stop = useCallback(async () => {
     await setVisibility(false);
     copilotEvents.emit("stop");
-  };
+  }, [copilotEvents, setVisibility]);
 
   const value = useMemo(
     () => ({
@@ -180,10 +181,19 @@ export const CopilotProvider = ({
       unregisterStep,
       getCurrentStep,
       start,
+      stop,
       visible,
       copilotEvents,
     }),
-    [registerStep, unregisterStep, getCurrentStep, start, visible, copilotEvents]
+    [
+      registerStep,
+      unregisterStep,
+      getCurrentStep,
+      start,
+      stop,
+      visible,
+      copilotEvents,
+    ]
   );
 
   return (
