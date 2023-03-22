@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "react-native-copilot-example",
-    "slug": "react-native-copilot-example",
+    "name": "copilot-example",
+    "slug": "copilot-example",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
