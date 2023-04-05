@@ -76,6 +76,8 @@ export interface CopilotOptions {
   svgMaskPath?: SvgMaskPathFunction;
   verticalOffset?: number;
   arrowColor?: string;
+  arrowSize?: number
+  margin?: number
   stopOnOutsideClick?: boolean;
   backdropColor?: string;
 }
