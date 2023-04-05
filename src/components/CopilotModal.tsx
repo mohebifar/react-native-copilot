@@ -311,8 +311,6 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
 
       const position = maskRect;
 
-      if (backdropColor === 'transparent') return null
-
       return (
         <MaskComponent
           animated={animated}
