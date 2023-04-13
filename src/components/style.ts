@@ -24,8 +24,8 @@ export const styles = StyleSheet.create({
   },
   tooltip: {
     position: "absolute",
-    paddingVertical: 15,
-    paddingHorizontal: 15,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
     backgroundColor: "#fff",
     borderRadius:10,
     // overflow: "hidden",

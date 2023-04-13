@@ -158,14 +158,14 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
         };
 
         if (verticalPosition === "bottom") {
-          tooltip.top = rect.y + rect.height + margin;
+          tooltip.top = rect.y + rect.height + margin + arrowSize;
           arrow.borderBottomColor = arrowColor;
           arrow.top = tooltip.top - arrowSize * 2;
         } else {
           tooltip.bottom = newMeasuredLayout.height - (rect.y - margin);
           arrow.borderTopColor = arrowColor;
-          arrow.bottom = tooltip.bottom - arrowSize * 2;
-          arrow.transform = [{ rotate: "180deg" }];
+          arrow.bottom = tooltip.bottom - arrowSize - margin;
+          arrow.transform = arrowComponent ? [{ rotate: "180deg" }] : [];
         }
 
         if (horizontalPosition === "left") {
