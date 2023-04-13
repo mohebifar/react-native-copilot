@@ -1,3 +1,4 @@
+import React from 'react';
 import type {
   Animated,
   LayoutRectangle,
@@ -12,6 +13,7 @@ export interface Step {
   order: number;
   visible: boolean;
   wrapperRef: React.RefObject<NativeMethods>;
+  extraComponent: React.ReactElement<any>;
   measure: () => Promise<LayoutRectangle>;
   text: string;
 }
@@ -76,6 +78,9 @@ export interface CopilotOptions {
   svgMaskPath?: SvgMaskPathFunction;
   verticalOffset?: number;
   arrowColor?: string;
+  arrowSize?: number,
+  margin?: number;
   stopOnOutsideClick?: boolean;
   backdropColor?: string;
+  arrowComponent?:  React.ReactElement<any>;
 }

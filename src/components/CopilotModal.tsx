@@ -23,7 +23,6 @@ import type { CopilotOptions } from "../types";
 import { StepNumber } from "./default-ui/StepNumber";
 import { Tooltip } from "./default-ui/Tooltip";
 import {
-  ARROW_SIZE,
   MARGIN,
   STEP_NUMBER_DIAMETER,
   STEP_NUMBER_RADIUS,
@@ -68,6 +67,9 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
       svgMaskPath,
       stopOnOutsideClick = false,
       arrowColor = "#fff",
+      arrowSize = MARGIN,
+      arrowComponent = null,
+      margin = MARGIN,
     },
     ref
   ) {
@@ -151,16 +153,19 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
           relativeToLeft > relativeToRight ? "left" : "right";
 
         const tooltip: ViewStyle = {};
-        const arrow: ViewStyle = {};
+        const arrow: ViewStyle = {
+          borderWidth: arrowSize,
+        };
 
         if (verticalPosition === "bottom") {
-          tooltip.top = rect.y + rect.height + MARGIN;
+          tooltip.top = rect.y + rect.height + margin;
           arrow.borderBottomColor = arrowColor;
-          arrow.top = tooltip.top - ARROW_SIZE * 2;
+          arrow.top = tooltip.top - arrowSize * 2;
         } else {
-          tooltip.bottom = newMeasuredLayout.height - (rect.y - MARGIN);
+          tooltip.bottom = newMeasuredLayout.height - (rect.y - margin);
           arrow.borderTopColor = arrowColor;
-          arrow.bottom = tooltip.bottom - ARROW_SIZE * 2;
+          arrow.bottom = tooltip.bottom - arrowSize * 2;
+          arrow.transform = [{ rotate: "180deg" }];
         }
 
         if (horizontalPosition === "left") {
@@ -169,16 +174,20 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
             0
           );
           tooltip.right =
-            tooltip.right === 0 ? tooltip.right + MARGIN : tooltip.right;
-          tooltip.maxWidth = newMeasuredLayout.width - tooltip.right - MARGIN;
-          arrow.right = tooltip.right + MARGIN;
+            tooltip.right === 0 ? tooltip.right + margin : tooltip.right;
+          tooltip.maxWidth = newMeasuredLayout.width - tooltip.right - margin;
+          arrow.right = tooltip.right + margin;
         } else {
-          tooltip.left = Math.max(rect.x, 0);
+          // tooltip.left = Math.max(rect.x, 0);
+          tooltip.left = 0;
           tooltip.left =
-            tooltip.left === 0 ? tooltip.left + MARGIN : tooltip.left;
-          tooltip.maxWidth = newMeasuredLayout.width - tooltip.left - MARGIN;
-          arrow.left = tooltip.left + MARGIN;
+            tooltip.left === 0 ? tooltip.left + margin : tooltip.left;
+          tooltip.maxWidth = newMeasuredLayout.width - tooltip.left - margin;
+          arrow.left = rect.x + rect.width / 2 - margin / 2;
         }
+        sanitize(arrow);
+        sanitize(tooltip);
+        sanitize(rect);
 
         const animate = [
           ["top", rect.y],
@@ -219,6 +228,8 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
         arrowColor,
         easing,
         isAnimated,
+        arrowSize,
+        margin,
       ]
     );
 
@@ -338,8 +349,12 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
           >
             <StepNumberComponent />
           </Animated.View>
+          {!!arrowSize && (
+            <Animated.View key="arrow" style={[styles.arrow, arrowStyles]}>
+              {arrowComponent && arrowComponent}
+            </Animated.View>
+          )}
 
-          <Animated.View key="arrow" style={[styles.arrow, arrowStyles]} />
           <Animated.View
             key="tooltip"
             style={[styles.tooltip, tooltipStyles, tooltipStyle]}
@@ -351,3 +366,25 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
     }
   }
 );
+
+const floorify = (obj: Record<string, any>) => {
+  Object.keys(obj).forEach((key) => {
+    if (typeof obj[key] === "number") {
+      obj[key] = Math.floor(obj[key]);
+    }
+  });
+};
+
+const removeNan = (obj: Record<string, any>) => {
+  Object.keys(obj).forEach((key) => {
+    if (typeof obj[key] === "number" && isNaN(obj[key])) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete obj[key];
+    }
+  });
+};
+
+const sanitize = (obj: Record<any, any>) => {
+  floorify(obj);
+  removeNan(obj);
+};
