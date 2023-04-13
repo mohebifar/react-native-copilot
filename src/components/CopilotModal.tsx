@@ -189,6 +189,10 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
         sanitize(tooltip);
         sanitize(rect);
 
+        sanitize(arrow);
+        sanitize(tooltip);
+        sanitize(rect);
+
         const animate = [
           ["top", rect.y],
           ["stepNumberLeft", stepNumberLeft],

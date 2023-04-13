@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.2.1
+
+### Patch Changes
+
+- 3a6dd5a: Fix malformed field crash and add more config (arrowSize and margin)
+
 ## 3.2.0
 
 ### Minor Changes
