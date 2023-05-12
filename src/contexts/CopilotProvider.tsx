@@ -233,7 +233,7 @@ export const CopilotProvider = ({
 export const useCopilot = () => {
   const value = useContext(CopilotContext);
   if (value == null) {
-    throw new Error("You must wrap your app inside CopilotPorivder");
+    throw new Error("You must wrap your app inside CopilotProvider");
   }
 
   return value;
