@@ -1,6 +1,6 @@
 {
   "name": "btaskee-react-native-copilot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Make an interactive step by step tour guide for you react-native app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mohebifar/react-native-copilot.git"
+    "url": "git@github.com:2ducanhpham/react-native-copilot.git"
   },
   "keywords": [
     "react-native",
@@ -29,12 +29,12 @@
   "files": [
     "dist"
   ],
-  "author": "Mohamad Mohebifar <mohamad@mohebifar.com>",
+  "author": "bTaskee custom <ducanh.pham@btaskee.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mohebifar/react-native-copilot/issues"
   },
-  "homepage": "https://github.com/mohebifar/react-native-copilot#readme",
+  "homepage": "https://github.com/2ducanhpham/react-native-copilot",
   "devDependencies": {
     "@testing-library/jest-native": "^5.4.2",
     "@testing-library/react-native": "^12.0.0",
