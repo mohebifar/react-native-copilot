@@ -29,7 +29,9 @@ export const styles = StyleSheet.create({
     borderRadius: 3,
     overflow: "hidden",
   },
-  tooltipText: {},
+  tooltipText: {
+    fontSize:18
+  },
   tooltipContainer: {
     flex: 1,
   },
@@ -59,6 +61,7 @@ export const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#27ae60",
+    fontSize:18
   },
   bottomBar: {
     marginTop: 10,
