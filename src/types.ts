@@ -46,6 +46,13 @@ export type Labels = Partial<
 
 export interface TooltipProps {
   labels: Labels;
+  handleStop: () => void;
+  handleNext: () => void;
+  handleNth: (n: number) => void;
+  handlePrev: () => void;
+  isLastStep: boolean;
+  isFirstStep: boolean;
+  currentStep: Step;
 }
 
 export interface MaskProps {
@@ -107,5 +114,9 @@ export interface CopilotContextType {
   copilotEvents: Emitter<Events>;
   isFirstStep: boolean;
   isLastStep: boolean;
+  currentStepNumber: number;
+}
+
+export interface StepNumberProps {
   currentStepNumber: number;
 }
