@@ -1,12 +1,9 @@
-import React, { type FunctionComponent } from "react";
+import React from "react";
 import { Text, View } from "react-native";
-import { useCopilot } from "../../contexts/CopilotProvider";
-
 import { styles } from "../style";
+import type { StepNumberProps } from "../../types";
 
-export const StepNumber: FunctionComponent<unknown> = () => {
-  const { currentStepNumber } = useCopilot();
-
+export const StepNumber = ({ currentStepNumber }: StepNumberProps) => {
   return (
     <View style={styles.stepNumber}>
       <Text style={styles.stepNumberText}>{currentStepNumber}</Text>
