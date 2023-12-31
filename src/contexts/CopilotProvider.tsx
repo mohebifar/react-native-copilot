@@ -1,4 +1,4 @@
-import mitt, { type Emitter } from "mitt";
+import mitt  from "mitt";
 import React, {
   createContext,
   useCallback,
@@ -16,33 +16,7 @@ import {
 import { OFFSET_WIDTH } from "../components/style";
 import { useStateWithAwait } from "../hooks/useStateWithAwait";
 import { useStepsMap } from "../hooks/useStepsMap";
-import { type CopilotOptions, type Step } from "../types";
-
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type Events = {
-  start: undefined;
-  stop: undefined;
-  stepChange: Step | undefined;
-};
-
-interface CopilotContextType {
-  registerStep: (step: Step) => void;
-  unregisterStep: (stepName: string) => void;
-  currentStep: Step | undefined;
-  start: (
-    fromStep?: string,
-    suppliedScrollView?: ScrollView | null
-  ) => Promise<void>;
-  stop: () => Promise<void>;
-  goToNext: () => Promise<void>;
-  goToNth: (n: number) => Promise<void>;
-  goToPrev: () => Promise<void>;
-  visible: boolean;
-  copilotEvents: Emitter<Events>;
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  currentStepNumber: number;
-}
+import type { CopilotContextType, Events,  CopilotOptions,  Step } from "../types";
 
 /*
 This is the maximum wait time for the steps to be registered before starting the tutorial
