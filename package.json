@@ -4,7 +4,7 @@
   "description": "Make an interactive step by step tour guide for you react-native app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "private": false,
   "scripts": {
     "build": "tsup",
