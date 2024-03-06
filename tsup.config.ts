@@ -4,7 +4,7 @@ import path from "path";
 
 export default defineConfig({
   entry: ["src/index.ts"],
-  format: "cjs",
+  format: ["cjs", "esm"],
   sourcemap: true,
   dts: true,
   external: ["react", "react-native", "react-native-svg"],

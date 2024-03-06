@@ -9,19 +9,19 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "expo": "~48.0.6",
-    "expo-build-properties": "~0.5.1",
-    "expo-dev-client": "~2.1.5",
-    "expo-status-bar": "~1.4.4",
-    "expo-updates": "~0.16.3",
+    "expo": "~50.0.8",
+    "expo-build-properties": "~0.11.1",
+    "expo-dev-client": "~3.3.9",
+    "expo-status-bar": "~1.11.1",
+    "expo-updates": "~0.24.11",
     "react": "18.2.0",
-    "react-native": "0.71.3",
-    "react-native-copilot": "*",
-    "react-native-svg": "13.4.0"
+    "react-native": "0.73.5",
+    "react-native-copilot": "3.2.1",
+    "react-native-svg": "15.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "node-watch": "^0.7.3"
+    "@babel/core": "^7.24.0",
+    "node-watch": "^0.7.4"
   },
   "private": true
 }
