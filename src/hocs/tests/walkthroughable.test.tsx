@@ -23,7 +23,7 @@ it("spreads the copilot prop object on the wrapped component", () => {
     <WalkthroughableView copilot={{ keyForNum: 1, keyForStr: "hello" }} />
   );
 
-  const { props } = tree.root.findByType(View);
+  const { props } = tree.root.findByType(View as any );
 
   expect(props.keyForNum).toBe(1);
   expect(props.keyForStr).toBe("hello");
@@ -38,7 +38,7 @@ it("spreads the copilot prop object on the wrapped component along with other fl
     />
   );
 
-  const { props } = tree.root.findByType(View);
+  const { props } = tree.root.findByType(View as any );
 
   expect(props.keyForNum).toBe(1);
   expect(props.keyForStr).toBe("hello");
@@ -54,7 +54,7 @@ it("spreads the copilot prop object on the wrapped component not overriding the 
     />
   );
 
-  const { props } = tree.root.findByType(View);
+  const { props } = tree.root.findByType(View as any );
 
   expect(props.keyForNum).toBe(2);
   expect(props.keyForStr).toBe("hello");
@@ -71,7 +71,7 @@ it("works with all types of react native built-in components", () => {
       />
     );
 
-    const { props } = tree.root.findByType(Component);
+    const { props } = tree.root.findByType(Component as any );
 
     expect(props.keyForNum).toBe(1);
     expect(props.keyForStr).toBe("hello");
