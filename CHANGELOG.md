@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.3.0
+
+### Minor Changes
+
+- 3e5d3cc: Fix the issue with missing module file specified in package json
+
 ## 3.2.1
 
 ### Patch Changes
