@@ -1,7 +1,9 @@
+import type { Emitter } from "mitt";
 import type {
   Animated,
   LayoutRectangle,
   NativeMethods,
+  ScrollView,
   ViewStyle,
 } from "react-native";
 
@@ -44,6 +46,13 @@ export type Labels = Partial<
 
 export interface TooltipProps {
   labels: Labels;
+  handleStop: () => void;
+  handleNext: () => void;
+  handleNth: (n: number) => void;
+  handlePrev: () => void;
+  isLastStep: boolean;
+  isFirstStep: boolean;
+  currentStep: Step;
 }
 
 export interface MaskProps {
@@ -69,15 +78,45 @@ export interface CopilotOptions {
   animationDuration?: number;
   tooltipComponent?: React.ComponentType<TooltipProps>;
   tooltipStyle?: ViewStyle;
-  stepNumberComponent?: React.ComponentType<any >;
+  stepNumberComponent?: React.ComponentType<any>;
   animated?: boolean;
   labels?: Labels;
   androidStatusBarVisible?: boolean;
   svgMaskPath?: SvgMaskPathFunction;
   verticalOffset?: number;
   arrowColor?: string;
-  arrowSize?: number
-  margin?: number
+  arrowSize?: number;
+  margin?: number;
   stopOnOutsideClick?: boolean;
   backdropColor?: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+export type Events = {
+  start: undefined;
+  stop: undefined;
+  stepChange: Step | undefined;
+};
+
+export interface CopilotContextType {
+  registerStep: (step: Step) => void;
+  unregisterStep: (stepName: string) => void;
+  currentStep: Step | undefined;
+  start: (
+    fromStep?: string,
+    suppliedScrollView?: ScrollView | null
+  ) => Promise<void>;
+  stop: () => Promise<void>;
+  goToNext: () => Promise<void>;
+  goToNth: (n: number) => Promise<void>;
+  goToPrev: () => Promise<void>;
+  visible: boolean;
+  copilotEvents: Emitter<Events>;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+  currentStepNumber: number;
+}
+
+export interface StepNumberProps {
+  currentStepNumber: number;
 }

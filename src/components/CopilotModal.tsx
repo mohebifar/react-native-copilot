@@ -69,11 +69,21 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
       stopOnOutsideClick = false,
       arrowColor = "#fff",
       arrowSize = ARROW_SIZE,
-      margin = MARGIN
+      margin = MARGIN,
     },
     ref
   ) {
-    const { stop, currentStep, visible } = useCopilot();
+    const {
+      stop,
+      currentStep,
+      visible,
+      goToNext,
+      goToNth,
+      goToPrev,
+      isLastStep,
+      isFirstStep,
+      currentStepNumber,
+    } = useCopilot();
     const [tooltipStyles, setTooltipStyles] = useState({});
     const [arrowStyles, setArrowStyles] = useState({});
     const [animatedValues] = useState({
@@ -88,6 +98,21 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
 
     const [isAnimated, setIsAnimated] = useState(false);
     const [containerVisible, setContainerVisible] = useState(false);
+
+    const handleNext = useCallback(() => {
+      void goToNext();
+    }, [goToNext]);
+
+    const handlePrev = useCallback(() => {
+      void goToPrev();
+    }, [goToPrev]);
+
+    const handleNth = useCallback(
+      (n: number) => {
+        void goToNth(n);
+      },
+      [goToNth]
+    );
 
     useEffect(() => {
       if (visible) {
@@ -182,9 +207,9 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
           arrow.left = tooltip.left + margin;
         }
 
-        sanitize(arrow)
-        sanitize(tooltip)
-        sanitize(rect)
+        sanitize(arrow);
+        sanitize(tooltip);
+        sanitize(rect);
 
         const animate = [
           ["top", rect.y],
@@ -253,10 +278,10 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
       setLayout(undefined);
     };
 
-    const handleStop = () => {
+    const handleStop = useCallback(() => {
       reset();
       void stop();
-    };
+    }, [stop]);
 
     const handleMaskClick = () => {
       if (stopOnOutsideClick) {
@@ -344,7 +369,7 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
               },
             ]}
           >
-            <StepNumberComponent />
+            <StepNumberComponent currentStepNumber={currentStepNumber} />
           </Animated.View>
 
           {!!arrowSize && (
@@ -354,7 +379,16 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
             key="tooltip"
             style={[styles.tooltip, tooltipStyles, tooltipStyle]}
           >
-            <TooltipComponent labels={labels} />
+            <TooltipComponent
+              labels={labels}
+              handleNext={handleNext}
+              handleNth={handleNth}
+              handlePrev={handlePrev}
+              currentStep={currentStep}
+              isLastStep={isLastStep}
+              handleStop={handleStop}
+              isFirstStep={isFirstStep}
+            />
           </Animated.View>
         </>
       );
@@ -382,4 +416,4 @@ const removeNan = (obj: Record<string, any>) => {
 const sanitize = (obj: Record<any, any>) => {
   floorify(obj);
   removeNan(obj);
-}
+};

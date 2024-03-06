@@ -4,6 +4,7 @@
   "include": ["src", "./tsup.config.ts"],
   "compilerOptions": {
     "types": ["react-native", "jest", "node"],
-    "target": "ES2015"
+    "target": "ES2015",
+    "jsx": "react-jsx"
   }
 }
