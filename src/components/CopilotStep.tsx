@@ -7,6 +7,7 @@ interface Props {
   name: string;
   order: number;
   text: string;
+  extraComponent: React.ReactElement<any>;
   children: React.ReactElement<any>;
   active?: boolean;
 }
@@ -17,6 +18,7 @@ export const CopilotStep = ({
   text,
   children,
   active = true,
+  extraComponent,
 }: Props) => {
   const registeredName = useRef<string | null>(null);
   const { registerStep, unregisterStep } = useCopilot();
@@ -60,6 +62,7 @@ export const CopilotStep = ({
         order,
         measure,
         wrapperRef,
+        extraComponent,
         visible: true,
       });
       registeredName.current = name;
