@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.3.1
+
+### Patch Changes
+
+- 05b3a47: Fix a type error in walkthroughable
+
 ## 3.3.0
 
 ### Minor Changes
