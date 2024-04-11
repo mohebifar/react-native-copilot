@@ -141,17 +141,21 @@ By default, if overlay is not explicitly specified, the `svg` overlay will be us
 You can customize the tooltip and the step number components by passing a component to the `CopilotProvider` component. If you are looking for an example tooltip component, take a look at [the default ui implementations](https://github.com/mohebifar/react-native-copilot/blob/master/src/components/default-ui).
 
 ```js
-const TooltipComponent = ({
-  isFirstStep,
-  isLastStep,
-  handleNext,
-  handleNth,
-  handlePrev,
-  handleStop,
-  currentStep,
-}) => (
-  // ...
-);
+const TooltipComponent = () => {
+  const {
+    isFirstStep,
+    isLastStep,
+    handleNext,
+    handleNth,
+    handlePrev,
+    handleStop,
+    currentStep,
+  } = useCopilot();
+
+  return (
+    // ...
+  )
+};
 
 
 <CopilotProvider tooltipComponent={TooltipComponent} stepNumberComponent={StepComponent}>
