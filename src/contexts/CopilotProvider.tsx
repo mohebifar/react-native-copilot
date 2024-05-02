@@ -42,6 +42,7 @@ interface CopilotContextType {
   isFirstStep: boolean;
   isLastStep: boolean;
   currentStepNumber: number;
+  totalStepsNumber: number;
 }
 
 /*
@@ -67,6 +68,7 @@ export const CopilotProvider = ({
   const {
     currentStep,
     currentStepNumber,
+    totalStepsNumber,
     getFirstStep,
     getPrevStep,
     getNextStep,
@@ -199,6 +201,7 @@ export const CopilotProvider = ({
       isFirstStep,
       isLastStep,
       currentStepNumber,
+      totalStepsNumber,
     }),
     [
       registerStep,
@@ -214,6 +217,7 @@ export const CopilotProvider = ({
       isFirstStep,
       isLastStep,
       currentStepNumber,
+      totalStepsNumber,
     ]
   );
 

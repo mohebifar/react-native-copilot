@@ -51,6 +51,8 @@ export const useStepsMap = () => {
     [currentStep, stepIndex]
   );
 
+  const totalStepsNumber = useMemo(() => orderedSteps.length, [orderedSteps]);
+
   const getFirstStep = useCallback(() => orderedSteps[0], [orderedSteps]);
 
   const getLastStep = useCallback(
@@ -93,6 +95,7 @@ export const useStepsMap = () => {
 
   return {
     currentStepNumber,
+    totalStepsNumber,
     getFirstStep,
     getLastStep,
     getPrevStep,
