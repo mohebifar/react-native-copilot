@@ -1,5 +1,11 @@
 # Change Log
 
+## 3.3.2
+
+### Patch Changes
+
+- d14d956: Expose totalStepsNumber via useCopilot
+
 ## 3.3.1
 
 ### Patch Changes
