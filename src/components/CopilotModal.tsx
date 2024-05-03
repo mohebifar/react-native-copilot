@@ -23,7 +23,6 @@ import type { CopilotOptions } from "../types";
 import { StepNumber } from "./default-ui/StepNumber";
 import { Tooltip } from "./default-ui/Tooltip";
 import {
-  ARROW_SIZE,
   MARGIN,
   STEP_NUMBER_DIAMETER,
   STEP_NUMBER_RADIUS,
@@ -68,8 +67,9 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
       svgMaskPath,
       stopOnOutsideClick = false,
       arrowColor = "#fff",
-      arrowSize = ARROW_SIZE,
-      margin = MARGIN
+      arrowSize = MARGIN,
+      arrowComponent = null,
+      margin = MARGIN,
     },
     ref
   ) {
@@ -153,16 +153,19 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
           relativeToLeft > relativeToRight ? "left" : "right";
 
         const tooltip: ViewStyle = {};
-        const arrow: ViewStyle = {};
+        const arrow: ViewStyle = {
+          borderWidth: arrowSize,
+        };
 
         if (verticalPosition === "bottom") {
-          tooltip.top = rect.y + rect.height + margin;
+          tooltip.top = rect.y + rect.height + margin + arrowSize;
           arrow.borderBottomColor = arrowColor;
           arrow.top = tooltip.top - arrowSize * 2;
         } else {
           tooltip.bottom = newMeasuredLayout.height - (rect.y - margin);
           arrow.borderTopColor = arrowColor;
-          arrow.bottom = tooltip.bottom - arrowSize * 2;
+          arrow.bottom = tooltip.bottom - arrowSize - margin;
+          arrow.transform = arrowComponent ? [{ rotate: "180deg" }] : [];
         }
 
         if (horizontalPosition === "left") {
@@ -175,16 +178,20 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
           tooltip.maxWidth = newMeasuredLayout.width - tooltip.right - margin;
           arrow.right = tooltip.right + margin;
         } else {
-          tooltip.left = Math.max(rect.x, 0);
+          // tooltip.left = Math.max(rect.x, 0);
+          tooltip.left = 0;
           tooltip.left =
             tooltip.left === 0 ? tooltip.left + margin : tooltip.left;
           tooltip.maxWidth = newMeasuredLayout.width - tooltip.left - margin;
-          arrow.left = tooltip.left + margin;
+          arrow.left = rect.x + rect.width / 2 - margin / 2;
         }
+        sanitize(arrow);
+        sanitize(tooltip);
+        sanitize(rect);
 
-        sanitize(arrow)
-        sanitize(tooltip)
-        sanitize(rect)
+        sanitize(arrow);
+        sanitize(tooltip);
+        sanitize(rect);
 
         const animate = [
           ["top", rect.y],
@@ -346,10 +353,12 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
           >
             <StepNumberComponent />
           </Animated.View>
-
           {!!arrowSize && (
-            <Animated.View key="arrow" style={[styles.arrow, arrowStyles]} />
+            <Animated.View key="arrow" style={[styles.arrow, arrowStyles]}>
+              {arrowComponent && arrowComponent}
+            </Animated.View>
           )}
+
           <Animated.View
             key="tooltip"
             style={[styles.tooltip, tooltipStyles, tooltipStyle]}
@@ -382,4 +391,4 @@ const removeNan = (obj: Record<string, any>) => {
 const sanitize = (obj: Record<any, any>) => {
   floorify(obj);
   removeNan(obj);
-}
+};
