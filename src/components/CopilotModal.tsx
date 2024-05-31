@@ -157,8 +157,6 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
 
         arrow.position = "absolute";
 
-        console.log("verticalPosition", verticalPosition);
-
         if (verticalPosition === "bottom") {
           tooltip.top = rect.y + rect.height + margin;
           arrow.borderBottomColor = arrowColor;
