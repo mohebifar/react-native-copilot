@@ -56,9 +56,10 @@ export const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
+    backgroundColor: "#055942"
   },
   buttonText: {
-    color: "#27ae60",
+    color: "#FFFFFF",
   },
   bottomBar: {
     marginTop: 10,

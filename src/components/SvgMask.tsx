@@ -22,10 +22,34 @@ const defaultSvgPath: SvgMaskPathFunction = ({
   const positionY = (position.y as any)._value as number;
   const sizeX = (size.x as any)._value as number;
   const sizeY = (size.y as any)._value as number;
+  const borderRadius = 8
+  const outerRectanglePath = `
+    M${borderRadius},0
+    H${canvasSize.x - borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,${canvasSize.x},${borderRadius}
+    V${canvasSize.y - borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,${canvasSize.x - borderRadius},${canvasSize.y}
+    H${borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,0,${canvasSize.y - borderRadius}
+    V${borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,${borderRadius},0
+    Z
+  `;
 
-  return `M0,0H${canvasSize.x}V${canvasSize.y}H0V0ZM${positionX},${positionY}H${
-    positionX + sizeX
-  }V${positionY + sizeY}H${positionX}V${positionY}Z`;
+  const innerRectanglePath = `
+    M${positionX + borderRadius},${positionY}
+    H${positionX + sizeX - borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,${positionX + sizeX},${positionY + borderRadius}
+    V${positionY + sizeY - borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,${positionX + sizeX - borderRadius},${positionY + sizeY}
+    H${positionX + borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,${positionX},${positionY + sizeY - borderRadius}
+    V${positionY + borderRadius}
+    A${borderRadius},${borderRadius},0,0,1,${positionX + borderRadius},${positionY}
+    Z
+  `;
+  
+  return `${outerRectanglePath} ${innerRectanglePath}`;
 };
 
 export const SvgMask = ({
