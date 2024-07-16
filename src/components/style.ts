@@ -1,5 +1,3 @@
-import { StyleSheet } from "react-native";
-
 export const STEP_NUMBER_RADIUS: number = 14;
 export const STEP_NUMBER_DIAMETER: number = STEP_NUMBER_RADIUS * 2;
 export const ZINDEX: number = 100;
@@ -7,7 +5,7 @@ export const MARGIN: number = 13;
 export const OFFSET_WIDTH: number = 4;
 export const ARROW_SIZE: number = 6;
 
-export const styles = StyleSheet.create({
+let styles = {
   container: {
     position: "absolute",
     left: 0,
@@ -80,4 +78,22 @@ export const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
-});
+};
+
+const RNCSetStyle = (stylesToUpdate: {
+  [K in keyof typeof styles]?: Partial<(typeof styles)[K]>;
+}) => {
+  styles = {
+    ...styles,
+    ...Object.keys(stylesToUpdate).reduce<any>((acc, key) => {
+      const styleKey = key as keyof typeof styles;
+      acc[styleKey] = {
+        ...styles[styleKey],
+        ...stylesToUpdate[styleKey],
+      };
+      return acc;
+    }, {}),
+  };
+};
+
+export { styles, RNCSetStyle };
