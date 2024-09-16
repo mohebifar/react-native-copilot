@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { Animated, View } from "react-native";
+import { Animated, View, I18nManager } from "react-native";
 import { styles } from "./style";
 
 import type { MaskProps, ValueXY } from "../types";
+
+const rtl = I18nManager.isRTL;
+const start = rtl ? 'right' : 'left';
+const end = rtl ? 'left' : 'right';
 
 export const ViewMask = (props: MaskProps) => {
   const sizeValue = useRef<Animated.ValueXY>(
@@ -78,23 +82,23 @@ export const ViewMask = (props: MaskProps) => {
     <View style={props.style} onStartShouldSetResponder={props.onClick}>
       {[
         {
-          right: leftOverlayRight,
+          [end]: leftOverlayRight,
           backgroundColor: props.backdropColor,
         },
         {
-          left: rightOverlayLeft,
+          [start]: rightOverlayLeft,
           backgroundColor: props.backdropColor,
         },
         {
           top: bottomOverlayTopBoundary,
-          left: verticalOverlayLeftBoundary,
-          right: verticalOverlayRightBoundary,
+          [start]: verticalOverlayLeftBoundary,
+          [end]: verticalOverlayRightBoundary,
           backgroundColor: props.backdropColor,
         },
         {
           bottom: topOverlayBottomBoundary,
-          left: verticalOverlayLeftBoundary,
-          right: verticalOverlayRightBoundary,
+          [start]: verticalOverlayLeftBoundary,
+          [end]: verticalOverlayRightBoundary,
           backgroundColor: props.backdropColor,
         },
       ].map((style, index) => (
