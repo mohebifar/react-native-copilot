@@ -100,7 +100,7 @@ const HomeScreen = () => {
 };
 ```
 
-If you are looking for a working example, please check out [this link](https://github.com/mohebifar/react-native-copilot/blob/master/example/App.js).
+If you are looking for a working example, please check out [this link](https://github.com/mohebifar/react-native-copilot/blob/master/example/App.jsx).
 
 ### Overlays and animation
 
@@ -145,10 +145,10 @@ const TooltipComponent = () => {
   const {
     isFirstStep,
     isLastStep,
-    handleNext,
-    handleNth,
-    handlePrev,
-    handleStop,
+    goToNext,
+    goToNth,
+    goToPrev,
+    stop,
     currentStep,
   } = useCopilot();
 
