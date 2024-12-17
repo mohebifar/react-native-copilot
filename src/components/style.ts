@@ -18,7 +18,6 @@ export const styles = StyleSheet.create({
   },
   arrow: {
     position: "absolute",
-    borderColor: "transparent",
     borderWidth: ARROW_SIZE,
   },
   tooltip: {
