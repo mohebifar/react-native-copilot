@@ -1,4 +1,11 @@
 <<<<<<< Updated upstream
+
+## 3.3.3
+
+### Patch Changes
+
+- 7961855: Fix arrow style on Android
+
 # Change Log
 
 ## 3.3.2
@@ -52,10 +59,11 @@
 
 ### Major Changes
 
-- f2b45c7: Migrate to TS and deprecate HOC
-=======
+- # f2b45c7: Migrate to TS and deprecate HOC
+
 # Changelog
->>>>>>> Stashed changes
+
+> > > > > > > Stashed changes
 
 All notable changes to this project will be documented in this file.
 
@@ -69,50 +77,50 @@ All notable changes to this project will be documented in this file.
 
 ### 🐛 Bug Fixes
 
-- *(android)* Fix malformed field crash, add more config (#279)
+- _(android)_ Fix malformed field crash, add more config (#279)
 
 ## [3.0.0] - 2023-03-22
 
 ### 🚀 Features
 
-- *(CopilotStep)* Add active flag to steps
-- *(tooltip)* Add getNth function (#267)
+- _(CopilotStep)_ Add active flag to steps
+- _(tooltip)_ Add getNth function (#267)
 
 ### 🐛 Bug Fixes
 
 - Fixing the arrow position
-- *(CopilotStep)* Fix measure error where __TEST__ is undefined
-- *(SvgMask)* Defer rendering Svg until layout is measured
-- *(example)* Fix the watcher for updating the example dep
-- *(copilot)* Start(fromStep) issue fixed
-- *(CopilotModal)* Consider status bar height
-- *(CopilotModal)* Do status bar offset only on android
-- *(contributing)* Fix broken links
-- *(copilot)* Hoist static props
-- *(types)* Adjust type from handleNthStep -> handleNth (#268)
+- _(CopilotStep)_ Fix measure error where **TEST** is undefined
+- _(SvgMask)_ Defer rendering Svg until layout is measured
+- _(example)_ Fix the watcher for updating the example dep
+- _(copilot)_ Start(fromStep) issue fixed
+- _(CopilotModal)_ Consider status bar height
+- _(CopilotModal)_ Do status bar offset only on android
+- _(contributing)_ Fix broken links
+- _(copilot)_ Hoist static props
+- _(types)_ Adjust type from handleNthStep -> handleNth (#268)
 
 ### 🚜 Refactor
 
 - The Button to the compoenents directory
-- *(CopilotModal)* Use Modal instead of ternary expression to control visibiity
+- _(CopilotModal)_ Use Modal instead of ternary expression to control visibiity
 
 ### 📚 Documentation
 
-- *(Readme)* Improve docs
+- _(Readme)_ Improve docs
 - Charles suggestions
-- *(Readme)* Add badges
+- _(Readme)_ Add badges
 - Update semaphore project name
 - Remove old name inspiration
-- *(README)* Renaming the npm package
-- *(README)* Copilotable to walkthroughable
-- *(README)* Add tutorial triggering description
-- *(README)* Updates for v2.0.0
-- *(README)* Add react-native-svg to the installation section
+- _(README)_ Renaming the npm package
+- _(README)_ Copilotable to walkthroughable
+- _(README)_ Add tutorial triggering description
+- _(README)_ Updates for v2.0.0
+- _(README)_ Add react-native-svg to the installation section
 - Fix shields to point to correct pkg & center
-- *(events)* Described event emitters in readme
-- *(events)* Remove event handlers on unmount in example
-- *(README)* Add OKG
-- *(README)* Update OKGrow link
+- _(events)_ Described event emitters in readme
+- _(events)_ Remove event handlers on unmount in example
+- _(README)_ Add OKG
+- _(README)_ Update OKGrow link
 
 ### 🎨 Styling
 
@@ -122,11 +130,11 @@ All notable changes to this project will be documented in this file.
 ### 🧪 Testing
 
 - Add unit tests
-- *(walkthroughable)* Added tests for the walkthroughable
-- *(copilot)* Added tests for the copilot HOC
-- *(copilot)* Add test for tooltip component
-- *(copilot)* Update the tests based on the Modal change
-- *(Copilot)* Test for the step active flags
+- _(walkthroughable)_ Added tests for the walkthroughable
+- _(copilot)_ Added tests for the copilot HOC
+- _(copilot)_ Add test for tooltip component
+- _(copilot)_ Update the tests based on the Modal change
+- _(Copilot)_ Test for the step active flags
 
 ### ⚙️ Miscellaneous Tasks
 
@@ -136,36 +144,36 @@ All notable changes to this project will be documented in this file.
 - Rename the package
 - Add package lock
 - Bump version (1.0.1)
-- *(example)* Upgrade expo for the example and better src linking
+- _(example)_ Upgrade expo for the example and better src linking
 - Cleaning up the directory structure
-- *(Example)* Update name of the package in the example
-- *(yarn)* Upgrade packages and remove package-lock.json
-- *(package)* Bump version to 2.1.0
-- *(README)* Update badges
-- *(package)* Bump version 2.2.0
-- *(package)* Bump version to 2.2.3
-- *(package)* Bump the version to 2.2.5
-- *(package)* Bump version 2.2.6
-- *(package)* Bump version to 2.3.0
+- _(Example)_ Update name of the package in the example
+- _(yarn)_ Upgrade packages and remove package-lock.json
+- _(package)_ Bump version to 2.1.0
+- _(README)_ Update badges
+- _(package)_ Bump version 2.2.0
+- _(package)_ Bump version to 2.2.3
+- _(package)_ Bump the version to 2.2.5
+- _(package)_ Bump version 2.2.6
+- _(package)_ Bump version to 2.3.0
 - Add hoist-non-react-statics dependency
 - Add `hoist-non-react-statics` dependency
 - Bump version to 2.4.0
 - Bump version to 2.4.1
 - Lint
-- *(package)* Bump version
-- *(package)* Update version
+- _(package)_ Bump version
+- _(package)_ Update version
 - Add travis
 - Upgrade packages
 - More pkg upgrades
 - Fix a lint issue
 - Upgrade expo to v34
-- *(travis)* Run deploy on master
-- *(package)* Bump version to 2.4.8
+- _(travis)_ Run deploy on master
+- _(package)_ Bump version to 2.4.8
 
 ### Example
 
-- *(App)* Trigger tutorial on componentDidMount
-- *(App)* Added an example for the event emitter
+- _(App)_ Trigger tutorial on componentDidMount
+- _(App)_ Added an example for the event emitter
 - Added the active flag to the example
 
 <!-- generated by git-cliff -->

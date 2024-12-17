@@ -1,6 +1,6 @@
 {
   "name": "react-native-copilot",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "Make an interactive step by step tour guide for you react-native app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
