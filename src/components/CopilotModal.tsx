@@ -14,6 +14,7 @@ import {
   Platform,
   StatusBar,
   View,
+  I18nManager,
   type LayoutChangeEvent,
   type LayoutRectangle,
   type ViewStyle,
@@ -33,6 +34,10 @@ import {
 type Props = CopilotOptions;
 
 const noop = () => {};
+
+const rtl = I18nManager.isRTL;
+const start = rtl ? 'right' : 'left';
+const end = rtl ? 'left' : 'right';
 
 const makeDefaultLayout = (): LayoutRectangle => ({
   x: 0,
@@ -128,12 +133,23 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
           rect.y -= StatusBar.currentHeight ?? 0;
         }
 
-        let stepNumberLeft = rect.x - STEP_NUMBER_RADIUS;
+        let stepNumberLeft: number;
 
-        if (stepNumberLeft < 0) {
-          stepNumberLeft = rect.x + rect.width - STEP_NUMBER_RADIUS;
-          if (stepNumberLeft > newMeasuredLayout.width - STEP_NUMBER_DIAMETER) {
-            stepNumberLeft = newMeasuredLayout.width - STEP_NUMBER_DIAMETER;
+        if (!rtl) {
+          stepNumberLeft = rect.x - STEP_NUMBER_RADIUS;
+          if (stepNumberLeft < 0) {
+            stepNumberLeft = rect.x + rect.width - STEP_NUMBER_RADIUS;
+            if (stepNumberLeft > newMeasuredLayout.width - STEP_NUMBER_DIAMETER) {
+              stepNumberLeft = newMeasuredLayout.width - STEP_NUMBER_DIAMETER;
+            }
+          }
+        } else {
+          stepNumberLeft = (rect.x + rect.width) - STEP_NUMBER_RADIUS;
+          if (stepNumberLeft > newMeasuredLayout.width) {
+            stepNumberLeft = rect.x - STEP_NUMBER_RADIUS;
+            if (stepNumberLeft > newMeasuredLayout.width - STEP_NUMBER_DIAMETER) {
+              stepNumberLeft = newMeasuredLayout.width - STEP_NUMBER_DIAMETER;
+            }
           }
         }
 
@@ -174,20 +190,20 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
         }
 
         if (horizontalPosition === "left") {
-          tooltip.right = Math.max(
+          tooltip[end] = Math.max(
             newMeasuredLayout.width - (rect.x + rect.width),
             0,
           );
-          tooltip.right =
-            tooltip.right === 0 ? tooltip.right + margin : tooltip.right;
-          tooltip.maxWidth = newMeasuredLayout.width - tooltip.right - margin;
-          arrow.right = tooltip.right + margin;
+          tooltip[end] =
+            tooltip[end] === 0 ? Number(tooltip[end]) + margin : tooltip[end];
+          tooltip.maxWidth = newMeasuredLayout.width - tooltip[end] - margin;
+          arrow[end] = Number(tooltip[end]) + margin;
         } else {
-          tooltip.left = Math.max(rect.x, 0);
-          tooltip.left =
-            tooltip.left === 0 ? tooltip.left + margin : tooltip.left;
-          tooltip.maxWidth = newMeasuredLayout.width - tooltip.left - margin;
-          arrow.left = tooltip.left + margin;
+          tooltip[start] = Math.max(rect.x, 0);
+          tooltip[start] =
+            tooltip[start] === 0 ? Number(tooltip[start]) + margin : tooltip[start];
+          tooltip.maxWidth = newMeasuredLayout.width - tooltip[start] - margin;
+          arrow[start] = Number(tooltip[start]) + margin;
         }
 
         sanitize(arrow);
@@ -347,7 +363,7 @@ export const CopilotModal = forwardRef<CopilotModalHandle, Props>(
             style={[
               styles.stepNumberContainer,
               {
-                left: animatedValues.stepNumberLeft,
+                [start]: animatedValues.stepNumberLeft,
                 top: Animated.add(animatedValues.top, -STEP_NUMBER_RADIUS),
               },
             ]}
